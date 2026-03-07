@@ -16,9 +16,8 @@ That is why I decided to take [Sitecore Powershell Extensions](https://doc.sitec
 Welcome to the "Sitecore JavaScript Extensions" - a SitecoreAI module that brings the power of scripting to Sitecore content authors and administrators. With this module, you can write and execute JavaScript code to automate tasks, manipulate content, and extend Sitecore functionality in any way you want.
 
 ## Video link
-⟹ Provide a video highlighing your Hackathon module submission and provide a link to the video. You can use any video hosting, file share or even upload the video to this repository. _Just remember to update the link below_
 
-⟹ [Replace this Video link](#video-link)
+[Youtube](https://www.youtube.com/watch?v=zqOo7-eLTYU)
 
 ## Pre-requisites and Dependencies
 
