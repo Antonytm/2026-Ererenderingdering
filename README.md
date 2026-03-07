@@ -76,6 +76,9 @@ You can open "Sitecore JavaScript Extensions" from the list of your apps in the 
 ![Apps icon](/docs/images/apps-icon.png)
 ![Apps list](/docs/images/apps-list.png)
 
+During the first run, application will create few items in Sitecore content. Please be patient. Once the items are created, you will see the application itself.
+![Application](/docs/images/application.png)
+
 ### Configuration
 
 "Sitecore JavaScript Extensions" does not require any additional configuration.
