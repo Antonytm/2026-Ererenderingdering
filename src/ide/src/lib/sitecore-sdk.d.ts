@@ -547,6 +547,148 @@ interface AddLanguageInput {
   useSupportedLanguageAsFallback?: boolean;
 }
 
+// ── Namespace Interfaces ─────────────────────────────────
+
+interface SitecoreContentNamespace {
+  getItem(idOrPath: string, opts?: ItemQueryOptions): Promise<SitecoreItem>;
+  getItemChildren(path: string): Promise<SitecoreItem[]>;
+  getMediaItem(idOrPath: string, opts?: ItemQueryOptions): Promise<SitecoreMediaItem>;
+  search(query: SearchQueryInput): Promise<SitecoreSearchResult>;
+  createItem(parent: string, templateId: string, name: string, fields?: Record<string, string>, opts?: { language?: string; database?: string }): Promise<SitecoreItem>;
+  createItemFromBranch(branchId: string, parent: string, name: string, fields?: Record<string, string>, opts?: { language?: string; database?: string }): Promise<{ job: SitecoreJob }>;
+  updateItem(idOrPath: string, fields: Record<string, string>, opts?: ItemQueryOptions): Promise<SitecoreItem>;
+  deleteItem(idOrPath: string, permanently?: boolean): Promise<{ successful: boolean }>;
+  renameItem(idOrPath: string, newName: string, opts?: { database?: string }): Promise<SitecoreItem>;
+  moveItem(idOrPath: string, targetParent: string, opts?: { sortOrder?: number; database?: string }): Promise<SitecoreItem>;
+  copyItem(idOrPath: string, targetParent: string, opts?: { copyItemName?: string; deepCopy?: boolean; database?: string }): Promise<SitecoreItem>;
+  addItemVersion(idOrPath: string, opts?: { language?: string; version?: number; versionName?: string; database?: string }): Promise<SitecoreItem>;
+  deleteItemVersion(idOrPath: string, opts?: { language?: string; version?: number; database?: string }): Promise<SitecoreItem>;
+  uploadMedia(itemPath: string, opts?: { alt?: string; database?: string; language?: string; overwriteExisting?: boolean; versioned?: boolean; includeExtensionInItemName?: boolean }): Promise<{ presignedUploadUrl: string }>;
+}
+
+interface SitecorePublishingNamespace {
+  getPublishingStatus(operationId: string): Promise<SitecorePublishingStatus>;
+  getPublishingTargets(): Promise<SitecorePublishingTarget[]>;
+  getPublishingQueue(query: { sort: { field: string; direction: "ASCENDING" | "DESCENDING" }; paging?: { pageIndex: number; pageSize: number }; dateFilter?: { dateFrom: string; dateTo: string }; itemsFilter?: any }): Promise<{ totalCount: number; results: any[] }>;
+  publishItem(input: PublishItemInput): Promise<SitecorePublishResult>;
+  publishLanguageSpecificItems(input: { itemsToPublish?: Array<{ id?: string; languages: string[] }>; targetDatabases: string[]; publishItemMode: "FULL" | "SMART"; publishSubItems?: boolean; publishRelatedItems?: boolean; sourceDatabase?: string; displayName?: string }): Promise<SitecorePublishResult>;
+  publishSite(input: PublishSiteInput): Promise<SitecorePublishResult>;
+  publishWithOptions(options: Array<{ language: string; targetDatabase: string; publishSiteMode?: "FULL" | "INCREMENTAL" | "SMART"; publishItemMode?: "FULL" | "SMART"; rootItemId?: string; rootItemPath?: string; publishSubItems?: boolean; publishRelatedItems?: boolean; sourceDatabase?: string; publishDate?: string }>): Promise<SitecorePublishResult>;
+  cancelPublishing(operationId: string): Promise<{ success: boolean; message: string; publishingOperationId: string }>;
+}
+
+interface SitecoreIndexesNamespace {
+  getIndex(name: string): Promise<SitecoreIndex>;
+  getIndexes(): Promise<SitecoreIndex[]>;
+  rebuildIndexes(names: string[]): Promise<{ jobs: SitecoreJob[] }>;
+  populateManagedSchema(names: string[]): Promise<{ jobs: SitecoreJob[] }>;
+  rebuildLinkDatabase(dbNames: string[]): Promise<{ job: SitecoreJob }>;
+  cleanUpDatabases(dbNames: string[]): Promise<{ job: SitecoreJob }>;
+}
+
+interface SitecoreWorkflowsNamespace {
+  getWorkflow(idOrItem: string | { itemId?: string; path?: string; database?: string }): Promise<SitecoreWorkflow>;
+  getWorkflows(): Promise<SitecoreWorkflow[]>;
+  getJob(nameOrHandle: string): Promise<SitecoreJob>;
+  getJobs(): Promise<SitecoreJob[]>;
+  isJobQueued(name: string): Promise<boolean>;
+  isJobRunning(name: string): Promise<boolean>;
+  startWorkflow(item: { itemId?: string; path?: string; database?: string; language?: string }): Promise<{ successful: boolean }>;
+  executeWorkflowCommand(commandId: string, item: { itemId?: string; path?: string; database?: string; language?: string }, comments?: string): Promise<{ successful: boolean; completed: boolean; error: string; message: string; nextStateId: string }>;
+}
+
+interface SitecoreTranslationNamespace {
+  translatePage(pageId: string, targetLang: string, opts?: { sourceLanguage?: string; brandKitId?: string; translateIfTargetVersionExists?: boolean; database?: string }): Promise<{ job: SitecoreJob }>;
+  translateSite(siteId: string, targetLang: string, opts?: { sourceLanguage?: string; brandKitId?: string; translateIfTargetVersionExists?: boolean; database?: string }): Promise<{ job: SitecoreJob }>;
+}
+
+interface SitecoreTemplatesNamespace {
+  getTemplate(idOrPath: string, opts?: { database?: string }): Promise<SitecoreTemplate>;
+  getTemplates(opts?: { database?: string; path?: string; templateId?: string }): Promise<SitecoreTemplate[]>;
+  getDataSourceTemplates(opts?: { database?: string }): Promise<SitecoreTemplate[]>;
+  getTenantTemplates(siteName: string, opts?: { database?: string; hasPageDesign?: boolean }): Promise<Array<{ template: SitecoreTemplate; pageDesign: { itemId: string; name: string } }>>;
+  createTemplate(parent: string, name: string, opts?: { database?: string; language?: string; icon?: string; baseTemplates?: string[]; sections?: any[]; createStandardValuesItem?: boolean }): Promise<SitecoreTemplate>;
+  updateTemplate(templateId: string, opts?: { name?: string; database?: string; language?: string; icon?: string; baseTemplates?: string[]; sections?: any[]; createStandardValuesItem?: boolean; deleteMissingFields?: boolean }): Promise<SitecoreTemplate>;
+  deleteTemplate(templateId: string, opts?: { database?: string }): Promise<{ successful: boolean }>;
+  createTemplateFolder(parent: string, name: string, opts?: { database?: string; language?: string }): Promise<SitecoreItem>;
+}
+
+interface SitecoreSitesNamespace {
+  getSite(name: string): Promise<SitecoreSite>;
+  getSites(includeSystem?: boolean): Promise<Array<{ name: string; hostName: string; language: string; rootPath: string }>>;
+  getSiteCollections(opts?: { database?: string }): Promise<SitecoreSiteCollection[]>;
+  getSolutionSites(opts?: { database?: string; siteName?: string; siteId?: string; siteCollectionID?: string; rootItemId?: string; includeNonSxaSites?: boolean }): Promise<SitecoreSolutionSite[]>;
+  searchSolutionSites(filter?: SearchStatementInput): Promise<Array<{ siteRoot: SitecoreItem; sites: SitecoreSolutionSite[] }>>;
+  getSolutionTemplates(opts?: { database?: string }): Promise<Array<{ id: string; name: string; description: string; enabled: boolean; builtInTemplate: boolean; createdBy: string; updated: string; contents: Array<{ key: string; value: any }>; siteCollection: { id: string; name: string } }>>;
+  scaffoldSolution(input: { siteName: string; hostName: string; language: string; templateId: string; languages?: string[]; siteCollectionName?: string; siteCollectionDisplayName?: string; siteCollectionDescription?: string; siteDescription?: string; siteDisplayName?: string; posMappings?: any[]; database?: string }): Promise<{ job: SitecoreJob }>;
+  createSite(input: { siteName: string; hostName: string; language: string; templateId: string; collectionId: string; languages?: string[]; description?: string; displayName?: string; posMappings?: any[]; database?: string }): Promise<{ job: SitecoreJob }>;
+  createSiteCollection(input: { name: string; displayName?: string; description?: string; database?: string }): Promise<{ job: SitecoreJob }>;
+  removeSite(input: { siteId?: string; siteName?: string; database?: string }): Promise<{ job: SitecoreJob }>;
+  removeSiteCollection(input: { id: string; database?: string }): Promise<{ job: SitecoreJob }>;
+  renameSite(input: { siteId?: string; siteName?: string; newName?: string; database?: string }): Promise<{ job: SitecoreJob }>;
+  renameSiteCollection(input: { id: string; name?: string; database?: string }): Promise<{ job: SitecoreJob }>;
+  cloneSite(input: { siteId?: string; siteName?: string; cloneName?: string; displayName?: string; description?: string; cloneSiteDefinitions?: boolean; posMappings?: any[]; database?: string }): Promise<{ job: SitecoreJob }>;
+  updateSitesPos(input: { posMappingsInput: Array<{ id: string; newValue: Array<{ name: string; language: string }> }>; database?: string }): Promise<{ result: Array<{ id: string; success: boolean }> }>;
+}
+
+interface SitecoreLanguagesNamespace {
+  getLanguage(name: string): Promise<SitecoreLanguage>;
+  getLanguages(db?: string): Promise<SitecoreLanguage[]>;
+  getSupportedLanguages(): Promise<SitecoreSupportedLanguage[]>;
+  getFallbackLanguage(name: string, db?: string): Promise<SitecoreLanguage>;
+  getArchivedItem(archivalId: string, archiveName?: string): Promise<SitecoreArchivedItem>;
+  getArchivedItems(opts?: { archiveName?: string; pageIndex?: number; pageSize?: number }): Promise<SitecoreArchivedItem[]>;
+  addLanguage(input: AddLanguageInput): Promise<{ successful: boolean }>;
+  deleteLanguage(name: string, db?: string): Promise<{ successful: boolean }>;
+  deleteLanguages(names: string[], db?: string): Promise<{ successful: boolean }>;
+  archiveItem(idOrPath: string, archiveName?: string): Promise<{ archiveItemId: string }>;
+  archiveVersion(idOrPath: string, language: string, version?: number, archiveName?: string): Promise<{ archiveVersionId: string }>;
+  setItemArchiveDate(idOrPath: string, date?: string): Promise<{ successful: boolean }>;
+  setVersionArchiveDate(idOrPath: string, language: string, date?: string, version?: number): Promise<{ successful: boolean }>;
+  restoreArchivedItem(archivalId: string, archiveName?: string): Promise<{ successful: boolean }>;
+  restoreArchivedVersion(versionId: string, archiveName?: string): Promise<{ successful: boolean }>;
+  deleteArchivedItem(archivalId: string, archiveName?: string): Promise<{ successful: boolean }>;
+  deleteArchivedVersion(versionId: string, archiveName?: string): Promise<{ successful: boolean }>;
+  emptyArchive(archiveName?: string): Promise<{ successful: boolean }>;
+}
+
+interface SitecoreSecurityNamespace {
+  getCurrentUser(): Promise<SitecoreUser>;
+  getUser(userName: string): Promise<SitecoreUser>;
+  getUsers(): Promise<SitecoreUser[]>;
+  getRole(roleName: string): Promise<SitecoreRole>;
+  getRoles(): Promise<SitecoreRole[]>;
+  getDomain(domainName: string): Promise<SitecoreDomain>;
+  getDomains(): Promise<SitecoreDomain[]>;
+  getSelectionProfiles(): Promise<Array<{ name: string; profileId: string }>>;
+  createUser(input: CreateUserInput): Promise<SitecoreUser>;
+  updateUser(input: UpdateUserInput): Promise<SitecoreUser>;
+  deleteUser(userName: string): Promise<{ successful: boolean }>;
+  unlockUser(userName: string): Promise<{ successful: boolean }>;
+  enableUser(userName: string): Promise<{ successful: boolean }>;
+  disableUser(userName: string): Promise<{ successful: boolean }>;
+  resetUserSettings(userName: string): Promise<{ successful: boolean }>;
+  changeUserPassword(userName: string, oldPw: string, newPw: string): Promise<{ successful: boolean }>;
+  createDomain(domainName: string, local?: boolean): Promise<SitecoreDomain>;
+  deleteDomain(domainName: string): Promise<{ successful: boolean }>;
+  createRole(roleName: string): Promise<SitecoreRole>;
+  deleteRole(roleName: string): Promise<{ successful: boolean }>;
+  addRoleToRoles(roleName: string, parentRoles: string[]): Promise<{ successful: boolean }>;
+  deleteRoleFromRoles(roleName: string, parentRoles: string[]): Promise<{ successful: boolean }>;
+  addAccountsToRole(roleName: string, opts?: { users?: string[]; roles?: string[] }): Promise<{ successful: boolean }>;
+  deleteAccountsFromRole(roleName: string, opts?: { users?: string[]; roles?: string[] }): Promise<{ successful: boolean }>;
+}
+
+interface SitecorePresentationNamespace {
+  getAvailableRenderings(opts?: { database?: string; renderingId?: string; siteRootItemId?: string }): Promise<SitecoreRendering[]>;
+  getPageDesigns(siteName: string, opts?: { database?: string }): Promise<Array<{ siteName: string; pageDesign: SitecoreItem }>>;
+  getPartialDesigns(siteName: string, opts?: { database?: string }): Promise<Array<{ siteName: string; partialDesign: SitecoreItem }>>;
+  getPageBranchesRoots(siteName: string, opts?: { database?: string }): Promise<Array<{ siteName: string; root: SitecoreItem }>>;
+  getDatabases(): Promise<Array<{ name: string }>>;
+  getMeta(): Promise<{ version: string; xMVersion: string }>;
+  configurePageDesigns(siteName: string, mapping: Array<{ templateId?: string; pageDesignId?: string }>, opts?: { database?: string }): Promise<boolean>;
+}
+
 // ── Sitecore SDK Interface ───────────────────────────────
 
 interface SitecoreSDK {
@@ -1271,6 +1413,29 @@ interface SitecoreSDK {
    * @param mapping - Array of template-to-page-design mappings
    */
   configurePageDesigns(siteName: string, mapping: Array<{ templateId?: string; pageDesignId?: string }>, opts?: { database?: string }): Promise<boolean>;
+
+  // ── Category Namespace Aliases ──────────────────────────
+
+  /** Content & Items — `Sitecore.Content.getItem()`, `.search()`, `.createItem()`, etc. */
+  Content: SitecoreContentNamespace;
+  /** Publishing — `Sitecore.Publishing.publishItem()`, `.publishSite()`, etc. */
+  Publishing: SitecorePublishingNamespace;
+  /** Search Indexes & Database — `Sitecore.Indexes.getIndex()`, `.rebuildIndexes()`, etc. */
+  Indexes: SitecoreIndexesNamespace;
+  /** Workflows & Jobs — `Sitecore.Workflows.getWorkflow()`, `.startWorkflow()`, etc. */
+  Workflows: SitecoreWorkflowsNamespace;
+  /** Translation — `Sitecore.Translation.translatePage()`, `.translateSite()` */
+  Translation: SitecoreTranslationNamespace;
+  /** Templates — `Sitecore.Templates.getTemplate()`, `.createTemplate()`, etc. */
+  Templates: SitecoreTemplatesNamespace;
+  /** Sites & Solutions — `Sitecore.Sites.getSite()`, `.createSite()`, etc. */
+  Sites: SitecoreSitesNamespace;
+  /** Languages & Archiving — `Sitecore.Languages.getLanguage()`, `.archiveItem()`, etc. */
+  Languages: SitecoreLanguagesNamespace;
+  /** Security — `Sitecore.Security.getCurrentUser()`, `.createUser()`, etc. */
+  Security: SitecoreSecurityNamespace;
+  /** Presentation & Meta — `Sitecore.Presentation.getAvailableRenderings()`, `.getMeta()`, etc. */
+  Presentation: SitecorePresentationNamespace;
 }
 
 /**
@@ -1331,3 +1496,17 @@ declare function print(...args: any[]): void;
  * render(`<h1>Hello World</h1><p>This is rendered HTML.</p>`);
  */
 declare function render(html: string): void;
+
+/**
+ * Display help for Sitecore SDK methods.
+ * - `help()` — overview of all categories
+ * - `help("getItem")` — full docs for a specific method
+ * - `help("content")` — all methods in a category
+ * - `help("search term")` — fuzzy search across method names and descriptions
+ * @param query - Method name, category name, or search term
+ * @example
+ * help();
+ * help("getItem");
+ * help("publishing");
+ */
+declare function help(query?: string): void;

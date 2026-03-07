@@ -17,6 +17,7 @@ const Editor = dynamic(() => import("@monaco-editor/react").then((m) => m.defaul
 export interface MonacoEditorHandle {
   getValue: () => string;
   setValue: (value: string) => void;
+  insertSnippet: (snippet: string) => void;
 }
 
 interface MonacoEditorProps {
@@ -32,6 +33,19 @@ export const MonacoEditor = forwardRef<MonacoEditorHandle, MonacoEditorProps>(
     useImperativeHandle(ref, () => ({
       getValue: () => editorRef.current?.getValue() ?? "",
       setValue: (value: string) => editorRef.current?.setValue(value),
+      insertSnippet: (snippet: string) => {
+        const editor = editorRef.current;
+        if (!editor) return;
+        editor.focus();
+        const controller = (editor as any).getContribution("snippetController2");
+        if (controller) {
+          controller.insert(snippet);
+        } else {
+          // Fallback: insert as plain text (strip snippet placeholders)
+          const plain = snippet.replace(/\$\{\d+:?(.*?)\}/g, "$1").replace(/\$\d+/g, "");
+          editor.trigger("helpPanel", "type", { text: plain });
+        }
+      },
     }));
 
     const handleMount: OnMount = useCallback(

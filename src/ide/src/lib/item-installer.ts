@@ -2,11 +2,14 @@ import type { SitecoreHelpers } from "./sitecore-helpers";
 import {
   MODULE_VERSION,
   MODULE_ROOT_PATH,
+  SCRIPT_LIBRARY_PATH,
+  USER_SCRIPTS_PATH,
   TEMPLATES_ROOT_PATH,
   SITECORE_TEMPLATE_ID,
   SITECORE_TEMPLATE_SECTION_ID,
   SITECORE_TEMPLATE_FIELD_ID,
   TEMPLATE_DEFINITIONS,
+  TEMPLATE_IDS,
   MODULE_DEFINITION,
   type ContentItem,
 } from "./items";
@@ -24,43 +27,19 @@ async function createContentRecursive(
   item: ContentItem
 ): Promise<void> {
   const itemPath = `${parentPath}/${item.name}`;
-  let itemId: string | null = null;
 
-  // Check if item already exists
-  const existing = await helpers.getItem(itemPath);
-  if (existing) {
-    itemId = existing.itemId;
-    // Update fields if they differ
-    const fieldEntries = Object.entries(item.fields);
-    if (fieldEntries.length > 0 && itemId) {
-      const existingFields: Record<string, string> = {};
-      for (const f of existing.fields?.nodes ?? []) {
-        existingFields[f.name] = f.value;
-      }
-      const needsUpdate = fieldEntries.some(
-        ([k, v]) => existingFields[k] !== v
-      );
-      if (needsUpdate) {
-        await helpers.updateItem(itemId, item.fields);
-      }
-    }
-  } else {
-    // Create the item
-    const createFields: Record<string, string> = { ...item.fields };
-    if (item.icon) createFields.__Icon = item.icon;
-    const hasFields = Object.keys(createFields).length > 0;
-    const created = await helpers.createItem(
-      parentId,
-      item.template,
-      item.name,
-      hasFields ? createFields : undefined
-    );
-    itemId = created?.itemId ?? null;
-  }
-
+  const createFields: Record<string, string> = { ...item.fields };
+  if (item.icon) createFields.__Icon = item.icon;
+  const hasFields = Object.keys(createFields).length > 0;
+  const created = await helpers.createItem(
+    parentId,
+    item.template,
+    item.name,
+    hasFields ? createFields : undefined
+  );
+  const itemId = created?.itemId;
   if (!itemId) return;
 
-  // Recurse into children
   if (item.children) {
     for (const child of item.children) {
       await createContentRecursive(helpers, itemPath, itemId, child);
@@ -176,30 +155,55 @@ async function installTemplates(helpers: SitecoreHelpers): Promise<void> {
   }
 }
 
-async function installContent(helpers: SitecoreHelpers): Promise<void> {
-  if (!MODULE_DEFINITION.parent) {
-    throw new Error("Root content item must have a parent path");
+async function deleteScriptLibrary(helpers: SitecoreHelpers): Promise<void> {
+  const scriptLib = await helpers.getItem(SCRIPT_LIBRARY_PATH);
+  if (scriptLib?.itemId) {
+    await helpers.deleteItem(scriptLib.itemId);
   }
+}
 
-  // Ensure parent exists (e.g. /sitecore/system/Modules)
-  const parentSegments = MODULE_DEFINITION.parent.split("/");
-  const parentName = parentSegments.pop()!;
-  const grandParentPath = parentSegments.join("/");
-
+async function installModuleRoot(helpers: SitecoreHelpers): Promise<string> {
   const systemModules = await ensurePathExists(
     helpers,
-    MODULE_DEFINITION.parent,
-    grandParentPath,
-    parentName
+    "/sitecore/system/Modules",
+    "/sitecore/system",
+    "Modules"
   );
-
   if (!systemModules?.itemId) throw new Error("Failed to find/create system Modules");
 
-  await createContentRecursive(
-    helpers,
-    MODULE_DEFINITION.parent,
+  const createFields: Record<string, string> = { Version: MODULE_VERSION };
+  if (MODULE_DEFINITION.icon) createFields.__Icon = MODULE_DEFINITION.icon;
+  const moduleRoot = await helpers.createItem(
     systemModules.itemId,
-    MODULE_DEFINITION
+    TEMPLATE_IDS.jsScriptModule,
+    "JavaScript Extensions",
+    createFields
+  );
+  if (!moduleRoot?.itemId) throw new Error("Failed to create module root");
+  return moduleRoot.itemId;
+}
+
+async function installScriptLibrary(helpers: SitecoreHelpers, moduleRootId: string): Promise<void> {
+  const scriptLibDef = MODULE_DEFINITION.children?.find((c) => c.name === "Script Library");
+  if (!scriptLibDef) return;
+  await createContentRecursive(helpers, MODULE_ROOT_PATH, moduleRootId, scriptLibDef);
+}
+
+async function ensureUserScripts(helpers: SitecoreHelpers, moduleRootId: string): Promise<void> {
+  const existing = await helpers.getItem(USER_SCRIPTS_PATH);
+  if (existing) return;
+
+  const userScriptsDef = MODULE_DEFINITION.children?.find((c) => c.name === "Script Library")
+    ?.children?.find((c) => c.name === "User Scripts");
+  const fields: Record<string, string> = {};
+  if (userScriptsDef?.icon) fields.__Icon = userScriptsDef.icon;
+  const scriptLib = await helpers.getItem(SCRIPT_LIBRARY_PATH);
+  if (!scriptLib?.itemId) return;
+  await helpers.createItem(
+    scriptLib.itemId,
+    TEMPLATE_IDS.jsScriptLibrary,
+    "User Scripts",
+    Object.keys(fields).length > 0 ? fields : undefined
   );
 }
 
@@ -219,9 +223,11 @@ export async function installModule(helpers: SitecoreHelpers): Promise<InstallRe
     const existing = await helpers.getItem(MODULE_ROOT_PATH);
 
     if (!existing) {
-      // Full install
+      // Fresh install: templates + full content tree
       await installTemplates(helpers);
-      await installContent(helpers);
+      const moduleRootId = await installModuleRoot(helpers);
+      await installScriptLibrary(helpers, moduleRootId);
+      await ensureUserScripts(helpers, moduleRootId);
       return { installed: true, version: MODULE_VERSION, storageMode: "sitecore" };
     }
 
@@ -230,10 +236,11 @@ export async function installModule(helpers: SitecoreHelpers): Promise<InstallRe
       existing.fields?.nodes?.find((f: any) => f.name === "Version")?.value ?? "0.0.0";
 
     if (compareVersions(MODULE_VERSION, installedVersion) > 0) {
-      // Upgrade: re-walk definition tree to create missing / update changed items
+      // Upgrade: reinstall templates, delete Script Library and recreate, preserve User Scripts
       await installTemplates(helpers);
-      await installContent(helpers);
-      // Update version
+      await deleteScriptLibrary(helpers);
+      await installScriptLibrary(helpers, existing.itemId);
+      await ensureUserScripts(helpers, existing.itemId);
       await helpers.updateItem(existing.itemId, { Version: MODULE_VERSION });
     }
 

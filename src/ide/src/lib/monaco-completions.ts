@@ -723,6 +723,7 @@ const sitecoreMethods: {
   },
 ];
 
+// ── Utilities ─────────────────────────────────────────────
 const utilityFunctions: {
   label: string;
   detail: string;
@@ -741,9 +742,28 @@ const utilityFunctions: {
     documentation: "Render HTML content in the Results tab.",
     insertText: "render(`${1:<h1>Hello</h1>}`)",
   },
+  {
+    label: "help",
+    detail: "(query?: string) => void",
+    documentation: 'Display help for Sitecore SDK methods. help() for overview, help("getItem") for details.',
+    insertText: 'help("${1}")',
+  },
 ];
 
 import { sitecoreSdkDts } from "./sitecore-sdk-dts";
+
+const namespaceMap: Record<string, { description: string; methods: string[] }> = {
+  Content: { description: "Content & Items", methods: ["getItem", "getItemChildren", "getMediaItem", "search", "createItem", "createItemFromBranch", "updateItem", "deleteItem", "renameItem", "moveItem", "copyItem", "addItemVersion", "deleteItemVersion", "uploadMedia"] },
+  Publishing: { description: "Publishing", methods: ["getPublishingStatus", "getPublishingTargets", "getPublishingQueue", "publishItem", "publishLanguageSpecificItems", "publishSite", "publishWithOptions", "cancelPublishing"] },
+  Indexes: { description: "Search Indexes & Database", methods: ["getIndex", "getIndexes", "rebuildIndexes", "populateManagedSchema", "rebuildLinkDatabase", "cleanUpDatabases"] },
+  Workflows: { description: "Workflows & Jobs", methods: ["getWorkflow", "getWorkflows", "getJob", "getJobs", "isJobQueued", "isJobRunning", "startWorkflow", "executeWorkflowCommand"] },
+  Translation: { description: "Translation", methods: ["translatePage", "translateSite"] },
+  Templates: { description: "Templates", methods: ["getTemplate", "getTemplates", "getDataSourceTemplates", "getTenantTemplates", "createTemplate", "updateTemplate", "deleteTemplate", "createTemplateFolder"] },
+  Sites: { description: "Sites & Solutions", methods: ["getSite", "getSites", "getSiteCollections", "getSolutionSites", "searchSolutionSites", "getSolutionTemplates", "scaffoldSolution", "createSite", "createSiteCollection", "removeSite", "removeSiteCollection", "renameSite", "renameSiteCollection", "cloneSite", "updateSitesPos"] },
+  Languages: { description: "Languages & Archiving", methods: ["getLanguage", "getLanguages", "getSupportedLanguages", "getFallbackLanguage", "getArchivedItem", "getArchivedItems", "addLanguage", "deleteLanguage", "deleteLanguages", "archiveItem", "archiveVersion", "setItemArchiveDate", "setVersionArchiveDate", "restoreArchivedItem", "restoreArchivedVersion", "deleteArchivedItem", "deleteArchivedVersion", "emptyArchive"] },
+  Security: { description: "Security", methods: ["getCurrentUser", "getUser", "getUsers", "getRole", "getRoles", "getDomain", "getDomains", "getSelectionProfiles", "createUser", "updateUser", "deleteUser", "unlockUser", "enableUser", "disableUser", "resetUserSettings", "changeUserPassword", "createDomain", "deleteDomain", "createRole", "deleteRole", "addRoleToRoles", "deleteRoleFromRoles", "addAccountsToRole", "deleteAccountsFromRole"] },
+  Presentation: { description: "Presentation & Meta", methods: ["getAvailableRenderings", "getPageDesigns", "getPartialDesigns", "getPageBranchesRoots", "getDatabases", "getMeta", "configurePageDesigns"] },
+};
 
 export function registerCompletions(monaco: any) {
   // Register type definitions for IntelliSense, hover, and signature help
@@ -779,9 +799,27 @@ export function registerCompletions(monaco: any) {
 
       const suggestions: any[] = [];
 
-      // Sitecore.* or sc.* completions
-      if (textBefore.endsWith("Sitecore.") || textBefore.endsWith("sc.")) {
-        const prefix = textBefore.endsWith("sc.") ? "sc." : "Sitecore.";
+      // Check for Sitecore.<Namespace>. or sc.<Namespace>. completions
+      const nsMatch = textBefore.match(/(?:Sitecore|sc)\.(\w+)\.$/);
+      if (nsMatch && namespaceMap[nsMatch[1]]) {
+        const ns = namespaceMap[nsMatch[1]];
+        const methodSet = new Set(ns.methods);
+        for (const method of sitecoreMethods) {
+          const methodName = method.label.replace("Sitecore.", "");
+          if (methodSet.has(methodName)) {
+            suggestions.push({
+              label: methodName,
+              kind: monaco.languages.CompletionItemKind.Method,
+              detail: method.detail,
+              documentation: method.documentation,
+              insertText: method.insertText.replace("Sitecore.", ""),
+              insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+              range,
+            });
+          }
+        }
+      } else if (textBefore.endsWith("Sitecore.") || textBefore.endsWith("sc.")) {
+        // Flat method completions
         for (const method of sitecoreMethods) {
           const methodName = method.label.replace("Sitecore.", "");
           suggestions.push({
@@ -791,6 +829,17 @@ export function registerCompletions(monaco: any) {
             documentation: method.documentation,
             insertText: method.insertText.replace("Sitecore.", ""),
             insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+            range,
+          });
+        }
+        // Namespace sub-objects
+        for (const [nsName, ns] of Object.entries(namespaceMap)) {
+          suggestions.push({
+            label: nsName,
+            kind: monaco.languages.CompletionItemKind.Module,
+            detail: ns.description,
+            documentation: `${ns.description} (${ns.methods.length} methods): ${ns.methods.join(", ")}`,
+            insertText: nsName,
             range,
           });
         }

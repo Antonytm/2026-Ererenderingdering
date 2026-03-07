@@ -2,9 +2,12 @@
   "name": "xmcloud-extension-starter",
   "version": "1.0.0",
   "scripts": {
+    "predev": "tsx scripts/generate-help.ts",
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "generate-help": "tsx scripts/generate-help.ts",
+    "prebuild": "tsx scripts/generate-help.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.2.0",
@@ -28,6 +31,7 @@
   "devDependencies": {
     "@types/node": "^24.2.0",
     "@types/react": "19.1.9",
+    "tsx": "^4.21.0",
     "typescript": "5.9.2"
   }
 }
