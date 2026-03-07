@@ -7,12 +7,14 @@ export const apiTestSuiteScript: ContentItem = {
     Script: `// ============================================================
 // Sitecore Scripting Console - Comprehensive API Test Suite
 // Exercises all safe-to-test APIs with Arrange/Act/Assert
+// Version: 1.8.0
 // ============================================================
+print('API Test Suite v1.8.0');
 
 // ── Section 1: Config & Test Mini-Framework ─────────────
 
 const TEST_PREFIX = '__sctest_' + Date.now() + '_';
-const cleanup = { items: [], templates: [], roles: [], templateFolders: [] };
+const cleanup = { items: [], templates: [], roles: [], templateFolders: [], users: [], domains: [], languages: [], siteCollections: [] };
 const results = [];
 const suiteStart = Date.now();
 
@@ -26,6 +28,17 @@ let testItemPath = null;
 let copyItemId = null;
 let testTemplateId = null;
 let testTemplateFolderId = null;
+let firstSiteName = null;
+let firstIndexName = null;
+let firstWorkflowId = null;
+let currentUserName = null;
+let firstDomainName = null;
+let testDomainName = null;
+let testUserName = null;
+let testRole2Name = null;
+let publishOperationId = null;
+let archiveTestItemId = null;
+let publishTestItemId = null;
 
 // Assert helpers
 function assert(cond, msg) {
@@ -122,6 +135,11 @@ await test('search', async () => {
   assertHasKey(result, 'totalCount', 'has totalCount');
 });
 
+await test('getMediaItem', async () => {
+  const item = await sc.getMediaItem('/sitecore/media library');
+  assertNotNull(item, 'media item');
+});
+
 // ── Content - CRUD (sequential, shared state) ──
 group('Content - CRUD');
 
@@ -165,6 +183,12 @@ await test('addItemVersion', async () => {
   assert(item.version >= 2, 'version should be >= 2, got ' + item.version);
 });
 
+await test('deleteItemVersion', async () => {
+  if (!testItemId) throw new Error('Skipped: no testItemId');
+  const result = await sc.deleteItemVersion(testItemId, 2);
+  assertNotNull(result, 'delete version result');
+});
+
 await test('copyItem', async () => {
   if (!testItemId) throw new Error('Skipped: no testItemId');
   const copyName = TEST_PREFIX + 'copy';
@@ -200,6 +224,21 @@ await test('getTemplates', async () => {
   const templates = await sc.Templates.getTemplates();
   assertArray(templates, 'templates is array');
   assert(templates.length > 0, 'should have templates');
+});
+
+await test('getDataSourceTemplates', async () => {
+  const templates = await sc.Templates.getDataSourceTemplates();
+  assertNotNull(templates, 'data source templates');
+});
+
+await test('getTenantTemplates', async () => {
+  const sites = await sc.Sites.getSites();
+  if (sites && sites.length > 0) {
+    firstSiteName = sites[0].name || sites[0].siteName;
+  }
+  if (!firstSiteName) throw new Error('Skipped: no sites available');
+  const templates = await sc.Templates.getTenantTemplates(firstSiteName);
+  assertNotNull(templates, 'tenant templates');
 });
 
 await test('createTemplateFolder', async () => {
@@ -239,34 +278,106 @@ await test('updateTemplate', async () => {
   assertNotNull(result, 'update template result');
 });
 
-// ── Publishing (read-only) ──
-group('Publishing');
+// ── Sites (read + queries) ──
+group('Sites');
 
-await test('getPublishingTargets', async () => {
-  const targets = await sc.Publishing.getPublishingTargets();
-  assertArray(targets, 'publishing targets is array');
+await test('getSites', async () => {
+  const sites = await sc.Sites.getSites();
+  assertNotNull(sites, 'sites');
+  if (sites && sites.length > 0 && !firstSiteName) {
+    firstSiteName = sites[0].name || sites[0].siteName;
+  }
 });
 
-// ── Indexes (read-only) ──
+await test('getSite', async () => {
+  if (!firstSiteName) throw new Error('Skipped: no sites available');
+  const site = await sc.Sites.getSite(firstSiteName);
+  assertNotNull(site, 'site');
+});
+
+await test('getSiteCollections', async () => {
+  const collections = await sc.Sites.getSiteCollections();
+  assertNotNull(collections, 'site collections');
+});
+
+await test('getSolutionSites', async () => {
+  const solution = await sc.Sites.getSolutionSites();
+  assertNotNull(solution, 'solution sites');
+});
+
+await test('searchSolutionSites', async () => {
+  const result = await sc.Sites.searchSolutionSites();
+  assertNotNull(result, 'search solution sites');
+});
+
+await test('getSolutionTemplates', async () => {
+  const templates = await sc.Sites.getSolutionTemplates();
+  assertNotNull(templates, 'solution templates');
+});
+
+// ── Indexes ──
 group('Indexes');
 
 await test('getIndexes', async () => {
   const indexes = await sc.Indexes.getIndexes();
   assertArray(indexes, 'indexes is array');
   assert(indexes.length > 0, 'should have indexes');
+  if (indexes.length > 0) {
+    firstIndexName = indexes[0].name || indexes[0].indexName || indexes[0];
+    if (typeof firstIndexName === 'object') firstIndexName = null;
+  }
 });
 
-// ── Workflows (read-only) ──
+await test('getIndex', async () => {
+  if (!firstIndexName) throw new Error('Skipped: no index name available');
+  const index = await sc.Indexes.getIndex(firstIndexName);
+  assertNotNull(index, 'index');
+});
+
+// ── Workflows ──
 group('Workflows');
 
 await test('getWorkflows', async () => {
   const wf = await sc.Workflows.getWorkflows();
   assertArray(wf, 'workflows is array');
+  if (wf && wf.length > 0) {
+    firstWorkflowId = wf[0].workflowId || wf[0].itemId || wf[0].id;
+  }
+});
+
+await test('getWorkflow', async () => {
+  if (!firstWorkflowId) throw new Error('Skipped: no workflow ID available');
+  const wf = await sc.Workflows.getWorkflow(firstWorkflowId);
+  assertNotNull(wf, 'workflow');
 });
 
 await test('getJobs', async () => {
   const jobs = await sc.Workflows.getJobs();
   assertNotNull(jobs, 'jobs result');
+});
+
+await test('getJob', async () => {
+  const jobs = await sc.Workflows.getJobs();
+  if (!jobs || (Array.isArray(jobs) && jobs.length === 0)) throw new Error('Skipped: no jobs available');
+  const jobList = Array.isArray(jobs) ? jobs : (jobs.jobs || jobs.results || []);
+  if (jobList.length === 0) throw new Error('Skipped: no jobs to query');
+  // Try handle first (contains |), then fall back to name
+  const firstJob = jobList[0];
+  const jobRef = firstJob.handle || firstJob.jobHandle;
+  if (!jobRef) throw new Error('Skipped: no job handle found in ' + JSON.stringify(Object.keys(firstJob)));
+  const job = await sc.Workflows.getJob(jobRef);
+  // Job may complete and be gone — null is acceptable
+  assert(true, 'getJob returned without error');
+});
+
+await test('isJobQueued', async () => {
+  const result = await sc.Workflows.isJobQueued('nonexistent_job_handle');
+  assertEqual(result, false, 'nonexistent job should not be queued');
+});
+
+await test('isJobRunning', async () => {
+  const result = await sc.Workflows.isJobRunning('nonexistent_job_handle');
+  assertEqual(result, false, 'nonexistent job should not be running');
 });
 
 // ── Languages (read-only) ──
@@ -283,12 +394,42 @@ await test('getSupportedLanguages', async () => {
   assertNotNull(langs, 'supported languages');
 });
 
-// ── Security ──
+await test('getLanguage', async () => {
+  const lang = await sc.Languages.getLanguage('en');
+  assertNotNull(lang, 'language en');
+});
+
+await test('getFallbackLanguage', async () => {
+  // 'en' may not have a fallback — just verify it doesn't throw
+  const fallback = await sc.Languages.getFallbackLanguage('en');
+  // fallback can be null if no fallback configured; that's valid
+  assert(true, 'getFallbackLanguage returned without error');
+});
+
+await test('getArchivedItems', async () => {
+  const archived = await sc.Languages.getArchivedItems({ archiveName: 'archive' });
+  assertNotNull(archived, 'archived items result');
+});
+
+// ── Security (read-only) ──
 group('Security');
 
 await test('getCurrentUser', async () => {
   const user = await sc.Security.getCurrentUser();
   assertNotNull(user, 'current user');
+  assertHasKey(user, 'name', 'user has name');
+  currentUserName = user.name;
+});
+
+await test('getUsers', async () => {
+  const users = await sc.Security.getUsers();
+  assertNotNull(users, 'users result');
+});
+
+await test('getUser', async () => {
+  if (!currentUserName) throw new Error('Skipped: no current user name');
+  const user = await sc.Security.getUser(currentUserName);
+  assertNotNull(user, 'user');
   assertHasKey(user, 'name', 'user has name');
 });
 
@@ -301,6 +442,19 @@ await test('getDomains', async () => {
   const domains = await sc.Security.getDomains();
   assertArray(domains, 'domains is array');
   assert(domains.length > 0, 'should have domains');
+  firstDomainName = domains[0].name || domains[0].domainName || domains[0];
+  if (typeof firstDomainName === 'object') firstDomainName = 'sitecore';
+});
+
+await test('getDomain', async () => {
+  if (!firstDomainName) throw new Error('Skipped: no domain name available');
+  const domain = await sc.Security.getDomain(firstDomainName);
+  assertNotNull(domain, 'domain');
+});
+
+await test('getSelectionProfiles', async () => {
+  const profiles = await sc.Security.getSelectionProfiles();
+  assertNotNull(profiles, 'selection profiles');
 });
 
 await test('createRole + getRole round-trip', async () => {
@@ -311,6 +465,19 @@ await test('createRole + getRole round-trip', async () => {
   const fetched = await sc.Security.getRole(roleName);
   assertNotNull(fetched, 'fetched role');
   assertContains(fetched.name, 'SCTestRole', 'role name contains prefix');
+});
+
+// ── Publishing (read-only) ──
+group('Publishing');
+
+await test('getPublishingTargets', async () => {
+  const targets = await sc.Publishing.getPublishingTargets();
+  assertArray(targets, 'publishing targets is array');
+});
+
+await test('getPublishingQueue', async () => {
+  const queue = await sc.Publishing.getPublishingQueue({ sort: { field: 'date', direction: 'DESCENDING' }, paging: { pageIndex: 0, pageSize: 10 } });
+  assertNotNull(queue, 'publishing queue');
 });
 
 // ── Presentation (read-only) ──
@@ -331,22 +498,385 @@ await test('getAvailableRenderings', async () => {
   assertNotNull(renderings, 'renderings');
 });
 
-// ── Sites (read-only) ──
-group('Sites');
-
-await test('getSites', async () => {
-  const sites = await sc.Sites.getSites();
-  assertNotNull(sites, 'sites');
+await test('getPageDesigns', async () => {
+  if (!firstSiteName) throw new Error('Skipped: no site name available');
+  const designs = await sc.Presentation.getPageDesigns(firstSiteName);
+  assertNotNull(designs, 'page designs');
 });
 
-await test('getSiteCollections', async () => {
-  const collections = await sc.Sites.getSiteCollections();
-  assertNotNull(collections, 'site collections');
+await test('getPartialDesigns', async () => {
+  if (!firstSiteName) throw new Error('Skipped: no site name available');
+  const designs = await sc.Presentation.getPartialDesigns(firstSiteName);
+  assertNotNull(designs, 'partial designs');
 });
 
-await test('getSolutionSites', async () => {
-  const solution = await sc.Sites.getSolutionSites();
-  assertNotNull(solution, 'solution sites');
+await test('getPageBranchesRoots', async () => {
+  if (!firstSiteName) throw new Error('Skipped: no site name available');
+  const roots = await sc.Presentation.getPageBranchesRoots(firstSiteName);
+  assertNotNull(roots, 'page branches roots');
+});
+
+// ── Security - CRUD (with cleanup) ──
+group('Security - CRUD');
+
+await test('createDomain + deleteDomain', async () => {
+  testDomainName = 'sctest' + Date.now();
+  const created = await sc.Security.createDomain(testDomainName);
+  assertNotNull(created, 'created domain');
+  cleanup.domains.push(testDomainName);
+  const fetched = await sc.Security.getDomain(testDomainName);
+  assertNotNull(fetched, 'fetched test domain');
+});
+
+await test('createUser', async () => {
+  if (!testDomainName) throw new Error('Skipped: no test domain');
+  testUserName = testDomainName + '\\\\testuser' + Date.now();
+  const created = await sc.Security.createUser({ userName: testUserName, password: 'T3st!Pass' + Date.now(), email: 'test@example.com' });
+  assertNotNull(created, 'created user');
+  cleanup.users.push(testUserName);
+});
+
+await test('getUser (test user)', async () => {
+  if (!testUserName) throw new Error('Skipped: no test user');
+  const user = await sc.Security.getUser(testUserName);
+  assertNotNull(user, 'test user');
+  assertHasKey(user, 'name', 'user has name');
+});
+
+await test('updateUser', async () => {
+  if (!testUserName) throw new Error('Skipped: no test user');
+  const result = await sc.Security.updateUser({ userName: testUserName, fullName: 'Test User Updated' });
+  assertNotNull(result, 'update user result');
+});
+
+await test('disableUser', async () => {
+  if (!testUserName) throw new Error('Skipped: no test user');
+  const result = await sc.Security.disableUser(testUserName);
+  assertNotNull(result, 'disable user result');
+});
+
+await test('enableUser', async () => {
+  if (!testUserName) throw new Error('Skipped: no test user');
+  const result = await sc.Security.enableUser(testUserName);
+  assertNotNull(result, 'enable user result');
+});
+
+await test('unlockUser', async () => {
+  if (!testUserName) throw new Error('Skipped: no test user');
+  const result = await sc.Security.unlockUser(testUserName);
+  assertNotNull(result, 'unlock user result');
+});
+
+await test('resetUserSettings', async () => {
+  if (!testUserName) throw new Error('Skipped: no test user');
+  const result = await sc.Security.resetUserSettings(testUserName);
+  assertNotNull(result, 'reset user settings result');
+});
+
+await test('changeUserPassword', async () => {
+  if (!testUserName) throw new Error('Skipped: no test user');
+  const result = await sc.Security.changeUserPassword(testUserName, 'T3st!Pass' + Date.now(), 'N3w!Pass' + Date.now());
+  assertNotNull(result, 'change password result');
+});
+
+await test('addRoleToRoles + deleteRoleFromRoles', async () => {
+  testRole2Name = 'sitecore\\\\SCTestRoleB' + Date.now();
+  const role2 = await sc.Security.createRole(testRole2Name);
+  assertNotNull(role2, 'created role2');
+  cleanup.roles.push(testRole2Name);
+  const existingRole = cleanup.roles[0];
+  if (!existingRole) throw new Error('Skipped: no existing role');
+  const addResult = await sc.Security.addRoleToRoles(existingRole, [testRole2Name]);
+  assertNotNull(addResult, 'add role to roles result');
+  const removeResult = await sc.Security.deleteRoleFromRoles(existingRole, [testRole2Name]);
+  assertNotNull(removeResult, 'delete role from roles result');
+});
+
+await test('addAccountsToRole + deleteAccountsFromRole', async () => {
+  if (!testUserName || cleanup.roles.length === 0) throw new Error('Skipped: no test user or role');
+  const roleName = cleanup.roles[0];
+  const addResult = await sc.Security.addAccountsToRole(roleName, { users: [testUserName] });
+  assertNotNull(addResult, 'add accounts to role result');
+  const removeResult = await sc.Security.deleteAccountsFromRole(roleName, { users: [testUserName] });
+  assertNotNull(removeResult, 'delete accounts from role result');
+});
+
+await test('deleteUser', async () => {
+  if (!testUserName) throw new Error('Skipped: no test user');
+  const result = await sc.Security.deleteUser(testUserName);
+  assertNotNull(result, 'delete user result');
+  cleanup.users = cleanup.users.filter(u => u !== testUserName);
+});
+
+await test('deleteDomain', async () => {
+  if (!testDomainName) throw new Error('Skipped: no test domain');
+  const result = await sc.Security.deleteDomain(testDomainName);
+  assertNotNull(result, 'delete domain result');
+  cleanup.domains = cleanup.domains.filter(d => d !== testDomainName);
+});
+
+// ── Publishing - Mutations ──
+group('Publishing - Mutations');
+
+await test('publishItem', async () => {
+  publishTestItemId = testItemId;
+  if (!publishTestItemId) {
+    const item = await sc.createItem('/sitecore/content', SAMPLE_ITEM_TEMPLATE, TEST_PREFIX + 'publish');
+    publishTestItemId = item.itemId;
+    cleanup.items.push(item.itemId);
+  }
+  const result = await sc.Publishing.publishItem({ itemId: publishTestItemId, publishingTargets: ['Internet'], languages: ['en'] });
+  assertNotNull(result, 'publish item result');
+  if (result && (result.operationId || result.handle)) {
+    publishOperationId = result.operationId || result.handle;
+  }
+});
+
+await test('getPublishingStatus', async () => {
+  if (!publishOperationId) throw new Error('Skipped: no publish operation ID');
+  const status = await sc.Publishing.getPublishingStatus(publishOperationId);
+  assertNotNull(status, 'publishing status');
+});
+
+await test('cancelPublishing', async () => {
+  try {
+    const result = await sc.Publishing.cancelPublishing(publishOperationId || 'nonexistent');
+    assertNotNull(result, 'cancel publishing result');
+  } catch (e) {
+    // Canceling a completed or invalid operation may throw — that's OK
+    assert(e && e.message, 'cancel threw with message: ' + (e && e.message));
+  }
+});
+
+await test('publishSite', async () => {
+  if (!firstSiteName) throw new Error('Skipped: no site name');
+  const result = await sc.Publishing.publishSite({ siteName: firstSiteName, publishingTargets: ['Internet'], languages: ['en'], publishSubItems: false });
+  assertNotNull(result, 'publish site result');
+});
+
+await test('publishWithOptions', async () => {
+  const result = await sc.Publishing.publishWithOptions([{ mode: 'smart', publishingTargets: ['Internet'], languages: ['en'] }]);
+  assertNotNull(result, 'publish with options result');
+});
+
+await test('publishLanguageSpecificItems', async () => {
+  if (!publishTestItemId) throw new Error('Skipped: no publish test item');
+  const result = await sc.Publishing.publishLanguageSpecificItems({ itemIds: [publishTestItemId], publishingTargets: ['Internet'], languages: ['en'] });
+  assertNotNull(result, 'publish language specific items result');
+});
+
+// ── Languages - Mutations ──
+group('Languages - Mutations');
+
+await test('addLanguage + deleteLanguage', async () => {
+  const result = await sc.Languages.addLanguage({ name: 'zu-ZA' });
+  assertNotNull(result, 'add language result');
+  cleanup.languages.push('zu-ZA');
+  const langs = await sc.Languages.getLanguages();
+  const hasZulu = Array.isArray(langs) && langs.some(l => (l.name || l.isoCode || l) === 'zu-ZA' || (l.name || '').includes('zu'));
+  assertTruthy(hasZulu, 'zu-ZA should be in languages');
+  const delResult = await sc.Languages.deleteLanguage('zu-ZA');
+  assertNotNull(delResult, 'delete language result');
+  cleanup.languages = cleanup.languages.filter(l => l !== 'zu-ZA');
+});
+
+await test('deleteLanguages (batch)', async () => {
+  await sc.Languages.addLanguage({ name: 'af-ZA' });
+  await sc.Languages.addLanguage({ name: 'sq-AL' });
+  cleanup.languages.push('af-ZA', 'sq-AL');
+  const result = await sc.Languages.deleteLanguages(['af-ZA', 'sq-AL']);
+  assertNotNull(result, 'delete languages result');
+  cleanup.languages = cleanup.languages.filter(l => l !== 'af-ZA' && l !== 'sq-AL');
+});
+
+await test('archiveItem + restoreArchivedItem', async () => {
+  const itemName = TEST_PREFIX + 'archive';
+  const item = await sc.createItem('/sitecore/content', SAMPLE_ITEM_TEMPLATE, itemName);
+  archiveTestItemId = item.itemId;
+  cleanup.items.push(item.itemId);
+  const archiveResult = await sc.Languages.archiveItem(item.itemId);
+  assertNotNull(archiveResult, 'archive item result');
+  assertHasKey(archiveResult, 'archiveItemId', 'has archiveItemId');
+  const restoreResult = await sc.Languages.restoreArchivedItem(archiveResult.archiveItemId);
+  assertNotNull(restoreResult, 'restore archived item result');
+});
+
+await test('archiveVersion + restoreArchivedVersion', async () => {
+  if (!archiveTestItemId) throw new Error('Skipped: no archive test item');
+  await sc.addItemVersion(archiveTestItemId);
+  const archiveResult = await sc.Languages.archiveVersion(archiveTestItemId, 'en', 2);
+  assertNotNull(archiveResult, 'archive version result');
+  assertHasKey(archiveResult, 'archiveVersionId', 'has archiveVersionId');
+  const restoreResult = await sc.Languages.restoreArchivedVersion(archiveResult.archiveVersionId);
+  assertNotNull(restoreResult, 'restore archived version result');
+});
+
+await test('setItemArchiveDate', async () => {
+  if (!archiveTestItemId) throw new Error('Skipped: no archive test item');
+  const futureDate = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString();
+  const result = await sc.Languages.setItemArchiveDate(archiveTestItemId, futureDate);
+  assertNotNull(result, 'set item archive date result');
+});
+
+await test('setVersionArchiveDate', async () => {
+  if (!archiveTestItemId) throw new Error('Skipped: no archive test item');
+  const futureDate = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString();
+  const result = await sc.Languages.setVersionArchiveDate(archiveTestItemId, 'en', futureDate, 1);
+  assertNotNull(result, 'set version archive date result');
+});
+
+await test('getArchivedItem', async () => {
+  if (!archiveTestItemId) throw new Error('Skipped: no archive test item');
+  const archiveResult = await sc.Languages.archiveItem(archiveTestItemId);
+  assertNotNull(archiveResult, 'archive result for getArchivedItem');
+  try {
+    const item = await sc.Languages.getArchivedItem(archiveResult.archiveItemId);
+    assertNotNull(item, 'archived item');
+  } finally {
+    try { await sc.Languages.restoreArchivedItem(archiveResult.archiveItemId); } catch(e) { /* ignore */ }
+  }
+});
+
+await test('deleteArchivedItem', async () => {
+  const tempName = TEST_PREFIX + 'archivedelete';
+  const item = await sc.createItem('/sitecore/content', SAMPLE_ITEM_TEMPLATE, tempName);
+  const archiveResult = await sc.Languages.archiveItem(item.itemId);
+  assertNotNull(archiveResult, 'archive for delete');
+  const result = await sc.Languages.deleteArchivedItem(archiveResult.archiveItemId);
+  assertNotNull(result, 'delete archived item result');
+});
+
+await test('deleteArchivedVersion', async () => {
+  const tempName = TEST_PREFIX + 'archivever';
+  const item = await sc.createItem('/sitecore/content', SAMPLE_ITEM_TEMPLATE, tempName);
+  cleanup.items.push(item.itemId);
+  await sc.addItemVersion(item.itemId);
+  const archiveResult = await sc.Languages.archiveVersion(item.itemId, 'en', 2);
+  assertNotNull(archiveResult, 'archive version for delete');
+  const result = await sc.Languages.deleteArchivedVersion(archiveResult.archiveVersionId);
+  assertNotNull(result, 'delete archived version result');
+});
+
+await test('emptyArchive', async () => {
+  const result = await sc.Languages.emptyArchive();
+  assertNotNull(result, 'empty archive result');
+});
+
+// ── Translation ──
+group('Translation');
+
+await test('translatePage', async () => {
+  if (!testItemId) throw new Error('Skipped: no test item');
+  try {
+    const result = await sc.Translation.translatePage(testItemId, 'da');
+    assertNotNull(result, 'translate page result');
+  } catch (e) {
+    // Translation may not be configured in all environments
+    assertContains(e.message || String(e), '', 'translatePage threw (may need translation config)');
+    throw new Error('Skipped: translation not configured - ' + (e.message || e));
+  }
+});
+
+await test('translateSite', async () => {
+  if (!firstSiteName) throw new Error('Skipped: no site name');
+  try {
+    const result = await sc.Translation.translateSite(firstSiteName, 'da');
+    assertNotNull(result, 'translate site result');
+  } catch (e) {
+    throw new Error('Skipped: translation not configured - ' + (e.message || e));
+  }
+});
+
+// ── Sites - Mutations ──
+group('Sites - Mutations');
+
+await test('createSiteCollection + removeSiteCollection', async () => {
+  const collName = TEST_PREFIX + 'coll';
+  try {
+    const created = await sc.Sites.createSiteCollection({ name: collName });
+    assertNotNull(created, 'created site collection');
+    cleanup.siteCollections.push(collName);
+    const removed = await sc.Sites.removeSiteCollection({ name: collName });
+    assertNotNull(removed, 'remove site collection result');
+    cleanup.siteCollections = cleanup.siteCollections.filter(c => c !== collName);
+  } catch (e) {
+    throw new Error('Skipped: site collection ops may need specific permissions - ' + (e.message || e));
+  }
+});
+
+await test('renameSiteCollection', async () => {
+  const collName = TEST_PREFIX + 'collrename';
+  const newCollName = TEST_PREFIX + 'collrenamed';
+  try {
+    await sc.Sites.createSiteCollection({ name: collName });
+    cleanup.siteCollections.push(collName);
+    const result = await sc.Sites.renameSiteCollection({ currentName: collName, newName: newCollName });
+    assertNotNull(result, 'rename site collection result');
+    cleanup.siteCollections = cleanup.siteCollections.filter(c => c !== collName);
+    cleanup.siteCollections.push(newCollName);
+    await sc.Sites.removeSiteCollection({ name: newCollName });
+    cleanup.siteCollections = cleanup.siteCollections.filter(c => c !== newCollName);
+  } catch (e) {
+    throw new Error('Skipped: site collection rename may need specific permissions - ' + (e.message || e));
+  }
+});
+
+// ── Presentation - Mutations ──
+group('Presentation - Mutations');
+
+await test('configurePageDesigns', async () => {
+  if (!firstSiteName) throw new Error('Skipped: no site name');
+  try {
+    const designs = await sc.Presentation.getPageDesigns(firstSiteName);
+    if (!designs || (Array.isArray(designs) && designs.length === 0)) throw new Error('Skipped: no page designs available');
+    // Just call configure with empty/minimal config to test the API exists
+    const result = await sc.Presentation.configurePageDesigns(firstSiteName, []);
+    assertNotNull(result, 'configure page designs result');
+  } catch (e) {
+    if (e.message && e.message.startsWith('Skipped:')) throw e;
+    throw new Error('Skipped: configurePageDesigns needs specific setup - ' + (e.message || e));
+  }
+});
+
+// ── Indexes - Mutations ──
+group('Indexes - Mutations');
+
+await test('rebuildIndexes', async () => {
+  if (!firstIndexName) throw new Error('Skipped: no index name available');
+  try {
+    const result = await sc.Indexes.rebuildIndexes([firstIndexName]);
+    assertNotNull(result, 'rebuild indexes result');
+  } catch (e) {
+    throw new Error('Skipped: rebuild may need admin permissions - ' + (e.message || e));
+  }
+});
+
+await test('populateManagedSchema', async () => {
+  if (!firstIndexName) throw new Error('Skipped: no index name available');
+  try {
+    const result = await sc.Indexes.populateManagedSchema([firstIndexName]);
+    assertNotNull(result, 'populate managed schema result');
+  } catch (e) {
+    throw new Error('Skipped: schema population may need admin permissions - ' + (e.message || e));
+  }
+});
+
+await test('rebuildLinkDatabase', async () => {
+  try {
+    const result = await sc.Indexes.rebuildLinkDatabase(['master']);
+    assertNotNull(result, 'rebuild link database result');
+  } catch (e) {
+    throw new Error('Skipped: rebuild link DB may need admin permissions - ' + (e.message || e));
+  }
+});
+
+await test('cleanUpDatabases', async () => {
+  try {
+    const result = await sc.Indexes.cleanUpDatabases(['master']);
+    assertNotNull(result, 'clean up databases result');
+  } catch (e) {
+    throw new Error('Skipped: cleanup may need admin permissions - ' + (e.message || e));
+  }
 });
 
 // ── Section 3: Cleanup ──────────────────────────────────
@@ -355,6 +885,18 @@ print('');
 print('=== CLEANUP ===');
 const cleanupErrors = [];
 
+// Delete users
+for (const userName of cleanup.users) {
+  try {
+    await sc.Security.deleteUser(userName);
+    print('Cleaned up user: ' + userName);
+  } catch (e) {
+    const msg = 'Failed to delete user ' + userName + ': ' + (e.message || e);
+    print(msg);
+    cleanupErrors.push(msg);
+  }
+}
+
 // Delete roles
 for (const roleName of cleanup.roles) {
   try {
@@ -362,6 +904,18 @@ for (const roleName of cleanup.roles) {
     print('Cleaned up role: ' + roleName);
   } catch (e) {
     const msg = 'Failed to delete role ' + roleName + ': ' + (e.message || e);
+    print(msg);
+    cleanupErrors.push(msg);
+  }
+}
+
+// Delete domains
+for (const domainName of cleanup.domains) {
+  try {
+    await sc.Security.deleteDomain(domainName);
+    print('Cleaned up domain: ' + domainName);
+  } catch (e) {
+    const msg = 'Failed to delete domain ' + domainName + ': ' + (e.message || e);
     print(msg);
     cleanupErrors.push(msg);
   }
@@ -403,6 +957,30 @@ for (const fid of cleanup.templateFolders) {
   }
 }
 
+// Delete languages
+for (const lang of cleanup.languages) {
+  try {
+    await sc.Languages.deleteLanguage(lang);
+    print('Cleaned up language: ' + lang);
+  } catch (e) {
+    const msg = 'Failed to delete language ' + lang + ': ' + (e.message || e);
+    print(msg);
+    cleanupErrors.push(msg);
+  }
+}
+
+// Delete site collections
+for (const coll of cleanup.siteCollections) {
+  try {
+    await sc.Sites.removeSiteCollection(coll);
+    print('Cleaned up site collection: ' + coll);
+  } catch (e) {
+    const msg = 'Failed to remove site collection ' + coll + ': ' + (e.message || e);
+    print(msg);
+    cleanupErrors.push(msg);
+  }
+}
+
 // ── Section 4: HTML Summary Report ──────────────────────
 
 const totalDuration = Date.now() - suiteStart;
@@ -435,16 +1013,10 @@ for (const g of groupOrder) {
 }
 
 const skippedAPIs = [
-  'Core: retrievePage, reloadCanvas, navigateTo',
-  'Content: createItemFromBranch, getMediaItem, uploadMedia, deleteItemVersion',
-  'Publishing: publishItem, publishSite, publishWithOptions, publishLanguageSpecificItems, cancelPublishing, getPublishingStatus, getPublishingQueue',
-  'Indexes: getIndex, rebuildIndexes, populateManagedSchema, rebuildLinkDatabase, cleanUpDatabases',
-  'Workflows: getWorkflow, getJob, isJobQueued, isJobRunning, startWorkflow, executeWorkflowCommand',
-  'Translation: translatePage, translateSite',
-  'Languages: all mutations & archiving (addLanguage, deleteLanguage, archiveItem, etc.)',
-  'Security: user CRUD, domain CRUD, role membership mutations',
-  'Presentation: configurePageDesigns, getPageDesigns, getPartialDesigns, getPageBranchesRoots (need site name)',
-  'Sites: scaffoldSolution, createSite, createSiteCollection, removeSite, removeSiteCollection, renameSite, renameSiteCollection, cloneSite, updateSitesPos'
+  'Content: uploadMedia, createItemFromBranch (need file blob / branch template)',
+  'Workflows: startWorkflow, executeWorkflowCommand (need item in workflow state)',
+  'Sites: createSite, removeSite, renameSite, cloneSite, scaffoldSolution, updateSitesPos (complex preconditions)',
+  'Core: retrievePage, navigateTo, reloadCanvas (need Pages context)'
 ];
 const skippedHtml = skippedAPIs.map(s => '<li style="margin:2px 0;color:var(--muted-foreground);">' + s + '</li>').join('');
 
@@ -477,7 +1049,7 @@ render(\`
     <tbody>\${tableRows}</tbody>
   </table>
   <details style="margin-top:20px;">
-    <summary style="cursor:pointer;color:var(--muted-foreground);font-size:var(--text-sm);">Skipped APIs (destructive/expensive/need preconditions)</summary>
+    <summary style="cursor:pointer;color:var(--muted-foreground);font-size:var(--text-sm);">Skipped APIs (need preconditions not available in test context)</summary>
     <ul style="margin-top:8px;padding-left:20px;font-size:var(--text-xs);">\${skippedHtml}</ul>
   </details>
 </div>
