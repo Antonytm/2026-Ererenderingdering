@@ -6,7 +6,7 @@ import {
   TEMPLATE_DEFINITIONS,
   MODULE_DEFINITION,
   type ItemDefinition,
-} from "./items/module-definition";
+} from "./items";
 
 export interface InstallResult {
   installed: boolean;

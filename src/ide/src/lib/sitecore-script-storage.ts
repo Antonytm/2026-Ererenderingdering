@@ -4,7 +4,7 @@ import {
   EXAMPLES_PATH,
   USER_SCRIPTS_PATH,
   TEMPLATE_IDS,
-} from "./items/module-definition";
+} from "./items";
 
 function itemToScript(item: any): SavedScript {
   const scriptField = item.fields?.nodes?.find((f: any) => f.name === "Script");
