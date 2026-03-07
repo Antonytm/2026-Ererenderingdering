@@ -73,7 +73,7 @@ export const MonacoEditor = forwardRef<MonacoEditorHandle, MonacoEditorProps>(
       <Editor
         defaultLanguage="javascript"
         defaultValue={defaultValue}
-        theme="vs-dark"
+        theme="light"
         onMount={handleMount}
         options={{
           minimap: { enabled: false },

@@ -4,10 +4,10 @@ import { useEffect, useRef } from "react";
 import type { ConsoleEntry } from "@/src/lib/script-runner";
 
 const levelColors: Record<ConsoleEntry["level"], string> = {
-  log: "text-[#d4d4d4]",
-  info: "text-blue-400",
-  warn: "text-yellow-400",
-  error: "text-red-400",
+  log: "text-slate-800",
+  info: "text-blue-600",
+  warn: "text-yellow-600",
+  error: "text-red-600",
 };
 
 const levelLabels: Record<ConsoleEntry["level"], string> = {
@@ -37,7 +37,7 @@ export function ConsoleOutput({ entries }: ConsoleOutputProps) {
   }
 
   return (
-    <div className="h-full overflow-auto p-2 font-mono text-xs leading-relaxed bg-[#1e1e1e] text-[#d4d4d4]">
+    <div className="h-full overflow-auto p-2 font-mono text-xs leading-relaxed bg-white text-slate-800">
       {entries.map((entry, i) => {
         const time = new Date(entry.timestamp).toLocaleTimeString();
         return (

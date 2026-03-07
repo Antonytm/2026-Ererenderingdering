@@ -2,12 +2,12 @@
 // Each printX outputs formatted text to Console; each renderX outputs styled HTML to Results.
 
 const STYLES = {
-  bg: "#0f172a",
-  text: "#e2e8f0",
-  muted: "#94a3b8",
-  accent: "#38bdf8",
-  border: "#334155",
-  headerBg: "#1e293b",
+  bg: "#ffffff",
+  text: "#1e293b",
+  muted: "#64748b",
+  accent: "#0284c7",
+  border: "#e2e8f0",
+  headerBg: "#f8fafc",
 } as const;
 
 function esc(s: string): string {
