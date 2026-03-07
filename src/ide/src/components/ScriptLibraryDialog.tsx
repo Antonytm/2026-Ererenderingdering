@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Trash2, Loader2, ChevronRight, Folder, FolderOpen, FileCode2 } from "lucide-react";
+import { Trash2, Loader2, ChevronRight, Folder, FolderOpen, FileCode2, Check } from "lucide-react";
 import type { SavedScript, ScriptStorageBackend, ScriptTreeNode } from "@/src/lib/script-storage";
 
 interface ScriptLibraryDialogProps {
@@ -31,6 +31,8 @@ function TreeNode({
   onDelete,
   expandedIds,
   toggleExpanded,
+  mode = "load",
+  isDisabled = false,
 }: {
   node: ScriptTreeNode;
   depth: number;
@@ -40,26 +42,40 @@ function TreeNode({
   onDelete: (id: string) => void;
   expandedIds: Set<string>;
   toggleExpanded: (id: string) => void;
+  mode?: "save" | "load";
+  isDisabled?: boolean;
 }) {
   const isFolder = node.type === "folder";
   const isExpanded = expandedIds.has(node.id);
   const isSelected = selectedId === node.id;
 
+  // In save mode, skip script nodes (only show folders)
+  if (mode === "save" && !isFolder) return null;
+
   return (
     <>
       <div
-        className={`flex items-center gap-1 px-2 py-1 cursor-pointer hover:bg-accent transition-colors select-none ${
-          isSelected ? "bg-accent" : ""
-        }`}
+        className={`flex items-center gap-1 px-2 py-1 transition-colors select-none ${
+          isDisabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer hover:bg-accent"
+        } ${isSelected ? "bg-accent" : ""}`}
         style={{ paddingLeft: `${depth * 16 + 8}px` }}
         onClick={() => {
-          if (isFolder) {
+          if (isDisabled) {
+            // Still allow expanding/collapsing disabled folders
+            if (isFolder) toggleExpanded(node.id);
+            return;
+          }
+          if (mode === "save" && isFolder) {
+            onSelect(node);
+            toggleExpanded(node.id);
+          } else if (isFolder) {
             toggleExpanded(node.id);
           } else {
             onSelect(node);
           }
         }}
         onDoubleClick={() => {
+          if (isDisabled) return;
           if (!isFolder) onDoubleClick(node);
         }}
       >
@@ -82,7 +98,10 @@ function TreeNode({
           <FileCode2 className="h-4 w-4 shrink-0 text-blue-500" />
         )}
         <span className="text-sm truncate flex-1">{node.name}</span>
-        {!isFolder && (
+        {mode === "save" && isSelected && (
+          <Check className="h-3.5 w-3.5 shrink-0 text-primary" />
+        )}
+        {mode === "load" && !isFolder && (
           <Button
             size="sm"
             variant="ghost"
@@ -107,6 +126,8 @@ function TreeNode({
           onDelete={onDelete}
           expandedIds={expandedIds}
           toggleExpanded={toggleExpanded}
+          mode={mode}
+          isDisabled={isDisabled && child.name !== "User Scripts"}
         />
       ))}
     </>
@@ -125,6 +146,8 @@ export function ScriptLibraryDialog({
   const [tree, setTree] = useState<ScriptTreeNode[]>([]);
   const [saveName, setSaveName] = useState("");
   const [selectedNode, setSelectedNode] = useState<ScriptTreeNode | null>(null);
+  const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null);
+  const [selectedFolderName, setSelectedFolderName] = useState<string>("User Scripts");
   const [loading, setLoading] = useState(false);
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
 
@@ -135,6 +158,16 @@ export function ScriptLibraryDialog({
       setTree(t);
       // Auto-expand top-level folders
       setExpandedIds(new Set(t.map((n) => n.id)));
+      // Auto-select User Scripts folder for save mode
+      // Prefer the real "User Scripts" child under Script Library over the synthetic top-level node
+      const scriptLib = t.find((n) => n.id === "script-library");
+      const realUserScripts = scriptLib?.children?.find((c) => c.name === "User Scripts");
+      const fallback = t.find((n) => n.id === "user-scripts") ?? t[0];
+      const defaultFolder = realUserScripts ?? fallback;
+      if (defaultFolder) {
+        setSelectedFolderId(defaultFolder.id);
+        setSelectedFolderName(defaultFolder.name);
+      }
     } catch {
       setTree([]);
     }
@@ -161,7 +194,7 @@ export function ScriptLibraryDialog({
   async function handleSave() {
     if (!saveName.trim()) return;
     setLoading(true);
-    const script = await backend.saveScript(saveName.trim(), currentCode);
+    const script = await backend.saveScript(saveName.trim(), currentCode, selectedFolderId ?? undefined);
     setLoading(false);
     onSaved?.(script);
     onOpenChange(false);
@@ -208,6 +241,41 @@ export function ScriptLibraryDialog({
 
         {mode === "save" ? (
           <div className="flex flex-col gap-3">
+            {/* Show folder tree if there are meaningful folders */}
+            {(tree.length > 1 || tree.some((n) => n.children?.some((c) => c.type === "folder"))) && (
+              <>
+                <label className="text-sm font-medium">Save to:</label>
+                <div className="max-h-[200px] overflow-auto border rounded-md">
+                  {loading ? (
+                    <div className="p-4 flex items-center justify-center text-muted-foreground">
+                      <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                      Loading...
+                    </div>
+                  ) : (
+                    <div className="py-1">
+                      {tree.filter((node) => node.id !== "user-scripts").map((node) => (
+                        <TreeNode
+                          key={node.id}
+                          node={node}
+                          depth={0}
+                          selectedId={selectedFolderId}
+                          onSelect={(n) => {
+                            setSelectedFolderId(n.id);
+                            setSelectedFolderName(n.name);
+                          }}
+                          onDoubleClick={() => {}}
+                          onDelete={() => {}}
+                          expandedIds={expandedIds}
+                          toggleExpanded={toggleExpanded}
+                          mode="save"
+                          isDisabled={node.id === "script-library"}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
             <Input
               placeholder="Script name..."
               value={saveName}
@@ -217,7 +285,7 @@ export function ScriptLibraryDialog({
             />
             <Button onClick={handleSave} disabled={!saveName.trim() || loading}>
               {loading ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : null}
-              Save
+              Save to {selectedFolderName}
             </Button>
           </div>
         ) : (
