@@ -1510,4 +1510,76 @@ declare function render(html: string): void;
  * help("publishing");
  */
 declare function help(query?: string): void;
+
+/**
+ * Print a formatted summary of a Sitecore item to the Console.
+ * @param item - Item object returned from \`getItem()\`, \`createItem()\`, etc.
+ * @example
+ * const item = await sc.getItem("/sitecore/content");
+ * printItem(item);
+ */
+declare function printItem(item: any): void;
+
+/**
+ * Render a styled HTML card for a Sitecore item in the Results tab.
+ * @param item - Item object returned from \`getItem()\`, \`createItem()\`, etc.
+ * @example
+ * const item = await sc.getItem("/sitecore/content");
+ * renderItem(item);
+ */
+declare function renderItem(item: any): void;
+
+/**
+ * Print a formatted summary of a Sitecore user to the Console.
+ * @param user - User object returned from \`getCurrentUser()\`, \`getUser()\`, etc.
+ * @example
+ * const user = await sc.Security.getCurrentUser();
+ * printUser(user);
+ */
+declare function printUser(user: any): void;
+
+/**
+ * Render a styled HTML card for a Sitecore user in the Results tab.
+ * @param user - User object returned from \`getCurrentUser()\`, \`getUser()\`, etc.
+ * @example
+ * const user = await sc.Security.getCurrentUser();
+ * renderUser(user);
+ */
+declare function renderUser(user: any): void;
+
+/**
+ * Print a formatted summary of a Sitecore role to the Console.
+ * @param role - Role object returned from \`getRole()\`, \`createRole()\`, etc.
+ * @example
+ * const role = await sc.Security.getRole("sitecore\\\\Author");
+ * printRole(role);
+ */
+declare function printRole(role: any): void;
+
+/**
+ * Render a styled HTML card for a Sitecore role in the Results tab.
+ * @param role - Role object returned from \`getRole()\`, \`createRole()\`, etc.
+ * @example
+ * const role = await sc.Security.getRole("sitecore\\\\Author");
+ * renderRole(role);
+ */
+declare function renderRole(role: any): void;
+
+/**
+ * Print a formatted summary of a Sitecore template to the Console.
+ * @param tmpl - Template object returned from \`getTemplate()\`, \`createTemplate()\`, etc.
+ * @example
+ * const tmpl = await sc.Templates.getTemplate(templateId);
+ * printTemplate(tmpl);
+ */
+declare function printTemplate(tmpl: any): void;
+
+/**
+ * Render a styled HTML card for a Sitecore template in the Results tab.
+ * @param tmpl - Template object returned from \`getTemplate()\`, \`createTemplate()\`, etc.
+ * @example
+ * const tmpl = await sc.Templates.getTemplate(templateId);
+ * renderTemplate(tmpl);
+ */
+declare function renderTemplate(tmpl: any): void;
 `;
