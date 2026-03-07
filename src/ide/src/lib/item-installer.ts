@@ -42,15 +42,15 @@ async function createTreeRecursive(
         ([k, v]) => existingFields[k] !== v
       );
       if (needsUpdate) {
-        await helpers.updateItem(itemId, itemPath, definition.fields);
+        await helpers.updateItem(itemId, definition.fields);
       }
     }
   } else {
     // Create the item
     const created = await helpers.createItem(
       parentId,
-      definition.name,
       definition.templateId,
+      definition.name,
       definition.fields
     );
     itemId = created?.itemId ?? null;
@@ -78,16 +78,16 @@ async function installTemplates(helpers: SitecoreHelpers): Promise<void> {
       if (!templatesFolder) throw new Error("Cannot find /sitecore/templates");
       const created = await helpers.createItem(
         templatesFolder.itemId,
-        "Modules",
-        "{E269FBB5-3750-427A-9149-7AA950B49301}"
+        "{E269FBB5-3750-427A-9149-7AA950B49301}",
+        "Modules"
       );
       modules = created;
     }
     // Create "JavaScript Extensions" folder
     const created = await helpers.createItem(
       modules.itemId,
-      "JavaScript Extensions",
-      "{E269FBB5-3750-427A-9149-7AA950B49301}"
+      "{E269FBB5-3750-427A-9149-7AA950B49301}",
+      "JavaScript Extensions"
     );
     templatesRoot = created;
   }
@@ -109,8 +109,8 @@ async function installContent(helpers: SitecoreHelpers): Promise<void> {
     if (!system) throw new Error("Cannot find /sitecore/system");
     const created = await helpers.createItem(
       system.itemId,
-      "Modules",
-      "{E269FBB5-3750-427A-9149-7AA950B49301}"
+      "{E269FBB5-3750-427A-9149-7AA950B49301}",
+      "Modules"
     );
     systemModules = created;
   }
@@ -151,7 +151,7 @@ export async function installModule(helpers: SitecoreHelpers): Promise<InstallRe
       await installTemplates(helpers);
       await installContent(helpers);
       // Update version
-      await helpers.updateItem(existing.itemId, MODULE_ROOT_PATH, { Version: MODULE_VERSION });
+      await helpers.updateItem(existing.itemId, { Version: MODULE_VERSION });
     }
 
     return { installed: true, version: MODULE_VERSION, storageMode: "sitecore" };

@@ -33,8 +33,8 @@ export function createSitecoreScriptStorage(helpers: SitecoreHelpers): ScriptSto
       }
       const created = await helpers.createItem(
         userScripts.itemId,
-        name,
         TEMPLATE_IDS.jsScript,
+        name,
         { Script: code }
       );
       return {
@@ -56,7 +56,7 @@ export function createSitecoreScriptStorage(helpers: SitecoreHelpers): ScriptSto
       if (updates.code !== undefined) fields["Script"] = updates.code;
       // Sitecore item rename is not straightforward via GraphQL, so we only update fields
       if (Object.keys(fields).length > 0) {
-        await helpers.updateItem(id, "", fields);
+        await helpers.updateItem(id, fields);
       }
       // Return updated script
       const scripts = await this.listScripts();
