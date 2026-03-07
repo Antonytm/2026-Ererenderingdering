@@ -14,6 +14,7 @@ import { Toolbar } from "./Toolbar";
 import { ConsoleOutput } from "./ConsoleOutput";
 import { ResultsPanel } from "./ResultsPanel";
 import { ScriptLibraryDialog } from "./ScriptLibraryDialog";
+import { HelpPanel } from "./HelpPanel";
 
 export function ScriptingConsole() {
   const { client, isInitialized } = useMarketplaceClient();
@@ -32,6 +33,7 @@ export function ScriptingConsole() {
     () => createLocalScriptStorage()
   );
   const [storageMode, setStorageMode] = useState<"sitecore" | "local">("local");
+  const [helpOpen, setHelpOpen] = useState(false);
 
   useEffect(() => {
     function onMouseMove(e: MouseEvent) {
@@ -139,57 +141,70 @@ export function ScriptingConsole() {
   }, []);
 
   return (
-    <div ref={containerRef} className="h-screen flex flex-col bg-background">
-      <Toolbar
-        onRun={handleRun}
-        onSave={handleSave}
-        onLoad={handleLoad}
-        onClear={handleClear}
-        isRunning={isRunning}
-        isClientReady={isInitialized && !!client}
-        storageMode={storageMode}
-      />
-
-      <div className="flex-1 min-h-0">
-        <MonacoEditor
-          ref={editorRef}
-          defaultValue={persistedCode}
-          onRunShortcut={handleRun}
-          onChange={setCode}
+    <div className="h-screen flex bg-background">
+      <div ref={containerRef} className="flex-1 min-w-0 flex flex-col">
+        <Toolbar
+          onRun={handleRun}
+          onSave={handleSave}
+          onLoad={handleLoad}
+          onClear={handleClear}
+          onToggleHelp={() => setHelpOpen((v) => !v)}
+          isRunning={isRunning}
+          isClientReady={isInitialized && !!client}
+          helpOpen={helpOpen}
+          storageMode={storageMode}
         />
+
+        <div className="flex-1 min-h-0">
+          <MonacoEditor
+            ref={editorRef}
+            defaultValue={persistedCode}
+            onRunShortcut={handleRun}
+            onChange={setCode}
+          />
+        </div>
+
+        {/* Drag handle */}
+        <div
+          className="h-2 bg-border hover:bg-primary/40 active:bg-primary/50 cursor-row-resize shrink-0 transition-colors flex items-center justify-center"
+          onMouseDown={(e) => {
+            e.preventDefault();
+            isDragging.current = true;
+            document.body.style.cursor = "row-resize";
+            document.body.style.userSelect = "none";
+          }}
+        >
+          <div className="w-10 h-0.5 rounded-full bg-muted-foreground/40" />
+        </div>
+
+        <div style={{ height: outputHeight }} className="flex flex-col min-h-0">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col h-full">
+            <TabsList variant="line" className="px-2 border-b">
+              <TabsTrigger value="console" className="text-xs">
+                Console
+              </TabsTrigger>
+              <TabsTrigger value="results" className="text-xs">
+                Results
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="console" className="flex-1 m-0 min-h-0">
+              <ConsoleOutput entries={consoleEntries} />
+            </TabsContent>
+            <TabsContent value="results" className="flex-1 m-0 min-h-0">
+              <ResultsPanel html={htmlOutput} />
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
 
-      {/* Drag handle */}
-      <div
-        className="h-2 bg-border hover:bg-primary/40 active:bg-primary/50 cursor-row-resize shrink-0 transition-colors flex items-center justify-center"
-        onMouseDown={(e) => {
-          e.preventDefault();
-          isDragging.current = true;
-          document.body.style.cursor = "row-resize";
-          document.body.style.userSelect = "none";
-        }}
-      >
-        <div className="w-10 h-0.5 rounded-full bg-muted-foreground/40" />
-      </div>
-
-      <div style={{ height: outputHeight }} className="flex flex-col min-h-0">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col h-full">
-          <TabsList variant="line" className="px-2 border-b">
-            <TabsTrigger value="console" className="text-xs">
-              Console
-            </TabsTrigger>
-            <TabsTrigger value="results" className="text-xs">
-              Results
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="console" className="flex-1 m-0 min-h-0">
-            <ConsoleOutput entries={consoleEntries} />
-          </TabsContent>
-          <TabsContent value="results" className="flex-1 m-0 min-h-0">
-            <ResultsPanel html={htmlOutput} />
-          </TabsContent>
-        </Tabs>
-      </div>
+      {helpOpen && (
+        <HelpPanel
+          onInsertSnippet={(snippet) => {
+            editorRef.current?.insertSnippet(snippet);
+          }}
+          onClose={() => setHelpOpen(false)}
+        />
+      )}
 
       <ScriptLibraryDialog
         open={dialogOpen}

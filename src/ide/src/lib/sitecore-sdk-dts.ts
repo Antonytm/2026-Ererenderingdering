@@ -1,1 +1,1513 @@
-export const sitecoreSdkDts = "// Sitecore XM Cloud SDK Type Definitions\r\n// These types are injected into the Monaco editor for IntelliSense, hover, and signature help.\r\n\r\n// ── Result Types ─────────────────────────────────────────\r\n\r\ninterface SitecoreItem {\r\n  /** The globally-unique identifier for the item */\r\n  itemId: string;\r\n  /** The item name (not localized) */\r\n  name: string;\r\n  /** The full item path from root */\r\n  path: string;\r\n  /** The database name */\r\n  database: string;\r\n  /** The localized display name */\r\n  displayName: string;\r\n  /** The version number */\r\n  version: number;\r\n  /** The item's template */\r\n  template: { templateId: string; name: string };\r\n  /** Item fields (own, non-standard) */\r\n  fields: { nodes: Array<{ name: string; value: string }> };\r\n  /** Direct child items */\r\n  children: { nodes: Array<{ itemId: string; name: string; path: string }> };\r\n}\r\n\r\ninterface SitecoreMediaItem {\r\n  /** Alternative text */\r\n  alt: string;\r\n  /** Media description */\r\n  description: string;\r\n  /** File extension */\r\n  extension: string;\r\n  /** Path in the media library */\r\n  mediaPath: string;\r\n  /** MIME type */\r\n  mimeType: string;\r\n  /** File size in bytes */\r\n  size: number;\r\n  /** Media title */\r\n  title: string;\r\n  /** Public URL */\r\n  url: string;\r\n  /** The underlying Sitecore item */\r\n  innerItem: { itemId: string; name: string; path: string };\r\n}\r\n\r\ninterface SitecoreSearchResult {\r\n  /** Total number of matching items */\r\n  totalCount: number;\r\n  /** Search result items */\r\n  results: Array<{\r\n    itemId: string;\r\n    name: string;\r\n    path: string;\r\n    displayName: string;\r\n    templateName: string;\r\n    templateId: string;\r\n    language: { name: string };\r\n    version: number;\r\n    createdBy: string;\r\n    createdDate: string;\r\n    updatedBy: string;\r\n    updatedDate: string;\r\n  }>;\r\n  /** Facet categories */\r\n  facets: Array<{ name: string; facets: Array<{ name: string; count: number }> }>;\r\n}\r\n\r\ninterface SitecorePublishingStatus {\r\n  /** Whether the operation is complete */\r\n  isDone: boolean;\r\n  /** Whether the operation failed */\r\n  isFailed: boolean;\r\n  /** Number of items processed */\r\n  processed: number;\r\n  /** Current state: INITIALIZING, QUEUED, RUNNING, FINISHED, ABORTED, etc. */\r\n  state: string;\r\n  /** Published languages */\r\n  languages: Array<{ name: string }>;\r\n  /** Target database */\r\n  targetDatabase: { name: string };\r\n}\r\n\r\ninterface SitecorePublishResult {\r\n  /** The operation ID for tracking progress via getPublishingStatus() */\r\n  operationId: string;\r\n}\r\n\r\ninterface SitecoreIndex {\r\n  /** Index name */\r\n  name: string;\r\n  /** Number of documents */\r\n  documentsCount: number;\r\n  /** Whether any documents have been deleted */\r\n  hasDeletions: boolean;\r\n  /** Duration of last rebuild */\r\n  lastRebuildDuration: string;\r\n  /** Last update timestamp */\r\n  lastUpdated: string;\r\n  /** Number of fields */\r\n  numberOfFields: number;\r\n  /** Number of terms */\r\n  numberOfTerms: number;\r\n  /** Whether the index is out of date */\r\n  outOfDate: boolean;\r\n}\r\n\r\ninterface SitecoreJob {\r\n  /** Job handle (unique identifier) */\r\n  handle: string;\r\n  /** Job name */\r\n  name: string;\r\n  /** Job display name */\r\n  displayName: string;\r\n  /** Whether the job is finished */\r\n  done: boolean;\r\n  /** When the job was queued */\r\n  queueTime: string;\r\n  /** Job status */\r\n  status: { jobState: string; processed: number; total: number; messages?: string[]; exceptions?: string[] };\r\n  /** Job options */\r\n  options?: { jobName: string; category: string; siteName: string; abortable: boolean };\r\n}\r\n\r\ninterface SitecoreWorkflow {\r\n  /** Workflow ID */\r\n  workflowId: string;\r\n  /** Display name */\r\n  displayName: string;\r\n  /** Initial workflow state */\r\n  initialState: { stateId: string; displayName: string; final: boolean };\r\n  /** All workflow states */\r\n  states: { nodes: Array<{ stateId: string; displayName: string; final: boolean; icon: string }> };\r\n}\r\n\r\ninterface SitecoreLanguage {\r\n  /** Language code (e.g. \"en\", \"fr-FR\") */\r\n  name: string;\r\n  /** Localized display name */\r\n  displayName: string;\r\n  /** English name */\r\n  englishName: string;\r\n  /** Native name */\r\n  nativeName: string;\r\n  /** Two-letter ISO code */\r\n  iso: string;\r\n}\r\n\r\ninterface SitecoreSupportedLanguage {\r\n  /** Language code */\r\n  name: string;\r\n  /** Language display name */\r\n  language: string;\r\n  /** Charset */\r\n  charset: string;\r\n  /** Code page */\r\n  codePage: string;\r\n  /** Custom code */\r\n  customCode: string;\r\n  /** Encoding */\r\n  encoding: string;\r\n  /** Region code */\r\n  regionCode: string;\r\n  /** Spell checker */\r\n  spellChecker: string;\r\n}\r\n\r\ninterface SitecoreArchivedItem {\r\n  /** Archival ID */\r\n  archivalId: string;\r\n  /** Item ID */\r\n  itemId: string;\r\n  /** Item name */\r\n  name: string;\r\n  /** Database */\r\n  database: string;\r\n  /** Original location path */\r\n  originalLocation: string;\r\n  /** User who archived */\r\n  archivedBy: string;\r\n  /** Archival date */\r\n  archivedDate: string;\r\n  /** Parent item ID */\r\n  parentId: string;\r\n  /** Archived versions */\r\n  versions?: Array<{ versionId: string; language: string; version: number; archivedBy: string; archivalDate: string }>;\r\n}\r\n\r\ninterface SitecoreTemplate {\r\n  /** Template ID */\r\n  templateId: string;\r\n  /** Template name */\r\n  name: string;\r\n  /** Full template path name */\r\n  fullName: string;\r\n  /** Template icon */\r\n  icon: string;\r\n  /** Own field definitions */\r\n  ownFields?: { nodes: Array<{ templateFieldId: string; name: string; type: string; key: string; defaultValue: string; source: string; sortOrder: number; section: { name: string } }> };\r\n  /** Template sections */\r\n  sections?: { nodes: Array<{ itemTemplateSectionId: string; name: string; key: string; sortOrder: number }> };\r\n  /** Direct base templates */\r\n  baseTemplates?: { nodes: Array<{ templateId: string; name: string }> };\r\n}\r\n\r\ninterface SitecoreSite {\r\n  /** Site name */\r\n  name: string;\r\n  /** Host name */\r\n  hostName: string;\r\n  /** Default language */\r\n  language: string;\r\n  /** Root path */\r\n  rootPath: string;\r\n  /** Start path */\r\n  startPath: string;\r\n  /** Content start path */\r\n  contentStartPath: string;\r\n  /** Database info */\r\n  database: { name: string };\r\n  /** Content database */\r\n  contentDatabase: { name: string };\r\n  /** Content language */\r\n  contentLanguage: { name: string };\r\n  /** Root item */\r\n  rootItem: { itemId: string; name: string; path: string };\r\n  /** Start item */\r\n  startItem: { itemId: string; name: string; path: string };\r\n  /** Site properties */\r\n  properties: Array<{ key: string; value: any }>;\r\n}\r\n\r\ninterface SitecoreSolutionSite {\r\n  /** Site ID */\r\n  id: string;\r\n  /** Site name */\r\n  name: string;\r\n  /** Display name */\r\n  displayName: string;\r\n  /** Description */\r\n  description: string;\r\n  /** Hostname */\r\n  hostname: string;\r\n  /** Default language */\r\n  language: string;\r\n  /** Creation date */\r\n  created: string;\r\n  /** Sort order */\r\n  sortOrder: number;\r\n  /** Whether site is linkable */\r\n  linkableSite: boolean;\r\n  /** Root item */\r\n  rootItem: { itemId: string; name: string; path: string };\r\n  /** Site collection */\r\n  siteCollection: { id: string; name: string };\r\n  /** Site languages */\r\n  languages: Array<{ name: string }>;\r\n  /** Point of sale mappings */\r\n  posMappings: Array<{ name: string; language: string }>;\r\n}\r\n\r\ninterface SitecoreSiteCollection {\r\n  /** Collection ID */\r\n  id: string;\r\n  /** Collection name */\r\n  name: string;\r\n  /** Display name */\r\n  displayName: string;\r\n  /** Description */\r\n  description: string;\r\n  /** Collection name */\r\n  collectionName: string;\r\n  /** Collection description */\r\n  collectionDescription: string;\r\n  /** Created date */\r\n  created: string;\r\n  /** Creator */\r\n  createdBy: string;\r\n  /** Item path */\r\n  itemPath: string;\r\n  /** Sort order */\r\n  sortOrder: number;\r\n  /** Shared sites */\r\n  sharedSites: string[];\r\n}\r\n\r\ninterface SitecoreUser {\r\n  /** User name (domain\\user) */\r\n  name: string;\r\n  /** Display name */\r\n  displayName: string;\r\n  /** Local name (without domain) */\r\n  localName: string;\r\n  /** Whether the user is an administrator */\r\n  isAdministrator: boolean;\r\n  /** Whether the user is authenticated */\r\n  isAuthenticated: boolean;\r\n  /** User domain */\r\n  domain: { name: string };\r\n  /** User profile */\r\n  profile?: { email: string; fullName: string; clientLanguage: string; contentLanguage: string; disabled?: boolean; lastLoginDate?: string };\r\n  /** Assigned roles */\r\n  roles?: Array<{ name: string; displayName?: string }>;\r\n}\r\n\r\ninterface SitecoreRole {\r\n  /** Role name (domain\\role) */\r\n  name: string;\r\n  /** Display name */\r\n  displayName: string;\r\n  /** Local name (without domain) */\r\n  localName: string;\r\n  /** Description */\r\n  description: string;\r\n  /** Whether this is the everyone role */\r\n  isEveryone: boolean;\r\n  /** Whether this is a global role */\r\n  isGlobal: boolean;\r\n  /** Role domain */\r\n  domain: { name: string };\r\n  /** Accounts that are members of this role */\r\n  members?: { nodes: Array<{ name: string; accountType: string }> };\r\n  /** Roles this role is a member of */\r\n  memberOf?: { nodes: Array<{ name: string; accountType: string }> };\r\n}\r\n\r\ninterface SitecoreDomain {\r\n  /** Domain name */\r\n  name: string;\r\n  /** Account prefix */\r\n  accountPrefix: string;\r\n  /** Whether this is the default domain */\r\n  isDefault: boolean;\r\n  /** Whether anonymous user is ensured */\r\n  ensureAnonymousUser: boolean;\r\n  /** Anonymous user name */\r\n  anonymousUserName: string;\r\n  /** Everyone role name */\r\n  everyoneRoleName: string;\r\n  /** Default profile item ID */\r\n  defaultProfileItemId: string;\r\n  /** Account name validation pattern */\r\n  accountNameValidation: string;\r\n  /** Anonymous user email pattern */\r\n  anonymousUserEmailPattern: string;\r\n}\r\n\r\ninterface SitecorePublishingTarget {\r\n  /** Target name */\r\n  name: string;\r\n  /** Target database name */\r\n  targetDatabase: string;\r\n  /** Whether this is a preview publishing target */\r\n  previewPublishingTarget: boolean;\r\n}\r\n\r\ninterface SitecoreRendering {\r\n  /** Rendering item ID */\r\n  itemId: string;\r\n  /** Rendering name */\r\n  name: string;\r\n  /** Rendering path */\r\n  path: string;\r\n  /** Display name */\r\n  displayName: string;\r\n  /** Datasource template */\r\n  datasourceTemplate: { templateId: string; name: string };\r\n  /** Rendering parameters template */\r\n  renderingParametersTemplate: { templateId: string; name: string };\r\n}\r\n\r\n// ── Options Types ────────────────────────────────────────\r\n\r\ninterface ItemQueryOptions {\r\n  /** Item language (e.g. \"en\") */\r\n  language?: string;\r\n  /** Item version number */\r\n  version?: number;\r\n  /** Database name (default: \"master\") */\r\n  database?: string;\r\n}\r\n\r\ninterface SearchQueryInput {\r\n  /** Search criteria statement */\r\n  searchStatement?: SearchStatementInput;\r\n  /** Filter criteria statement */\r\n  filterStatement?: SearchStatementInput;\r\n  /** Fields to build facets on */\r\n  facetOnFields?: string[];\r\n  /** Facet metrics */\r\n  facetMetrics?: Array<{ function: string; key: string }>;\r\n  /** Index name to search in */\r\n  index?: string;\r\n  /** Language to search in */\r\n  language?: string;\r\n  /** Whether to return only latest versions */\r\n  latestVersionOnly?: boolean;\r\n  /** Paging parameters */\r\n  paging?: { pageIndex?: number; pageSize?: number; skip?: number };\r\n  /** Sort parameters */\r\n  sort?: Array<{ field: string; direction?: \"ASCENDING\" | \"DESCENDING\" }>;\r\n}\r\n\r\ninterface SearchStatementInput {\r\n  /** Search criteria */\r\n  criteria?: Array<{\r\n    /** Field name (e.g. \"_name\", \"_fullpath\", \"_templatename\") */\r\n    field: string;\r\n    /** Search value */\r\n    value: string;\r\n    /** Criteria type: EXACT, STARTSWITH, CONTAINS, ENDSWITH, WILDCARD, SEARCH, RANGE, FUZZY, PROXIMITY, REGEXP */\r\n    criteriaType?: \"EXACT\" | \"STARTSWITH\" | \"CONTAINS\" | \"ENDSWITH\" | \"WILDCARD\" | \"SEARCH\" | \"RANGE\" | \"FUZZY\" | \"PROXIMITY\" | \"REGEXP\";\r\n    /** Operator: SHOULD, MUST, NOT */\r\n    operator?: \"SHOULD\" | \"MUST\" | \"NOT\";\r\n    /** Boost value */\r\n    boost?: number;\r\n    /** Additional parameters */\r\n    parameters?: string;\r\n  }>;\r\n  /** Boolean operator for combining criteria: SHOULD, MUST, NOT */\r\n  operator?: \"SHOULD\" | \"MUST\" | \"NOT\";\r\n  /** Nested sub-statements */\r\n  subStatements?: SearchStatementInput[];\r\n}\r\n\r\ninterface PublishItemInput {\r\n  /** Root item ID to publish */\r\n  rootItemId?: string;\r\n  /** Root item path to publish */\r\n  rootItemPath?: string;\r\n  /** Multiple root item IDs */\r\n  rootItemIds?: string[];\r\n  /** Multiple root item paths */\r\n  rootItemPaths?: string[];\r\n  /** Languages to publish */\r\n  languages: string[];\r\n  /** Target database names */\r\n  targetDatabases: string[];\r\n  /** Publish mode: \"FULL\" or \"SMART\" */\r\n  publishItemMode: \"FULL\" | \"SMART\";\r\n  /** Whether to publish sub-items */\r\n  publishSubItems?: boolean;\r\n  /** Whether to publish related items */\r\n  publishRelatedItems?: boolean;\r\n  /** Source database name */\r\n  sourceDatabase?: string;\r\n  /** Display name for the publish request */\r\n  displayName?: string;\r\n}\r\n\r\ninterface PublishSiteInput {\r\n  /** Languages to publish */\r\n  languages: string[];\r\n  /** Target database names */\r\n  targetDatabases: string[];\r\n  /** Publish site mode: \"FULL\", \"INCREMENTAL\", or \"SMART\" */\r\n  publishSiteMode: \"FULL\" | \"INCREMENTAL\" | \"SMART\";\r\n  /** Source database name */\r\n  sourceDatabase?: string;\r\n  /** Display name for the publish request */\r\n  displayName?: string;\r\n}\r\n\r\ninterface CreateUserInput {\r\n  /** User name (domain\\user format) */\r\n  userName: string;\r\n  /** User password */\r\n  password: string;\r\n  /** Email address */\r\n  email?: string;\r\n  /** Full name */\r\n  fullName?: string;\r\n  /** Whether the user is an administrator */\r\n  isAdministrator?: boolean;\r\n  /** Role names to assign */\r\n  roleNames?: string[];\r\n  /** Comment about the user */\r\n  comment?: string;\r\n  /** Client language */\r\n  clientLanguage?: string;\r\n  /** Default content language */\r\n  defaultContentLanguage?: string;\r\n  /** Portrait */\r\n  portrait?: string;\r\n  /** Regional ISO code */\r\n  regionalIsoCode?: string;\r\n  /** Start URL */\r\n  startUrl?: string;\r\n  /** User profile ID */\r\n  userProfileId?: string;\r\n  /** Wallpaper */\r\n  wallpaper?: string;\r\n}\r\n\r\ninterface UpdateUserInput {\r\n  /** User name (domain\\user format) */\r\n  userName: string;\r\n  /** Email address */\r\n  email?: string;\r\n  /** Full name */\r\n  fullName?: string;\r\n  /** Whether the user is an administrator */\r\n  isAdministrator?: boolean;\r\n  /** Role names to assign */\r\n  roleNames?: string[];\r\n  /** Comment about the user */\r\n  comment?: string;\r\n  /** Client language */\r\n  clientLanguage?: string;\r\n  /** Default content language */\r\n  defaultContentLanguage?: string;\r\n  /** Portrait */\r\n  portrait?: string;\r\n  /** Regional ISO code */\r\n  regionalIsoCode?: string;\r\n  /** Start URL */\r\n  startUrl?: string;\r\n  /** User profile ID */\r\n  userProfileId?: string;\r\n  /** Wallpaper */\r\n  wallpaper?: string;\r\n}\r\n\r\ninterface AddLanguageInput {\r\n  /** Language code (e.g. \"fr-FR\") */\r\n  languageCode: string;\r\n  /** Language name */\r\n  name?: string;\r\n  /** Database name */\r\n  database?: string;\r\n  /** Charset */\r\n  charset?: string;\r\n  /** Code page */\r\n  codePage?: string;\r\n  /** Custom code */\r\n  customCode?: string;\r\n  /** Encoding */\r\n  encoding?: string;\r\n  /** Fallback language code */\r\n  fallbackCode?: string;\r\n  /** Region code */\r\n  regionCode?: string;\r\n  /** Spell checker */\r\n  spellChecker?: string;\r\n  /** Use supported language definition as fallback (default: true) */\r\n  useSupportedLanguageAsFallback?: boolean;\r\n}\r\n\r\n// ── Sitecore SDK Interface ───────────────────────────────\r\n\r\ninterface SitecoreSDK {\r\n  // ── Core ──────────────────────────────────────────────\r\n\r\n  /** Get the current application context including tenant, organization, and resource access info. */\r\n  getContext(): Promise<any>;\r\n\r\n  /**\r\n   * Execute a raw GraphQL query or mutation against the XM Cloud Authoring API.\r\n   * @param query - GraphQL query or mutation string\r\n   * @param variables - Optional variables object\r\n   * @example\r\n   * const data = await sc.graphql(`\r\n   *   query {\r\n   *     item(where: { path: \"/sitecore/content\" }) {\r\n   *       itemId\r\n   *       name\r\n   *     }\r\n   *   }\r\n   * `);\r\n   */\r\n  graphql(query: string, variables?: Record<string, any>): Promise<any>;\r\n\r\n  /** List all sites configured in XM Cloud. Returns array of sites with name, hostName, language, rootPath. */\r\n  listSites(): Promise<Array<{ name: string; hostName: string; language: string; rootPath: string }>>;\r\n\r\n  /**\r\n   * Retrieve a page by ID using the XM Cloud Pages API.\r\n   * @param pageId - The page item ID\r\n   * @param site - Site name\r\n   * @param language - Language code (default: \"en\")\r\n   */\r\n  retrievePage(pageId: string, site: string, language?: string): Promise<any>;\r\n\r\n  /** Reload the Pages editor canvas. */\r\n  reloadCanvas(): Promise<void>;\r\n\r\n  /**\r\n   * Navigate the Pages editor to a specific item.\r\n   * @param itemId - The item ID to navigate to\r\n   */\r\n  navigateTo(itemId: string): Promise<void>;\r\n\r\n  // ── Content & Items ───────────────────────────────────\r\n\r\n  /**\r\n   * Get a content item by ID or path. Automatically detects whether the argument is a GUID or path.\r\n   * @param idOrPath - Item ID (GUID) or Sitecore path\r\n   * @param opts - Optional: language, version, database\r\n   * @example\r\n   * const item = await sc.getItem(\"/sitecore/content/Home\");\r\n   * const item = await sc.getItem(\"110D559F-DEA5-42EA-9C1C-8A5DF7E70EF9\");\r\n   */\r\n  getItem(idOrPath: string, opts?: ItemQueryOptions): Promise<SitecoreItem>;\r\n\r\n  /**\r\n   * Get child items of the item at the given path.\r\n   * @param path - Sitecore path\r\n   * @example\r\n   * const children = await sc.getItemChildren(\"/sitecore/content/Home\");\r\n   */\r\n  getItemChildren(path: string): Promise<SitecoreItem[]>;\r\n\r\n  /**\r\n   * Get a media item by ID or path.\r\n   * @param idOrPath - Media item ID or path (e.g. \"/sitecore/media library/Images/photo\")\r\n   * @param opts - Optional: language, version, database\r\n   */\r\n  getMediaItem(idOrPath: string, opts?: ItemQueryOptions): Promise<SitecoreMediaItem>;\r\n\r\n  /**\r\n   * Full-text and faceted search across the content tree.\r\n   * @param query - Search query with criteria, filters, paging, sorting, and facets\r\n   * @example\r\n   * const results = await sc.search({\r\n   *   searchStatement: {\r\n   *     criteria: [{ field: \"_name\", value: \"Home\", criteriaType: \"CONTAINS\" }]\r\n   *   },\r\n   *   paging: { pageSize: 10 }\r\n   * });\r\n   */\r\n  search(query: SearchQueryInput): Promise<SitecoreSearchResult>;\r\n\r\n  /**\r\n   * Create a new content item.\r\n   * @param parent - Parent item ID or path\r\n   * @param templateId - Template ID for the new item\r\n   * @param name - Item name\r\n   * @param fields - Optional field values as `{ FieldName: \"value\" }`\r\n   * @param opts - Optional: language, database\r\n   * @example\r\n   * const item = await sc.createItem(parentId, templateId, \"My Page\", { Title: \"Hello\" });\r\n   */\r\n  createItem(parent: string, templateId: string, name: string, fields?: Record<string, string>, opts?: { language?: string; database?: string }): Promise<SitecoreItem>;\r\n\r\n  /**\r\n   * Create an item from a branch template.\r\n   * @param branchId - Branch template ID\r\n   * @param parent - Parent item ID\r\n   * @param name - Item name\r\n   * @param fields - Optional field values\r\n   * @param opts - Optional: language, database\r\n   */\r\n  createItemFromBranch(branchId: string, parent: string, name: string, fields?: Record<string, string>, opts?: { language?: string; database?: string }): Promise<{ job: SitecoreJob }>;\r\n\r\n  /**\r\n   * Update fields on a content item.\r\n   * @param idOrPath - Item ID or path\r\n   * @param fields - Field values to update as `{ FieldName: \"value\" }`\r\n   * @param opts - Optional: language, version, database\r\n   * @example\r\n   * await sc.updateItem(itemId, { Title: \"New Title\", Body: \"<p>Content</p>\" });\r\n   */\r\n  updateItem(idOrPath: string, fields: Record<string, string>, opts?: ItemQueryOptions): Promise<SitecoreItem>;\r\n\r\n  /**\r\n   * Delete an item.\r\n   * @param idOrPath - Item ID or path\r\n   * @param permanently - If true, permanently deletes (no recycle bin). Default: false\r\n   */\r\n  deleteItem(idOrPath: string, permanently?: boolean): Promise<{ successful: boolean }>;\r\n\r\n  /**\r\n   * Rename an item.\r\n   * @param idOrPath - Item ID or path\r\n   * @param newName - New item name\r\n   */\r\n  renameItem(idOrPath: string, newName: string, opts?: { database?: string }): Promise<SitecoreItem>;\r\n\r\n  /**\r\n   * Move an item to a new parent.\r\n   * @param idOrPath - Item ID or path to move\r\n   * @param targetParent - Target parent ID or path\r\n   * @param opts - Optional: sortOrder, database\r\n   */\r\n  moveItem(idOrPath: string, targetParent: string, opts?: { sortOrder?: number; database?: string }): Promise<SitecoreItem>;\r\n\r\n  /**\r\n   * Copy an item to a new parent.\r\n   * @param idOrPath - Item ID or path to copy\r\n   * @param targetParent - Target parent ID or path\r\n   * @param opts - Optional: copyItemName, deepCopy (default: true), database\r\n   */\r\n  copyItem(idOrPath: string, targetParent: string, opts?: { copyItemName?: string; deepCopy?: boolean; database?: string }): Promise<SitecoreItem>;\r\n\r\n  /**\r\n   * Add a new version to an item.\r\n   * @param idOrPath - Item ID or path\r\n   * @param opts - Optional: language, version (base version), versionName, database\r\n   */\r\n  addItemVersion(idOrPath: string, opts?: { language?: string; version?: number; versionName?: string; database?: string }): Promise<SitecoreItem>;\r\n\r\n  /**\r\n   * Delete a version of an item.\r\n   * @param idOrPath - Item ID or path\r\n   * @param opts - Optional: language, version (if not specified, deletes latest), database\r\n   */\r\n  deleteItemVersion(idOrPath: string, opts?: { language?: string; version?: number; database?: string }): Promise<SitecoreItem>;\r\n\r\n  /**\r\n   * Get a pre-signed upload URL for media.\r\n   * @param itemPath - Relative path under sitecore media library\r\n   * @param opts - Optional: alt, database, language, overwriteExisting, versioned, includeExtensionInItemName\r\n   * @returns Object with `presignedUploadUrl` to PUT the file to\r\n   */\r\n  uploadMedia(itemPath: string, opts?: { alt?: string; database?: string; language?: string; overwriteExisting?: boolean; versioned?: boolean; includeExtensionInItemName?: boolean }): Promise<{ presignedUploadUrl: string }>;\r\n\r\n  // ── Publishing ────────────────────────────────────────\r\n\r\n  /**\r\n   * Check the progress of a publishing operation.\r\n   * @param operationId - The operation ID returned from a publish call\r\n   */\r\n  getPublishingStatus(operationId: string): Promise<SitecorePublishingStatus>;\r\n\r\n  /** List all publishing targets (e.g. \"web\" database). */\r\n  getPublishingTargets(): Promise<SitecorePublishingTarget[]>;\r\n\r\n  /**\r\n   * Get publishing queue entries.\r\n   * @param query - Query with sort (required), paging, dateFilter, itemsFilter\r\n   * @example\r\n   * const queue = await sc.getPublishingQueue({\r\n   *   sort: { field: \"date\", direction: \"DESCENDING\" }\r\n   * });\r\n   */\r\n  getPublishingQueue(query: { sort: { field: string; direction: \"ASCENDING\" | \"DESCENDING\" }; paging?: { pageIndex: number; pageSize: number }; dateFilter?: { dateFrom: string; dateTo: string }; itemsFilter?: any }): Promise<{ totalCount: number; results: any[] }>;\r\n\r\n  /**\r\n   * Publish one or more items.\r\n   * @example\r\n   * const result = await sc.publishItem({\r\n   *   rootItemId: itemId,\r\n   *   languages: [\"en\"],\r\n   *   targetDatabases: [\"web\"],\r\n   *   publishItemMode: \"SMART\",\r\n   *   publishSubItems: true\r\n   * });\r\n   * // Track: await sc.getPublishingStatus(result.operationId);\r\n   */\r\n  publishItem(input: PublishItemInput): Promise<SitecorePublishResult>;\r\n\r\n  /**\r\n   * Publish items with per-item language specifications.\r\n   * @example\r\n   * await sc.publishLanguageSpecificItems({\r\n   *   itemsToPublish: [{ id: itemId, languages: [\"en\", \"fr\"] }],\r\n   *   targetDatabases: [\"web\"],\r\n   *   publishItemMode: \"SMART\"\r\n   * });\r\n   */\r\n  publishLanguageSpecificItems(input: { itemsToPublish?: Array<{ id?: string; languages: string[] }>; targetDatabases: string[]; publishItemMode: \"FULL\" | \"SMART\"; publishSubItems?: boolean; publishRelatedItems?: boolean; sourceDatabase?: string; displayName?: string }): Promise<SitecorePublishResult>;\r\n\r\n  /**\r\n   * Publish an entire site.\r\n   * @example\r\n   * await sc.publishSite({\r\n   *   languages: [\"en\"],\r\n   *   targetDatabases: [\"web\"],\r\n   *   publishSiteMode: \"INCREMENTAL\"\r\n   * });\r\n   */\r\n  publishSite(input: PublishSiteInput): Promise<SitecorePublishResult>;\r\n\r\n  /**\r\n   * Advanced publish with detailed options per language/target.\r\n   * @param options - Array of publishing options\r\n   */\r\n  publishWithOptions(options: Array<{ language: string; targetDatabase: string; publishSiteMode?: \"FULL\" | \"INCREMENTAL\" | \"SMART\"; publishItemMode?: \"FULL\" | \"SMART\"; rootItemId?: string; rootItemPath?: string; publishSubItems?: boolean; publishRelatedItems?: boolean; sourceDatabase?: string; publishDate?: string }>): Promise<SitecorePublishResult>;\r\n\r\n  /**\r\n   * Cancel an in-progress publishing operation.\r\n   * @param operationId - The operation ID to cancel\r\n   */\r\n  cancelPublishing(operationId: string): Promise<{ success: boolean; message: string; publishingOperationId: string }>;\r\n\r\n  // ── Search Indexes & Database ─────────────────────────\r\n\r\n  /**\r\n   * Get info about a single search index.\r\n   * @param name - Index name (e.g. \"sitecore_master_index\")\r\n   */\r\n  getIndex(name: string): Promise<SitecoreIndex>;\r\n\r\n  /** Get all search indexes. */\r\n  getIndexes(): Promise<SitecoreIndex[]>;\r\n\r\n  /**\r\n   * Rebuild one or more search indexes.\r\n   * @param names - Array of index names to rebuild\r\n   * @example\r\n   * await sc.rebuildIndexes([\"sitecore_master_index\"]);\r\n   */\r\n  rebuildIndexes(names: string[]): Promise<{ jobs: SitecoreJob[] }>;\r\n\r\n  /**\r\n   * Populate managed schema for search indexes.\r\n   * @param names - Array of index names\r\n   */\r\n  populateManagedSchema(names: string[]): Promise<{ jobs: SitecoreJob[] }>;\r\n\r\n  /**\r\n   * Rebuild the link database for specified databases.\r\n   * @param dbNames - Array of database names (e.g. [\"master\"])\r\n   */\r\n  rebuildLinkDatabase(dbNames: string[]): Promise<{ job: SitecoreJob }>;\r\n\r\n  /**\r\n   * Clean up specified databases.\r\n   * @param dbNames - Array of database names\r\n   */\r\n  cleanUpDatabases(dbNames: string[]): Promise<{ job: SitecoreJob }>;\r\n\r\n  // ── Workflows & Jobs ──────────────────────────────────\r\n\r\n  /**\r\n   * Get a workflow by workflow ID, or by item reference.\r\n   * @param idOrItem - Workflow ID (GUID string) or item reference object\r\n   * @example\r\n   * const wf = await sc.getWorkflow(workflowId);\r\n   * const wf = await sc.getWorkflow({ itemId: myItemId });\r\n   */\r\n  getWorkflow(idOrItem: string | { itemId?: string; path?: string; database?: string }): Promise<SitecoreWorkflow>;\r\n\r\n  /** Get all configured workflows. */\r\n  getWorkflows(): Promise<SitecoreWorkflow[]>;\r\n\r\n  /**\r\n   * Get a specific job by name or handle. Names use simple string, handles contain \"|\".\r\n   * @param nameOrHandle - Job name or job handle\r\n   */\r\n  getJob(nameOrHandle: string): Promise<SitecoreJob>;\r\n\r\n  /** Get all jobs. */\r\n  getJobs(): Promise<SitecoreJob[]>;\r\n\r\n  /**\r\n   * Check if a job is queued.\r\n   * @param name - Job name\r\n   */\r\n  isJobQueued(name: string): Promise<boolean>;\r\n\r\n  /**\r\n   * Check if a job is running.\r\n   * @param name - Job name\r\n   */\r\n  isJobRunning(name: string): Promise<boolean>;\r\n\r\n  /**\r\n   * Start a workflow for an item. Sets the state to initial and clears all workflow history.\r\n   * @param item - Item reference with itemId or path\r\n   */\r\n  startWorkflow(item: { itemId?: string; path?: string; database?: string; language?: string }): Promise<{ successful: boolean }>;\r\n\r\n  /**\r\n   * Execute a workflow command on an item.\r\n   * @param commandId - Workflow command ID\r\n   * @param item - Item reference\r\n   * @param comments - Optional workflow comments\r\n   */\r\n  executeWorkflowCommand(commandId: string, item: { itemId?: string; path?: string; database?: string; language?: string }, comments?: string): Promise<{ successful: boolean; completed: boolean; error: string; message: string; nextStateId: string }>;\r\n\r\n  // ── Translation ───────────────────────────────────────\r\n\r\n  /**\r\n   * Translate a page to a target language using AI translation.\r\n   * @param pageId - Page item ID\r\n   * @param targetLang - Target language code (e.g. \"fr-FR\")\r\n   * @param opts - Optional: sourceLanguage, brandKitId, translateIfTargetVersionExists (default: false)\r\n   */\r\n  translatePage(pageId: string, targetLang: string, opts?: { sourceLanguage?: string; brandKitId?: string; translateIfTargetVersionExists?: boolean; database?: string }): Promise<{ job: SitecoreJob }>;\r\n\r\n  /**\r\n   * Translate an entire site to a target language using AI translation.\r\n   * @param siteId - Site ID\r\n   * @param targetLang - Target language code\r\n   * @param opts - Optional: sourceLanguage, brandKitId, translateIfTargetVersionExists (default: false)\r\n   */\r\n  translateSite(siteId: string, targetLang: string, opts?: { sourceLanguage?: string; brandKitId?: string; translateIfTargetVersionExists?: boolean; database?: string }): Promise<{ job: SitecoreJob }>;\r\n\r\n  // ── Templates ─────────────────────────────────────────\r\n\r\n  /**\r\n   * Get a single template by ID or path, with fields, sections, and base templates.\r\n   * @param idOrPath - Template ID or path\r\n   * @param opts - Optional: database\r\n   */\r\n  getTemplate(idOrPath: string, opts?: { database?: string }): Promise<SitecoreTemplate>;\r\n\r\n  /**\r\n   * List templates.\r\n   * @param opts - Optional: database, path, templateId\r\n   */\r\n  getTemplates(opts?: { database?: string; path?: string; templateId?: string }): Promise<SitecoreTemplate[]>;\r\n\r\n  /** Get data source templates. */\r\n  getDataSourceTemplates(opts?: { database?: string }): Promise<SitecoreTemplate[]>;\r\n\r\n  /**\r\n   * Get tenant templates for a site.\r\n   * @param siteName - Site name\r\n   * @param opts - Optional: database, hasPageDesign\r\n   */\r\n  getTenantTemplates(siteName: string, opts?: { database?: string; hasPageDesign?: boolean }): Promise<Array<{ template: SitecoreTemplate; pageDesign: { itemId: string; name: string } }>>;\r\n\r\n  /**\r\n   * Create a new template.\r\n   * @param parent - Parent item ID where the template is created\r\n   * @param name - Template name\r\n   * @param opts - Optional: database, language, icon, baseTemplates, sections, createStandardValuesItem\r\n   */\r\n  createTemplate(parent: string, name: string, opts?: { database?: string; language?: string; icon?: string; baseTemplates?: string[]; sections?: any[]; createStandardValuesItem?: boolean }): Promise<SitecoreTemplate>;\r\n\r\n  /**\r\n   * Update an existing template.\r\n   * @param templateId - Template ID\r\n   * @param opts - Properties to update: name, icon, baseTemplates, sections, deleteMissingFields, etc.\r\n   */\r\n  updateTemplate(templateId: string, opts?: { name?: string; database?: string; language?: string; icon?: string; baseTemplates?: string[]; sections?: any[]; createStandardValuesItem?: boolean; deleteMissingFields?: boolean }): Promise<SitecoreTemplate>;\r\n\r\n  /**\r\n   * Delete a template.\r\n   * @param templateId - Template ID to delete\r\n   */\r\n  deleteTemplate(templateId: string, opts?: { database?: string }): Promise<{ successful: boolean }>;\r\n\r\n  /**\r\n   * Create a template folder.\r\n   * @param parent - Parent item ID\r\n   * @param name - Folder name\r\n   */\r\n  createTemplateFolder(parent: string, name: string, opts?: { database?: string; language?: string }): Promise<SitecoreItem>;\r\n\r\n  // ── Sites & Solutions ─────────────────────────────────\r\n\r\n  /**\r\n   * Get a single site by name with full details.\r\n   * @param name - Site name\r\n   */\r\n  getSite(name: string): Promise<SitecoreSite>;\r\n\r\n  /**\r\n   * Get all sites.\r\n   * @param includeSystem - Include system sites (default: false)\r\n   */\r\n  getSites(includeSystem?: boolean): Promise<Array<{ name: string; hostName: string; language: string; rootPath: string }>>;\r\n\r\n  /** Get all site collections. */\r\n  getSiteCollections(opts?: { database?: string }): Promise<SitecoreSiteCollection[]>;\r\n\r\n  /**\r\n   * Get solution sites.\r\n   * @param opts - Optional filters: siteName, siteId, siteCollectionID, rootItemId, includeNonSxaSites\r\n   */\r\n  getSolutionSites(opts?: { database?: string; siteName?: string; siteId?: string; siteCollectionID?: string; rootItemId?: string; includeNonSxaSites?: boolean }): Promise<SitecoreSolutionSite[]>;\r\n\r\n  /** Search solution sites with optional filter statement. */\r\n  searchSolutionSites(filter?: SearchStatementInput): Promise<Array<{ siteRoot: SitecoreItem; sites: SitecoreSolutionSite[] }>>;\r\n\r\n  /** Get solution templates. */\r\n  getSolutionTemplates(opts?: { database?: string }): Promise<Array<{ id: string; name: string; description: string; enabled: boolean; builtInTemplate: boolean; createdBy: string; updated: string; contents: Array<{ key: string; value: any }>; siteCollection: { id: string; name: string } }>>;\r\n\r\n  /**\r\n   * Scaffold a new solution with site, site collection, and template.\r\n   * @example\r\n   * await sc.scaffoldSolution({\r\n   *   siteName: \"MySite\",\r\n   *   hostName: \"mysite.com\",\r\n   *   language: \"en\",\r\n   *   templateId: templateId\r\n   * });\r\n   */\r\n  scaffoldSolution(input: { siteName: string; hostName: string; language: string; templateId: string; languages?: string[]; siteCollectionName?: string; siteCollectionDisplayName?: string; siteCollectionDescription?: string; siteDescription?: string; siteDisplayName?: string; posMappings?: any[]; database?: string }): Promise<{ job: SitecoreJob }>;\r\n\r\n  /**\r\n   * Create a site within an existing collection.\r\n   */\r\n  createSite(input: { siteName: string; hostName: string; language: string; templateId: string; collectionId: string; languages?: string[]; description?: string; displayName?: string; posMappings?: any[]; database?: string }): Promise<{ job: SitecoreJob }>;\r\n\r\n  /**\r\n   * Create a site collection.\r\n   * @example\r\n   * await sc.createSiteCollection({ name: \"MyCollection\", displayName: \"My Collection\" });\r\n   */\r\n  createSiteCollection(input: { name: string; displayName?: string; description?: string; database?: string }): Promise<{ job: SitecoreJob }>;\r\n\r\n  /** Remove a site by ID or name. */\r\n  removeSite(input: { siteId?: string; siteName?: string; database?: string }): Promise<{ job: SitecoreJob }>;\r\n\r\n  /** Remove a site collection by ID. */\r\n  removeSiteCollection(input: { id: string; database?: string }): Promise<{ job: SitecoreJob }>;\r\n\r\n  /** Rename a site. */\r\n  renameSite(input: { siteId?: string; siteName?: string; newName?: string; database?: string }): Promise<{ job: SitecoreJob }>;\r\n\r\n  /** Rename a site collection. */\r\n  renameSiteCollection(input: { id: string; name?: string; database?: string }): Promise<{ job: SitecoreJob }>;\r\n\r\n  /** Clone a site. */\r\n  cloneSite(input: { siteId?: string; siteName?: string; cloneName?: string; displayName?: string; description?: string; cloneSiteDefinitions?: boolean; posMappings?: any[]; database?: string }): Promise<{ job: SitecoreJob }>;\r\n\r\n  /** Update Point of Sale mappings for sites. */\r\n  updateSitesPos(input: { posMappingsInput: Array<{ id: string; newValue: Array<{ name: string; language: string }> }>; database?: string }): Promise<{ result: Array<{ id: string; success: boolean }> }>;\r\n\r\n  // ── Languages & Archiving ─────────────────────────────\r\n\r\n  /**\r\n   * Get a single language by name.\r\n   * @param name - Language code (e.g. \"en\", \"fr-FR\")\r\n   */\r\n  getLanguage(name: string): Promise<SitecoreLanguage>;\r\n\r\n  /**\r\n   * Get all languages.\r\n   * @param db - Optional database name\r\n   */\r\n  getLanguages(db?: string): Promise<SitecoreLanguage[]>;\r\n\r\n  /** Get all languages supported by Sitecore. */\r\n  getSupportedLanguages(): Promise<SitecoreSupportedLanguage[]>;\r\n\r\n  /**\r\n   * Get the fallback language for a given language.\r\n   * @param name - Language code\r\n   * @param db - Optional database name\r\n   */\r\n  getFallbackLanguage(name: string, db?: string): Promise<SitecoreLanguage>;\r\n\r\n  /**\r\n   * Get a single archived item by archival ID.\r\n   * @param archivalId - The archival ID\r\n   * @param archiveName - Optional archive name (default: \"archive\")\r\n   */\r\n  getArchivedItem(archivalId: string, archiveName?: string): Promise<SitecoreArchivedItem>;\r\n\r\n  /**\r\n   * List archived items.\r\n   * @param opts - Optional: archiveName, pageIndex, pageSize\r\n   */\r\n  getArchivedItems(opts?: { archiveName?: string; pageIndex?: number; pageSize?: number }): Promise<SitecoreArchivedItem[]>;\r\n\r\n  /**\r\n   * Add a language to the system.\r\n   * @param input - Language details; languageCode is required\r\n   * @example\r\n   * await sc.addLanguage({ languageCode: \"fr-FR\" });\r\n   */\r\n  addLanguage(input: AddLanguageInput): Promise<{ successful: boolean }>;\r\n\r\n  /**\r\n   * Delete a language. WARNING: Removes ALL versions of this language from every item.\r\n   * @param name - Language code to delete\r\n   * @param db - Optional database name\r\n   */\r\n  deleteLanguage(name: string, db?: string): Promise<{ successful: boolean }>;\r\n\r\n  /**\r\n   * Delete multiple languages at once.\r\n   * @param names - Array of language codes\r\n   * @param db - Optional database name\r\n   */\r\n  deleteLanguages(names: string[], db?: string): Promise<{ successful: boolean }>;\r\n\r\n  /**\r\n   * Archive an item.\r\n   * @param idOrPath - Item ID or path\r\n   * @param archiveName - Optional archive name\r\n   */\r\n  archiveItem(idOrPath: string, archiveName?: string): Promise<{ archiveItemId: string }>;\r\n\r\n  /**\r\n   * Archive a specific version of an item.\r\n   * @param idOrPath - Item ID or path\r\n   * @param language - Language code\r\n   * @param version - Version number (latest if not specified)\r\n   * @param archiveName - Optional archive name\r\n   */\r\n  archiveVersion(idOrPath: string, language: string, version?: number, archiveName?: string): Promise<{ archiveVersionId: string }>;\r\n\r\n  /**\r\n   * Schedule an item for archiving at a future date. Pass undefined to clear the date.\r\n   * @param idOrPath - Item ID or path\r\n   * @param date - ISO 8601 date string, or undefined to clear\r\n   */\r\n  setItemArchiveDate(idOrPath: string, date?: string): Promise<{ successful: boolean }>;\r\n\r\n  /**\r\n   * Schedule a version for archiving at a future date.\r\n   * @param idOrPath - Item ID or path\r\n   * @param language - Language code\r\n   * @param date - ISO 8601 date string, or undefined to clear\r\n   * @param version - Version number (latest if not specified)\r\n   */\r\n  setVersionArchiveDate(idOrPath: string, language: string, date?: string, version?: number): Promise<{ successful: boolean }>;\r\n\r\n  /** Restore an archived item. */\r\n  restoreArchivedItem(archivalId: string, archiveName?: string): Promise<{ successful: boolean }>;\r\n\r\n  /** Restore an archived version. */\r\n  restoreArchivedVersion(versionId: string, archiveName?: string): Promise<{ successful: boolean }>;\r\n\r\n  /** Permanently delete an archived item. */\r\n  deleteArchivedItem(archivalId: string, archiveName?: string): Promise<{ successful: boolean }>;\r\n\r\n  /** Permanently delete an archived version. */\r\n  deleteArchivedVersion(versionId: string, archiveName?: string): Promise<{ successful: boolean }>;\r\n\r\n  /** Empty the entire archive. */\r\n  emptyArchive(archiveName?: string): Promise<{ successful: boolean }>;\r\n\r\n  // ── Security ──────────────────────────────────────────\r\n\r\n  /** Get the current authenticated user with profile and roles. */\r\n  getCurrentUser(): Promise<SitecoreUser>;\r\n\r\n  /**\r\n   * Get a specific user by username.\r\n   * @param userName - User name in domain\\user format\r\n   */\r\n  getUser(userName: string): Promise<SitecoreUser>;\r\n\r\n  /** Get all users. */\r\n  getUsers(): Promise<SitecoreUser[]>;\r\n\r\n  /**\r\n   * Get a specific role with its members and memberships.\r\n   * @param roleName - Role name in domain\\role format\r\n   */\r\n  getRole(roleName: string): Promise<SitecoreRole>;\r\n\r\n  /** Get all roles. */\r\n  getRoles(): Promise<SitecoreRole[]>;\r\n\r\n  /**\r\n   * Get a specific security domain.\r\n   * @param domainName - Domain name\r\n   */\r\n  getDomain(domainName: string): Promise<SitecoreDomain>;\r\n\r\n  /** Get all security domains. */\r\n  getDomains(): Promise<SitecoreDomain[]>;\r\n\r\n  /** Get user profile selection profiles. */\r\n  getSelectionProfiles(): Promise<Array<{ name: string; profileId: string }>>;\r\n\r\n  /**\r\n   * Create a new user.\r\n   * @example\r\n   * await sc.createUser({ userName: \"sitecore\\\\editor1\", password: \"P@ss1\", email: \"ed@co.com\" });\r\n   */\r\n  createUser(input: CreateUserInput): Promise<SitecoreUser>;\r\n\r\n  /** Update user properties. Specify userName and fields to change. */\r\n  updateUser(input: UpdateUserInput): Promise<SitecoreUser>;\r\n\r\n  /** Delete a user. */\r\n  deleteUser(userName: string): Promise<{ successful: boolean }>;\r\n\r\n  /** Unlock a locked-out user. */\r\n  unlockUser(userName: string): Promise<{ successful: boolean }>;\r\n\r\n  /** Enable a disabled user. */\r\n  enableUser(userName: string): Promise<{ successful: boolean }>;\r\n\r\n  /** Disable a user. */\r\n  disableUser(userName: string): Promise<{ successful: boolean }>;\r\n\r\n  /** Reset user settings to defaults. */\r\n  resetUserSettings(userName: string): Promise<{ successful: boolean }>;\r\n\r\n  /**\r\n   * Change a user's password.\r\n   * @param userName - User name\r\n   * @param oldPw - Current password\r\n   * @param newPw - New password\r\n   */\r\n  changeUserPassword(userName: string, oldPw: string, newPw: string): Promise<{ successful: boolean }>;\r\n\r\n  /**\r\n   * Create a security domain.\r\n   * @param domainName - Domain name\r\n   * @param local - Whether the domain is locally managed\r\n   */\r\n  createDomain(domainName: string, local?: boolean): Promise<SitecoreDomain>;\r\n\r\n  /** Delete a security domain. */\r\n  deleteDomain(domainName: string): Promise<{ successful: boolean }>;\r\n\r\n  /**\r\n   * Create a security role.\r\n   * @param roleName - Role name in domain\\role format\r\n   */\r\n  createRole(roleName: string): Promise<SitecoreRole>;\r\n\r\n  /** Delete a security role. */\r\n  deleteRole(roleName: string): Promise<{ successful: boolean }>;\r\n\r\n  /**\r\n   * Add a role as member of parent roles.\r\n   * @param roleName - Role to add\r\n   * @param parentRoles - Parent roles to add it to\r\n   */\r\n  addRoleToRoles(roleName: string, parentRoles: string[]): Promise<{ successful: boolean }>;\r\n\r\n  /**\r\n   * Remove a role from parent roles.\r\n   * @param roleName - Role to remove\r\n   * @param parentRoles - Parent roles to remove it from\r\n   */\r\n  deleteRoleFromRoles(roleName: string, parentRoles: string[]): Promise<{ successful: boolean }>;\r\n\r\n  /**\r\n   * Add users and/or roles to a role.\r\n   * @param roleName - The parent role\r\n   * @param opts - Users and/or roles to add\r\n   */\r\n  addAccountsToRole(roleName: string, opts?: { users?: string[]; roles?: string[] }): Promise<{ successful: boolean }>;\r\n\r\n  /**\r\n   * Remove users and/or roles from a role.\r\n   * @param roleName - The parent role\r\n   * @param opts - Users and/or roles to remove\r\n   */\r\n  deleteAccountsFromRole(roleName: string, opts?: { users?: string[]; roles?: string[] }): Promise<{ successful: boolean }>;\r\n\r\n  // ── Presentation & Meta ───────────────────────────────\r\n\r\n  /**\r\n   * Get available renderings.\r\n   * @param opts - Optional: database, renderingId, siteRootItemId\r\n   */\r\n  getAvailableRenderings(opts?: { database?: string; renderingId?: string; siteRootItemId?: string }): Promise<SitecoreRendering[]>;\r\n\r\n  /**\r\n   * Get page designs for a site.\r\n   * @param siteName - Site name\r\n   */\r\n  getPageDesigns(siteName: string, opts?: { database?: string }): Promise<Array<{ siteName: string; pageDesign: SitecoreItem }>>;\r\n\r\n  /**\r\n   * Get partial designs for a site.\r\n   * @param siteName - Site name\r\n   */\r\n  getPartialDesigns(siteName: string, opts?: { database?: string }): Promise<Array<{ siteName: string; partialDesign: SitecoreItem }>>;\r\n\r\n  /**\r\n   * Get page branch roots for a site.\r\n   * @param siteName - Site name\r\n   */\r\n  getPageBranchesRoots(siteName: string, opts?: { database?: string }): Promise<Array<{ siteName: string; root: SitecoreItem }>>;\r\n\r\n  /** Get all databases. */\r\n  getDatabases(): Promise<Array<{ name: string }>>;\r\n\r\n  /** Get API version info. */\r\n  getMeta(): Promise<{ version: string; xMVersion: string }>;\r\n\r\n  /**\r\n   * Map templates to page designs for a site.\r\n   * @param siteName - Site name\r\n   * @param mapping - Array of template-to-page-design mappings\r\n   */\r\n  configurePageDesigns(siteName: string, mapping: Array<{ templateId?: string; pageDesignId?: string }>, opts?: { database?: string }): Promise<boolean>;\r\n}\r\n\r\n/**\r\n * Sitecore XM Cloud SDK — access all 118 GraphQL operations.\r\n *\r\n * Use `Sitecore.*` or `sc.*` (shorthand alias) to call any method.\r\n *\r\n * **Categories:**\r\n * - Content & Items: `getItem`, `search`, `createItem`, `updateItem`, `deleteItem`, `renameItem`, `moveItem`, `copyItem`, ...\r\n * - Publishing: `publishItem`, `publishSite`, `getPublishingStatus`, `cancelPublishing`, ...\r\n * - Search Indexes: `getIndexes`, `rebuildIndexes`, `populateManagedSchema`, ...\r\n * - Workflows & Jobs: `getWorkflow`, `startWorkflow`, `executeWorkflowCommand`, `getJob`, ...\r\n * - Translation: `translatePage`, `translateSite`\r\n * - Templates: `getTemplate`, `createTemplate`, `updateTemplate`, `deleteTemplate`, ...\r\n * - Sites & Solutions: `getSite`, `createSite`, `scaffoldSolution`, `cloneSite`, ...\r\n * - Languages & Archiving: `getLanguages`, `addLanguage`, `archiveItem`, `restoreArchivedItem`, ...\r\n * - Security: `getCurrentUser`, `createUser`, `createRole`, `addAccountsToRole`, ...\r\n * - Presentation & Meta: `getAvailableRenderings`, `getPageDesigns`, `getMeta`, ...\r\n *\r\n * @example\r\n * // Get an item\r\n * const item = await sc.getItem(\"/sitecore/content/Home\");\r\n *\r\n * // Search for items\r\n * const results = await sc.search({\r\n *   searchStatement: { criteria: [{ field: \"_name\", value: \"Home\", criteriaType: \"CONTAINS\" }] },\r\n *   paging: { pageSize: 10 }\r\n * });\r\n *\r\n * // Publish\r\n * const pub = await sc.publishItem({\r\n *   rootItemId: item.itemId,\r\n *   languages: [\"en\"],\r\n *   targetDatabases: [\"web\"],\r\n *   publishItemMode: \"SMART\"\r\n * });\r\n */\r\ndeclare const Sitecore: SitecoreSDK;\r\n\r\n/**\r\n * Shorthand alias for `Sitecore`. All methods are identical.\r\n * @see Sitecore\r\n */\r\ndeclare const sc: SitecoreSDK;\r\n\r\n/**\r\n * Print values to the Console output panel. Accepts multiple arguments.\r\n * @param args - Values to print (objects are JSON-serialized)\r\n * @example\r\n * print(\"Hello\", { key: \"value\" });\r\n */\r\ndeclare function print(...args: any[]): void;\r\n\r\n/**\r\n * Render HTML content in the Results tab.\r\n * @param html - HTML string to render\r\n * @example\r\n * render(`<h1>Hello World</h1><p>This is rendered HTML.</p>`);\r\n */\r\ndeclare function render(html: string): void;\r\n";
+export const sitecoreSdkDts = `// Sitecore XM Cloud SDK Type Definitions
+// These types are injected into the Monaco editor for IntelliSense, hover, and signature help.
+
+// ── Result Types ─────────────────────────────────────────
+
+interface SitecoreItem {
+  /** The globally-unique identifier for the item */
+  itemId: string;
+  /** The item name (not localized) */
+  name: string;
+  /** The full item path from root */
+  path: string;
+  /** The database name */
+  database: string;
+  /** The localized display name */
+  displayName: string;
+  /** The version number */
+  version: number;
+  /** The item's template */
+  template: { templateId: string; name: string };
+  /** Item fields (own, non-standard) */
+  fields: { nodes: Array<{ name: string; value: string }> };
+  /** Direct child items */
+  children: { nodes: Array<{ itemId: string; name: string; path: string }> };
+}
+
+interface SitecoreMediaItem {
+  /** Alternative text */
+  alt: string;
+  /** Media description */
+  description: string;
+  /** File extension */
+  extension: string;
+  /** Path in the media library */
+  mediaPath: string;
+  /** MIME type */
+  mimeType: string;
+  /** File size in bytes */
+  size: number;
+  /** Media title */
+  title: string;
+  /** Public URL */
+  url: string;
+  /** The underlying Sitecore item */
+  innerItem: { itemId: string; name: string; path: string };
+}
+
+interface SitecoreSearchResult {
+  /** Total number of matching items */
+  totalCount: number;
+  /** Search result items */
+  results: Array<{
+    itemId: string;
+    name: string;
+    path: string;
+    displayName: string;
+    templateName: string;
+    templateId: string;
+    language: { name: string };
+    version: number;
+    createdBy: string;
+    createdDate: string;
+    updatedBy: string;
+    updatedDate: string;
+  }>;
+  /** Facet categories */
+  facets: Array<{ name: string; facets: Array<{ name: string; count: number }> }>;
+}
+
+interface SitecorePublishingStatus {
+  /** Whether the operation is complete */
+  isDone: boolean;
+  /** Whether the operation failed */
+  isFailed: boolean;
+  /** Number of items processed */
+  processed: number;
+  /** Current state: INITIALIZING, QUEUED, RUNNING, FINISHED, ABORTED, etc. */
+  state: string;
+  /** Published languages */
+  languages: Array<{ name: string }>;
+  /** Target database */
+  targetDatabase: { name: string };
+}
+
+interface SitecorePublishResult {
+  /** The operation ID for tracking progress via getPublishingStatus() */
+  operationId: string;
+}
+
+interface SitecoreIndex {
+  /** Index name */
+  name: string;
+  /** Number of documents */
+  documentsCount: number;
+  /** Whether any documents have been deleted */
+  hasDeletions: boolean;
+  /** Duration of last rebuild */
+  lastRebuildDuration: string;
+  /** Last update timestamp */
+  lastUpdated: string;
+  /** Number of fields */
+  numberOfFields: number;
+  /** Number of terms */
+  numberOfTerms: number;
+  /** Whether the index is out of date */
+  outOfDate: boolean;
+}
+
+interface SitecoreJob {
+  /** Job handle (unique identifier) */
+  handle: string;
+  /** Job name */
+  name: string;
+  /** Job display name */
+  displayName: string;
+  /** Whether the job is finished */
+  done: boolean;
+  /** When the job was queued */
+  queueTime: string;
+  /** Job status */
+  status: { jobState: string; processed: number; total: number; messages?: string[]; exceptions?: string[] };
+  /** Job options */
+  options?: { jobName: string; category: string; siteName: string; abortable: boolean };
+}
+
+interface SitecoreWorkflow {
+  /** Workflow ID */
+  workflowId: string;
+  /** Display name */
+  displayName: string;
+  /** Initial workflow state */
+  initialState: { stateId: string; displayName: string; final: boolean };
+  /** All workflow states */
+  states: { nodes: Array<{ stateId: string; displayName: string; final: boolean; icon: string }> };
+}
+
+interface SitecoreLanguage {
+  /** Language code (e.g. "en", "fr-FR") */
+  name: string;
+  /** Localized display name */
+  displayName: string;
+  /** English name */
+  englishName: string;
+  /** Native name */
+  nativeName: string;
+  /** Two-letter ISO code */
+  iso: string;
+}
+
+interface SitecoreSupportedLanguage {
+  /** Language code */
+  name: string;
+  /** Language display name */
+  language: string;
+  /** Charset */
+  charset: string;
+  /** Code page */
+  codePage: string;
+  /** Custom code */
+  customCode: string;
+  /** Encoding */
+  encoding: string;
+  /** Region code */
+  regionCode: string;
+  /** Spell checker */
+  spellChecker: string;
+}
+
+interface SitecoreArchivedItem {
+  /** Archival ID */
+  archivalId: string;
+  /** Item ID */
+  itemId: string;
+  /** Item name */
+  name: string;
+  /** Database */
+  database: string;
+  /** Original location path */
+  originalLocation: string;
+  /** User who archived */
+  archivedBy: string;
+  /** Archival date */
+  archivedDate: string;
+  /** Parent item ID */
+  parentId: string;
+  /** Archived versions */
+  versions?: Array<{ versionId: string; language: string; version: number; archivedBy: string; archivalDate: string }>;
+}
+
+interface SitecoreTemplate {
+  /** Template ID */
+  templateId: string;
+  /** Template name */
+  name: string;
+  /** Full template path name */
+  fullName: string;
+  /** Template icon */
+  icon: string;
+  /** Own field definitions */
+  ownFields?: { nodes: Array<{ templateFieldId: string; name: string; type: string; key: string; defaultValue: string; source: string; sortOrder: number; section: { name: string } }> };
+  /** Template sections */
+  sections?: { nodes: Array<{ itemTemplateSectionId: string; name: string; key: string; sortOrder: number }> };
+  /** Direct base templates */
+  baseTemplates?: { nodes: Array<{ templateId: string; name: string }> };
+}
+
+interface SitecoreSite {
+  /** Site name */
+  name: string;
+  /** Host name */
+  hostName: string;
+  /** Default language */
+  language: string;
+  /** Root path */
+  rootPath: string;
+  /** Start path */
+  startPath: string;
+  /** Content start path */
+  contentStartPath: string;
+  /** Database info */
+  database: { name: string };
+  /** Content database */
+  contentDatabase: { name: string };
+  /** Content language */
+  contentLanguage: { name: string };
+  /** Root item */
+  rootItem: { itemId: string; name: string; path: string };
+  /** Start item */
+  startItem: { itemId: string; name: string; path: string };
+  /** Site properties */
+  properties: Array<{ key: string; value: any }>;
+}
+
+interface SitecoreSolutionSite {
+  /** Site ID */
+  id: string;
+  /** Site name */
+  name: string;
+  /** Display name */
+  displayName: string;
+  /** Description */
+  description: string;
+  /** Hostname */
+  hostname: string;
+  /** Default language */
+  language: string;
+  /** Creation date */
+  created: string;
+  /** Sort order */
+  sortOrder: number;
+  /** Whether site is linkable */
+  linkableSite: boolean;
+  /** Root item */
+  rootItem: { itemId: string; name: string; path: string };
+  /** Site collection */
+  siteCollection: { id: string; name: string };
+  /** Site languages */
+  languages: Array<{ name: string }>;
+  /** Point of sale mappings */
+  posMappings: Array<{ name: string; language: string }>;
+}
+
+interface SitecoreSiteCollection {
+  /** Collection ID */
+  id: string;
+  /** Collection name */
+  name: string;
+  /** Display name */
+  displayName: string;
+  /** Description */
+  description: string;
+  /** Collection name */
+  collectionName: string;
+  /** Collection description */
+  collectionDescription: string;
+  /** Created date */
+  created: string;
+  /** Creator */
+  createdBy: string;
+  /** Item path */
+  itemPath: string;
+  /** Sort order */
+  sortOrder: number;
+  /** Shared sites */
+  sharedSites: string[];
+}
+
+interface SitecoreUser {
+  /** User name (domain\\user) */
+  name: string;
+  /** Display name */
+  displayName: string;
+  /** Local name (without domain) */
+  localName: string;
+  /** Whether the user is an administrator */
+  isAdministrator: boolean;
+  /** Whether the user is authenticated */
+  isAuthenticated: boolean;
+  /** User domain */
+  domain: { name: string };
+  /** User profile */
+  profile?: { email: string; fullName: string; clientLanguage: string; contentLanguage: string; disabled?: boolean; lastLoginDate?: string };
+  /** Assigned roles */
+  roles?: Array<{ name: string; displayName?: string }>;
+}
+
+interface SitecoreRole {
+  /** Role name (domain\\role) */
+  name: string;
+  /** Display name */
+  displayName: string;
+  /** Local name (without domain) */
+  localName: string;
+  /** Description */
+  description: string;
+  /** Whether this is the everyone role */
+  isEveryone: boolean;
+  /** Whether this is a global role */
+  isGlobal: boolean;
+  /** Role domain */
+  domain: { name: string };
+  /** Accounts that are members of this role */
+  members?: { nodes: Array<{ name: string; accountType: string }> };
+  /** Roles this role is a member of */
+  memberOf?: { nodes: Array<{ name: string; accountType: string }> };
+}
+
+interface SitecoreDomain {
+  /** Domain name */
+  name: string;
+  /** Account prefix */
+  accountPrefix: string;
+  /** Whether this is the default domain */
+  isDefault: boolean;
+  /** Whether anonymous user is ensured */
+  ensureAnonymousUser: boolean;
+  /** Anonymous user name */
+  anonymousUserName: string;
+  /** Everyone role name */
+  everyoneRoleName: string;
+  /** Default profile item ID */
+  defaultProfileItemId: string;
+  /** Account name validation pattern */
+  accountNameValidation: string;
+  /** Anonymous user email pattern */
+  anonymousUserEmailPattern: string;
+}
+
+interface SitecorePublishingTarget {
+  /** Target name */
+  name: string;
+  /** Target database name */
+  targetDatabase: string;
+  /** Whether this is a preview publishing target */
+  previewPublishingTarget: boolean;
+}
+
+interface SitecoreRendering {
+  /** Rendering item ID */
+  itemId: string;
+  /** Rendering name */
+  name: string;
+  /** Rendering path */
+  path: string;
+  /** Display name */
+  displayName: string;
+  /** Datasource template */
+  datasourceTemplate: { templateId: string; name: string };
+  /** Rendering parameters template */
+  renderingParametersTemplate: { templateId: string; name: string };
+}
+
+// ── Options Types ────────────────────────────────────────
+
+interface ItemQueryOptions {
+  /** Item language (e.g. "en") */
+  language?: string;
+  /** Item version number */
+  version?: number;
+  /** Database name (default: "master") */
+  database?: string;
+}
+
+interface SearchQueryInput {
+  /** Search criteria statement */
+  searchStatement?: SearchStatementInput;
+  /** Filter criteria statement */
+  filterStatement?: SearchStatementInput;
+  /** Fields to build facets on */
+  facetOnFields?: string[];
+  /** Facet metrics */
+  facetMetrics?: Array<{ function: string; key: string }>;
+  /** Index name to search in */
+  index?: string;
+  /** Language to search in */
+  language?: string;
+  /** Whether to return only latest versions */
+  latestVersionOnly?: boolean;
+  /** Paging parameters */
+  paging?: { pageIndex?: number; pageSize?: number; skip?: number };
+  /** Sort parameters */
+  sort?: Array<{ field: string; direction?: "ASCENDING" | "DESCENDING" }>;
+}
+
+interface SearchStatementInput {
+  /** Search criteria */
+  criteria?: Array<{
+    /** Field name (e.g. "_name", "_fullpath", "_templatename") */
+    field: string;
+    /** Search value */
+    value: string;
+    /** Criteria type: EXACT, STARTSWITH, CONTAINS, ENDSWITH, WILDCARD, SEARCH, RANGE, FUZZY, PROXIMITY, REGEXP */
+    criteriaType?: "EXACT" | "STARTSWITH" | "CONTAINS" | "ENDSWITH" | "WILDCARD" | "SEARCH" | "RANGE" | "FUZZY" | "PROXIMITY" | "REGEXP";
+    /** Operator: SHOULD, MUST, NOT */
+    operator?: "SHOULD" | "MUST" | "NOT";
+    /** Boost value */
+    boost?: number;
+    /** Additional parameters */
+    parameters?: string;
+  }>;
+  /** Boolean operator for combining criteria: SHOULD, MUST, NOT */
+  operator?: "SHOULD" | "MUST" | "NOT";
+  /** Nested sub-statements */
+  subStatements?: SearchStatementInput[];
+}
+
+interface PublishItemInput {
+  /** Root item ID to publish */
+  rootItemId?: string;
+  /** Root item path to publish */
+  rootItemPath?: string;
+  /** Multiple root item IDs */
+  rootItemIds?: string[];
+  /** Multiple root item paths */
+  rootItemPaths?: string[];
+  /** Languages to publish */
+  languages: string[];
+  /** Target database names */
+  targetDatabases: string[];
+  /** Publish mode: "FULL" or "SMART" */
+  publishItemMode: "FULL" | "SMART";
+  /** Whether to publish sub-items */
+  publishSubItems?: boolean;
+  /** Whether to publish related items */
+  publishRelatedItems?: boolean;
+  /** Source database name */
+  sourceDatabase?: string;
+  /** Display name for the publish request */
+  displayName?: string;
+}
+
+interface PublishSiteInput {
+  /** Languages to publish */
+  languages: string[];
+  /** Target database names */
+  targetDatabases: string[];
+  /** Publish site mode: "FULL", "INCREMENTAL", or "SMART" */
+  publishSiteMode: "FULL" | "INCREMENTAL" | "SMART";
+  /** Source database name */
+  sourceDatabase?: string;
+  /** Display name for the publish request */
+  displayName?: string;
+}
+
+interface CreateUserInput {
+  /** User name (domain\\user format) */
+  userName: string;
+  /** User password */
+  password: string;
+  /** Email address */
+  email?: string;
+  /** Full name */
+  fullName?: string;
+  /** Whether the user is an administrator */
+  isAdministrator?: boolean;
+  /** Role names to assign */
+  roleNames?: string[];
+  /** Comment about the user */
+  comment?: string;
+  /** Client language */
+  clientLanguage?: string;
+  /** Default content language */
+  defaultContentLanguage?: string;
+  /** Portrait */
+  portrait?: string;
+  /** Regional ISO code */
+  regionalIsoCode?: string;
+  /** Start URL */
+  startUrl?: string;
+  /** User profile ID */
+  userProfileId?: string;
+  /** Wallpaper */
+  wallpaper?: string;
+}
+
+interface UpdateUserInput {
+  /** User name (domain\\user format) */
+  userName: string;
+  /** Email address */
+  email?: string;
+  /** Full name */
+  fullName?: string;
+  /** Whether the user is an administrator */
+  isAdministrator?: boolean;
+  /** Role names to assign */
+  roleNames?: string[];
+  /** Comment about the user */
+  comment?: string;
+  /** Client language */
+  clientLanguage?: string;
+  /** Default content language */
+  defaultContentLanguage?: string;
+  /** Portrait */
+  portrait?: string;
+  /** Regional ISO code */
+  regionalIsoCode?: string;
+  /** Start URL */
+  startUrl?: string;
+  /** User profile ID */
+  userProfileId?: string;
+  /** Wallpaper */
+  wallpaper?: string;
+}
+
+interface AddLanguageInput {
+  /** Language code (e.g. "fr-FR") */
+  languageCode: string;
+  /** Language name */
+  name?: string;
+  /** Database name */
+  database?: string;
+  /** Charset */
+  charset?: string;
+  /** Code page */
+  codePage?: string;
+  /** Custom code */
+  customCode?: string;
+  /** Encoding */
+  encoding?: string;
+  /** Fallback language code */
+  fallbackCode?: string;
+  /** Region code */
+  regionCode?: string;
+  /** Spell checker */
+  spellChecker?: string;
+  /** Use supported language definition as fallback (default: true) */
+  useSupportedLanguageAsFallback?: boolean;
+}
+
+// ── Namespace Interfaces ─────────────────────────────────
+
+interface SitecoreContentNamespace {
+  getItem(idOrPath: string, opts?: ItemQueryOptions): Promise<SitecoreItem>;
+  getItemChildren(path: string): Promise<SitecoreItem[]>;
+  getMediaItem(idOrPath: string, opts?: ItemQueryOptions): Promise<SitecoreMediaItem>;
+  search(query: SearchQueryInput): Promise<SitecoreSearchResult>;
+  createItem(parent: string, templateId: string, name: string, fields?: Record<string, string>, opts?: { language?: string; database?: string }): Promise<SitecoreItem>;
+  createItemFromBranch(branchId: string, parent: string, name: string, fields?: Record<string, string>, opts?: { language?: string; database?: string }): Promise<{ job: SitecoreJob }>;
+  updateItem(idOrPath: string, fields: Record<string, string>, opts?: ItemQueryOptions): Promise<SitecoreItem>;
+  deleteItem(idOrPath: string, permanently?: boolean): Promise<{ successful: boolean }>;
+  renameItem(idOrPath: string, newName: string, opts?: { database?: string }): Promise<SitecoreItem>;
+  moveItem(idOrPath: string, targetParent: string, opts?: { sortOrder?: number; database?: string }): Promise<SitecoreItem>;
+  copyItem(idOrPath: string, targetParent: string, opts?: { copyItemName?: string; deepCopy?: boolean; database?: string }): Promise<SitecoreItem>;
+  addItemVersion(idOrPath: string, opts?: { language?: string; version?: number; versionName?: string; database?: string }): Promise<SitecoreItem>;
+  deleteItemVersion(idOrPath: string, opts?: { language?: string; version?: number; database?: string }): Promise<SitecoreItem>;
+  uploadMedia(itemPath: string, opts?: { alt?: string; database?: string; language?: string; overwriteExisting?: boolean; versioned?: boolean; includeExtensionInItemName?: boolean }): Promise<{ presignedUploadUrl: string }>;
+}
+
+interface SitecorePublishingNamespace {
+  getPublishingStatus(operationId: string): Promise<SitecorePublishingStatus>;
+  getPublishingTargets(): Promise<SitecorePublishingTarget[]>;
+  getPublishingQueue(query: { sort: { field: string; direction: "ASCENDING" | "DESCENDING" }; paging?: { pageIndex: number; pageSize: number }; dateFilter?: { dateFrom: string; dateTo: string }; itemsFilter?: any }): Promise<{ totalCount: number; results: any[] }>;
+  publishItem(input: PublishItemInput): Promise<SitecorePublishResult>;
+  publishLanguageSpecificItems(input: { itemsToPublish?: Array<{ id?: string; languages: string[] }>; targetDatabases: string[]; publishItemMode: "FULL" | "SMART"; publishSubItems?: boolean; publishRelatedItems?: boolean; sourceDatabase?: string; displayName?: string }): Promise<SitecorePublishResult>;
+  publishSite(input: PublishSiteInput): Promise<SitecorePublishResult>;
+  publishWithOptions(options: Array<{ language: string; targetDatabase: string; publishSiteMode?: "FULL" | "INCREMENTAL" | "SMART"; publishItemMode?: "FULL" | "SMART"; rootItemId?: string; rootItemPath?: string; publishSubItems?: boolean; publishRelatedItems?: boolean; sourceDatabase?: string; publishDate?: string }>): Promise<SitecorePublishResult>;
+  cancelPublishing(operationId: string): Promise<{ success: boolean; message: string; publishingOperationId: string }>;
+}
+
+interface SitecoreIndexesNamespace {
+  getIndex(name: string): Promise<SitecoreIndex>;
+  getIndexes(): Promise<SitecoreIndex[]>;
+  rebuildIndexes(names: string[]): Promise<{ jobs: SitecoreJob[] }>;
+  populateManagedSchema(names: string[]): Promise<{ jobs: SitecoreJob[] }>;
+  rebuildLinkDatabase(dbNames: string[]): Promise<{ job: SitecoreJob }>;
+  cleanUpDatabases(dbNames: string[]): Promise<{ job: SitecoreJob }>;
+}
+
+interface SitecoreWorkflowsNamespace {
+  getWorkflow(idOrItem: string | { itemId?: string; path?: string; database?: string }): Promise<SitecoreWorkflow>;
+  getWorkflows(): Promise<SitecoreWorkflow[]>;
+  getJob(nameOrHandle: string): Promise<SitecoreJob>;
+  getJobs(): Promise<SitecoreJob[]>;
+  isJobQueued(name: string): Promise<boolean>;
+  isJobRunning(name: string): Promise<boolean>;
+  startWorkflow(item: { itemId?: string; path?: string; database?: string; language?: string }): Promise<{ successful: boolean }>;
+  executeWorkflowCommand(commandId: string, item: { itemId?: string; path?: string; database?: string; language?: string }, comments?: string): Promise<{ successful: boolean; completed: boolean; error: string; message: string; nextStateId: string }>;
+}
+
+interface SitecoreTranslationNamespace {
+  translatePage(pageId: string, targetLang: string, opts?: { sourceLanguage?: string; brandKitId?: string; translateIfTargetVersionExists?: boolean; database?: string }): Promise<{ job: SitecoreJob }>;
+  translateSite(siteId: string, targetLang: string, opts?: { sourceLanguage?: string; brandKitId?: string; translateIfTargetVersionExists?: boolean; database?: string }): Promise<{ job: SitecoreJob }>;
+}
+
+interface SitecoreTemplatesNamespace {
+  getTemplate(idOrPath: string, opts?: { database?: string }): Promise<SitecoreTemplate>;
+  getTemplates(opts?: { database?: string; path?: string; templateId?: string }): Promise<SitecoreTemplate[]>;
+  getDataSourceTemplates(opts?: { database?: string }): Promise<SitecoreTemplate[]>;
+  getTenantTemplates(siteName: string, opts?: { database?: string; hasPageDesign?: boolean }): Promise<Array<{ template: SitecoreTemplate; pageDesign: { itemId: string; name: string } }>>;
+  createTemplate(parent: string, name: string, opts?: { database?: string; language?: string; icon?: string; baseTemplates?: string[]; sections?: any[]; createStandardValuesItem?: boolean }): Promise<SitecoreTemplate>;
+  updateTemplate(templateId: string, opts?: { name?: string; database?: string; language?: string; icon?: string; baseTemplates?: string[]; sections?: any[]; createStandardValuesItem?: boolean; deleteMissingFields?: boolean }): Promise<SitecoreTemplate>;
+  deleteTemplate(templateId: string, opts?: { database?: string }): Promise<{ successful: boolean }>;
+  createTemplateFolder(parent: string, name: string, opts?: { database?: string; language?: string }): Promise<SitecoreItem>;
+}
+
+interface SitecoreSitesNamespace {
+  getSite(name: string): Promise<SitecoreSite>;
+  getSites(includeSystem?: boolean): Promise<Array<{ name: string; hostName: string; language: string; rootPath: string }>>;
+  getSiteCollections(opts?: { database?: string }): Promise<SitecoreSiteCollection[]>;
+  getSolutionSites(opts?: { database?: string; siteName?: string; siteId?: string; siteCollectionID?: string; rootItemId?: string; includeNonSxaSites?: boolean }): Promise<SitecoreSolutionSite[]>;
+  searchSolutionSites(filter?: SearchStatementInput): Promise<Array<{ siteRoot: SitecoreItem; sites: SitecoreSolutionSite[] }>>;
+  getSolutionTemplates(opts?: { database?: string }): Promise<Array<{ id: string; name: string; description: string; enabled: boolean; builtInTemplate: boolean; createdBy: string; updated: string; contents: Array<{ key: string; value: any }>; siteCollection: { id: string; name: string } }>>;
+  scaffoldSolution(input: { siteName: string; hostName: string; language: string; templateId: string; languages?: string[]; siteCollectionName?: string; siteCollectionDisplayName?: string; siteCollectionDescription?: string; siteDescription?: string; siteDisplayName?: string; posMappings?: any[]; database?: string }): Promise<{ job: SitecoreJob }>;
+  createSite(input: { siteName: string; hostName: string; language: string; templateId: string; collectionId: string; languages?: string[]; description?: string; displayName?: string; posMappings?: any[]; database?: string }): Promise<{ job: SitecoreJob }>;
+  createSiteCollection(input: { name: string; displayName?: string; description?: string; database?: string }): Promise<{ job: SitecoreJob }>;
+  removeSite(input: { siteId?: string; siteName?: string; database?: string }): Promise<{ job: SitecoreJob }>;
+  removeSiteCollection(input: { id: string; database?: string }): Promise<{ job: SitecoreJob }>;
+  renameSite(input: { siteId?: string; siteName?: string; newName?: string; database?: string }): Promise<{ job: SitecoreJob }>;
+  renameSiteCollection(input: { id: string; name?: string; database?: string }): Promise<{ job: SitecoreJob }>;
+  cloneSite(input: { siteId?: string; siteName?: string; cloneName?: string; displayName?: string; description?: string; cloneSiteDefinitions?: boolean; posMappings?: any[]; database?: string }): Promise<{ job: SitecoreJob }>;
+  updateSitesPos(input: { posMappingsInput: Array<{ id: string; newValue: Array<{ name: string; language: string }> }>; database?: string }): Promise<{ result: Array<{ id: string; success: boolean }> }>;
+}
+
+interface SitecoreLanguagesNamespace {
+  getLanguage(name: string): Promise<SitecoreLanguage>;
+  getLanguages(db?: string): Promise<SitecoreLanguage[]>;
+  getSupportedLanguages(): Promise<SitecoreSupportedLanguage[]>;
+  getFallbackLanguage(name: string, db?: string): Promise<SitecoreLanguage>;
+  getArchivedItem(archivalId: string, archiveName?: string): Promise<SitecoreArchivedItem>;
+  getArchivedItems(opts?: { archiveName?: string; pageIndex?: number; pageSize?: number }): Promise<SitecoreArchivedItem[]>;
+  addLanguage(input: AddLanguageInput): Promise<{ successful: boolean }>;
+  deleteLanguage(name: string, db?: string): Promise<{ successful: boolean }>;
+  deleteLanguages(names: string[], db?: string): Promise<{ successful: boolean }>;
+  archiveItem(idOrPath: string, archiveName?: string): Promise<{ archiveItemId: string }>;
+  archiveVersion(idOrPath: string, language: string, version?: number, archiveName?: string): Promise<{ archiveVersionId: string }>;
+  setItemArchiveDate(idOrPath: string, date?: string): Promise<{ successful: boolean }>;
+  setVersionArchiveDate(idOrPath: string, language: string, date?: string, version?: number): Promise<{ successful: boolean }>;
+  restoreArchivedItem(archivalId: string, archiveName?: string): Promise<{ successful: boolean }>;
+  restoreArchivedVersion(versionId: string, archiveName?: string): Promise<{ successful: boolean }>;
+  deleteArchivedItem(archivalId: string, archiveName?: string): Promise<{ successful: boolean }>;
+  deleteArchivedVersion(versionId: string, archiveName?: string): Promise<{ successful: boolean }>;
+  emptyArchive(archiveName?: string): Promise<{ successful: boolean }>;
+}
+
+interface SitecoreSecurityNamespace {
+  getCurrentUser(): Promise<SitecoreUser>;
+  getUser(userName: string): Promise<SitecoreUser>;
+  getUsers(): Promise<SitecoreUser[]>;
+  getRole(roleName: string): Promise<SitecoreRole>;
+  getRoles(): Promise<SitecoreRole[]>;
+  getDomain(domainName: string): Promise<SitecoreDomain>;
+  getDomains(): Promise<SitecoreDomain[]>;
+  getSelectionProfiles(): Promise<Array<{ name: string; profileId: string }>>;
+  createUser(input: CreateUserInput): Promise<SitecoreUser>;
+  updateUser(input: UpdateUserInput): Promise<SitecoreUser>;
+  deleteUser(userName: string): Promise<{ successful: boolean }>;
+  unlockUser(userName: string): Promise<{ successful: boolean }>;
+  enableUser(userName: string): Promise<{ successful: boolean }>;
+  disableUser(userName: string): Promise<{ successful: boolean }>;
+  resetUserSettings(userName: string): Promise<{ successful: boolean }>;
+  changeUserPassword(userName: string, oldPw: string, newPw: string): Promise<{ successful: boolean }>;
+  createDomain(domainName: string, local?: boolean): Promise<SitecoreDomain>;
+  deleteDomain(domainName: string): Promise<{ successful: boolean }>;
+  createRole(roleName: string): Promise<SitecoreRole>;
+  deleteRole(roleName: string): Promise<{ successful: boolean }>;
+  addRoleToRoles(roleName: string, parentRoles: string[]): Promise<{ successful: boolean }>;
+  deleteRoleFromRoles(roleName: string, parentRoles: string[]): Promise<{ successful: boolean }>;
+  addAccountsToRole(roleName: string, opts?: { users?: string[]; roles?: string[] }): Promise<{ successful: boolean }>;
+  deleteAccountsFromRole(roleName: string, opts?: { users?: string[]; roles?: string[] }): Promise<{ successful: boolean }>;
+}
+
+interface SitecorePresentationNamespace {
+  getAvailableRenderings(opts?: { database?: string; renderingId?: string; siteRootItemId?: string }): Promise<SitecoreRendering[]>;
+  getPageDesigns(siteName: string, opts?: { database?: string }): Promise<Array<{ siteName: string; pageDesign: SitecoreItem }>>;
+  getPartialDesigns(siteName: string, opts?: { database?: string }): Promise<Array<{ siteName: string; partialDesign: SitecoreItem }>>;
+  getPageBranchesRoots(siteName: string, opts?: { database?: string }): Promise<Array<{ siteName: string; root: SitecoreItem }>>;
+  getDatabases(): Promise<Array<{ name: string }>>;
+  getMeta(): Promise<{ version: string; xMVersion: string }>;
+  configurePageDesigns(siteName: string, mapping: Array<{ templateId?: string; pageDesignId?: string }>, opts?: { database?: string }): Promise<boolean>;
+}
+
+// ── Sitecore SDK Interface ───────────────────────────────
+
+interface SitecoreSDK {
+  // ── Core ──────────────────────────────────────────────
+
+  /** Get the current application context including tenant, organization, and resource access info. */
+  getContext(): Promise<any>;
+
+  /**
+   * Execute a raw GraphQL query or mutation against the XM Cloud Authoring API.
+   * @param query - GraphQL query or mutation string
+   * @param variables - Optional variables object
+   * @example
+   * const data = await sc.graphql(\`
+   *   query {
+   *     item(where: { path: "/sitecore/content" }) {
+   *       itemId
+   *       name
+   *     }
+   *   }
+   * \`);
+   */
+  graphql(query: string, variables?: Record<string, any>): Promise<any>;
+
+  /** List all sites configured in XM Cloud. Returns array of sites with name, hostName, language, rootPath. */
+  listSites(): Promise<Array<{ name: string; hostName: string; language: string; rootPath: string }>>;
+
+  /**
+   * Retrieve a page by ID using the XM Cloud Pages API.
+   * @param pageId - The page item ID
+   * @param site - Site name
+   * @param language - Language code (default: "en")
+   */
+  retrievePage(pageId: string, site: string, language?: string): Promise<any>;
+
+  /** Reload the Pages editor canvas. */
+  reloadCanvas(): Promise<void>;
+
+  /**
+   * Navigate the Pages editor to a specific item.
+   * @param itemId - The item ID to navigate to
+   */
+  navigateTo(itemId: string): Promise<void>;
+
+  // ── Content & Items ───────────────────────────────────
+
+  /**
+   * Get a content item by ID or path. Automatically detects whether the argument is a GUID or path.
+   * @param idOrPath - Item ID (GUID) or Sitecore path
+   * @param opts - Optional: language, version, database
+   * @example
+   * const item = await sc.getItem("/sitecore/content/Home");
+   * const item = await sc.getItem("110D559F-DEA5-42EA-9C1C-8A5DF7E70EF9");
+   */
+  getItem(idOrPath: string, opts?: ItemQueryOptions): Promise<SitecoreItem>;
+
+  /**
+   * Get child items of the item at the given path.
+   * @param path - Sitecore path
+   * @example
+   * const children = await sc.getItemChildren("/sitecore/content/Home");
+   */
+  getItemChildren(path: string): Promise<SitecoreItem[]>;
+
+  /**
+   * Get a media item by ID or path.
+   * @param idOrPath - Media item ID or path (e.g. "/sitecore/media library/Images/photo")
+   * @param opts - Optional: language, version, database
+   */
+  getMediaItem(idOrPath: string, opts?: ItemQueryOptions): Promise<SitecoreMediaItem>;
+
+  /**
+   * Full-text and faceted search across the content tree.
+   * @param query - Search query with criteria, filters, paging, sorting, and facets
+   * @example
+   * const results = await sc.search({
+   *   searchStatement: {
+   *     criteria: [{ field: "_name", value: "Home", criteriaType: "CONTAINS" }]
+   *   },
+   *   paging: { pageSize: 10 }
+   * });
+   */
+  search(query: SearchQueryInput): Promise<SitecoreSearchResult>;
+
+  /**
+   * Create a new content item.
+   * @param parent - Parent item ID or path
+   * @param templateId - Template ID for the new item
+   * @param name - Item name
+   * @param fields - Optional field values as \`{ FieldName: "value" }\`
+   * @param opts - Optional: language, database
+   * @example
+   * const item = await sc.createItem(parentId, templateId, "My Page", { Title: "Hello" });
+   */
+  createItem(parent: string, templateId: string, name: string, fields?: Record<string, string>, opts?: { language?: string; database?: string }): Promise<SitecoreItem>;
+
+  /**
+   * Create an item from a branch template.
+   * @param branchId - Branch template ID
+   * @param parent - Parent item ID
+   * @param name - Item name
+   * @param fields - Optional field values
+   * @param opts - Optional: language, database
+   */
+  createItemFromBranch(branchId: string, parent: string, name: string, fields?: Record<string, string>, opts?: { language?: string; database?: string }): Promise<{ job: SitecoreJob }>;
+
+  /**
+   * Update fields on a content item.
+   * @param idOrPath - Item ID or path
+   * @param fields - Field values to update as \`{ FieldName: "value" }\`
+   * @param opts - Optional: language, version, database
+   * @example
+   * await sc.updateItem(itemId, { Title: "New Title", Body: "<p>Content</p>" });
+   */
+  updateItem(idOrPath: string, fields: Record<string, string>, opts?: ItemQueryOptions): Promise<SitecoreItem>;
+
+  /**
+   * Delete an item.
+   * @param idOrPath - Item ID or path
+   * @param permanently - If true, permanently deletes (no recycle bin). Default: false
+   */
+  deleteItem(idOrPath: string, permanently?: boolean): Promise<{ successful: boolean }>;
+
+  /**
+   * Rename an item.
+   * @param idOrPath - Item ID or path
+   * @param newName - New item name
+   */
+  renameItem(idOrPath: string, newName: string, opts?: { database?: string }): Promise<SitecoreItem>;
+
+  /**
+   * Move an item to a new parent.
+   * @param idOrPath - Item ID or path to move
+   * @param targetParent - Target parent ID or path
+   * @param opts - Optional: sortOrder, database
+   */
+  moveItem(idOrPath: string, targetParent: string, opts?: { sortOrder?: number; database?: string }): Promise<SitecoreItem>;
+
+  /**
+   * Copy an item to a new parent.
+   * @param idOrPath - Item ID or path to copy
+   * @param targetParent - Target parent ID or path
+   * @param opts - Optional: copyItemName, deepCopy (default: true), database
+   */
+  copyItem(idOrPath: string, targetParent: string, opts?: { copyItemName?: string; deepCopy?: boolean; database?: string }): Promise<SitecoreItem>;
+
+  /**
+   * Add a new version to an item.
+   * @param idOrPath - Item ID or path
+   * @param opts - Optional: language, version (base version), versionName, database
+   */
+  addItemVersion(idOrPath: string, opts?: { language?: string; version?: number; versionName?: string; database?: string }): Promise<SitecoreItem>;
+
+  /**
+   * Delete a version of an item.
+   * @param idOrPath - Item ID or path
+   * @param opts - Optional: language, version (if not specified, deletes latest), database
+   */
+  deleteItemVersion(idOrPath: string, opts?: { language?: string; version?: number; database?: string }): Promise<SitecoreItem>;
+
+  /**
+   * Get a pre-signed upload URL for media.
+   * @param itemPath - Relative path under sitecore media library
+   * @param opts - Optional: alt, database, language, overwriteExisting, versioned, includeExtensionInItemName
+   * @returns Object with \`presignedUploadUrl\` to PUT the file to
+   */
+  uploadMedia(itemPath: string, opts?: { alt?: string; database?: string; language?: string; overwriteExisting?: boolean; versioned?: boolean; includeExtensionInItemName?: boolean }): Promise<{ presignedUploadUrl: string }>;
+
+  // ── Publishing ────────────────────────────────────────
+
+  /**
+   * Check the progress of a publishing operation.
+   * @param operationId - The operation ID returned from a publish call
+   */
+  getPublishingStatus(operationId: string): Promise<SitecorePublishingStatus>;
+
+  /** List all publishing targets (e.g. "web" database). */
+  getPublishingTargets(): Promise<SitecorePublishingTarget[]>;
+
+  /**
+   * Get publishing queue entries.
+   * @param query - Query with sort (required), paging, dateFilter, itemsFilter
+   * @example
+   * const queue = await sc.getPublishingQueue({
+   *   sort: { field: "date", direction: "DESCENDING" }
+   * });
+   */
+  getPublishingQueue(query: { sort: { field: string; direction: "ASCENDING" | "DESCENDING" }; paging?: { pageIndex: number; pageSize: number }; dateFilter?: { dateFrom: string; dateTo: string }; itemsFilter?: any }): Promise<{ totalCount: number; results: any[] }>;
+
+  /**
+   * Publish one or more items.
+   * @example
+   * const result = await sc.publishItem({
+   *   rootItemId: itemId,
+   *   languages: ["en"],
+   *   targetDatabases: ["web"],
+   *   publishItemMode: "SMART",
+   *   publishSubItems: true
+   * });
+   * // Track: await sc.getPublishingStatus(result.operationId);
+   */
+  publishItem(input: PublishItemInput): Promise<SitecorePublishResult>;
+
+  /**
+   * Publish items with per-item language specifications.
+   * @example
+   * await sc.publishLanguageSpecificItems({
+   *   itemsToPublish: [{ id: itemId, languages: ["en", "fr"] }],
+   *   targetDatabases: ["web"],
+   *   publishItemMode: "SMART"
+   * });
+   */
+  publishLanguageSpecificItems(input: { itemsToPublish?: Array<{ id?: string; languages: string[] }>; targetDatabases: string[]; publishItemMode: "FULL" | "SMART"; publishSubItems?: boolean; publishRelatedItems?: boolean; sourceDatabase?: string; displayName?: string }): Promise<SitecorePublishResult>;
+
+  /**
+   * Publish an entire site.
+   * @example
+   * await sc.publishSite({
+   *   languages: ["en"],
+   *   targetDatabases: ["web"],
+   *   publishSiteMode: "INCREMENTAL"
+   * });
+   */
+  publishSite(input: PublishSiteInput): Promise<SitecorePublishResult>;
+
+  /**
+   * Advanced publish with detailed options per language/target.
+   * @param options - Array of publishing options
+   */
+  publishWithOptions(options: Array<{ language: string; targetDatabase: string; publishSiteMode?: "FULL" | "INCREMENTAL" | "SMART"; publishItemMode?: "FULL" | "SMART"; rootItemId?: string; rootItemPath?: string; publishSubItems?: boolean; publishRelatedItems?: boolean; sourceDatabase?: string; publishDate?: string }>): Promise<SitecorePublishResult>;
+
+  /**
+   * Cancel an in-progress publishing operation.
+   * @param operationId - The operation ID to cancel
+   */
+  cancelPublishing(operationId: string): Promise<{ success: boolean; message: string; publishingOperationId: string }>;
+
+  // ── Search Indexes & Database ─────────────────────────
+
+  /**
+   * Get info about a single search index.
+   * @param name - Index name (e.g. "sitecore_master_index")
+   */
+  getIndex(name: string): Promise<SitecoreIndex>;
+
+  /** Get all search indexes. */
+  getIndexes(): Promise<SitecoreIndex[]>;
+
+  /**
+   * Rebuild one or more search indexes.
+   * @param names - Array of index names to rebuild
+   * @example
+   * await sc.rebuildIndexes(["sitecore_master_index"]);
+   */
+  rebuildIndexes(names: string[]): Promise<{ jobs: SitecoreJob[] }>;
+
+  /**
+   * Populate managed schema for search indexes.
+   * @param names - Array of index names
+   */
+  populateManagedSchema(names: string[]): Promise<{ jobs: SitecoreJob[] }>;
+
+  /**
+   * Rebuild the link database for specified databases.
+   * @param dbNames - Array of database names (e.g. ["master"])
+   */
+  rebuildLinkDatabase(dbNames: string[]): Promise<{ job: SitecoreJob }>;
+
+  /**
+   * Clean up specified databases.
+   * @param dbNames - Array of database names
+   */
+  cleanUpDatabases(dbNames: string[]): Promise<{ job: SitecoreJob }>;
+
+  // ── Workflows & Jobs ──────────────────────────────────
+
+  /**
+   * Get a workflow by workflow ID, or by item reference.
+   * @param idOrItem - Workflow ID (GUID string) or item reference object
+   * @example
+   * const wf = await sc.getWorkflow(workflowId);
+   * const wf = await sc.getWorkflow({ itemId: myItemId });
+   */
+  getWorkflow(idOrItem: string | { itemId?: string; path?: string; database?: string }): Promise<SitecoreWorkflow>;
+
+  /** Get all configured workflows. */
+  getWorkflows(): Promise<SitecoreWorkflow[]>;
+
+  /**
+   * Get a specific job by name or handle. Names use simple string, handles contain "|".
+   * @param nameOrHandle - Job name or job handle
+   */
+  getJob(nameOrHandle: string): Promise<SitecoreJob>;
+
+  /** Get all jobs. */
+  getJobs(): Promise<SitecoreJob[]>;
+
+  /**
+   * Check if a job is queued.
+   * @param name - Job name
+   */
+  isJobQueued(name: string): Promise<boolean>;
+
+  /**
+   * Check if a job is running.
+   * @param name - Job name
+   */
+  isJobRunning(name: string): Promise<boolean>;
+
+  /**
+   * Start a workflow for an item. Sets the state to initial and clears all workflow history.
+   * @param item - Item reference with itemId or path
+   */
+  startWorkflow(item: { itemId?: string; path?: string; database?: string; language?: string }): Promise<{ successful: boolean }>;
+
+  /**
+   * Execute a workflow command on an item.
+   * @param commandId - Workflow command ID
+   * @param item - Item reference
+   * @param comments - Optional workflow comments
+   */
+  executeWorkflowCommand(commandId: string, item: { itemId?: string; path?: string; database?: string; language?: string }, comments?: string): Promise<{ successful: boolean; completed: boolean; error: string; message: string; nextStateId: string }>;
+
+  // ── Translation ───────────────────────────────────────
+
+  /**
+   * Translate a page to a target language using AI translation.
+   * @param pageId - Page item ID
+   * @param targetLang - Target language code (e.g. "fr-FR")
+   * @param opts - Optional: sourceLanguage, brandKitId, translateIfTargetVersionExists (default: false)
+   */
+  translatePage(pageId: string, targetLang: string, opts?: { sourceLanguage?: string; brandKitId?: string; translateIfTargetVersionExists?: boolean; database?: string }): Promise<{ job: SitecoreJob }>;
+
+  /**
+   * Translate an entire site to a target language using AI translation.
+   * @param siteId - Site ID
+   * @param targetLang - Target language code
+   * @param opts - Optional: sourceLanguage, brandKitId, translateIfTargetVersionExists (default: false)
+   */
+  translateSite(siteId: string, targetLang: string, opts?: { sourceLanguage?: string; brandKitId?: string; translateIfTargetVersionExists?: boolean; database?: string }): Promise<{ job: SitecoreJob }>;
+
+  // ── Templates ─────────────────────────────────────────
+
+  /**
+   * Get a single template by ID or path, with fields, sections, and base templates.
+   * @param idOrPath - Template ID or path
+   * @param opts - Optional: database
+   */
+  getTemplate(idOrPath: string, opts?: { database?: string }): Promise<SitecoreTemplate>;
+
+  /**
+   * List templates.
+   * @param opts - Optional: database, path, templateId
+   */
+  getTemplates(opts?: { database?: string; path?: string; templateId?: string }): Promise<SitecoreTemplate[]>;
+
+  /** Get data source templates. */
+  getDataSourceTemplates(opts?: { database?: string }): Promise<SitecoreTemplate[]>;
+
+  /**
+   * Get tenant templates for a site.
+   * @param siteName - Site name
+   * @param opts - Optional: database, hasPageDesign
+   */
+  getTenantTemplates(siteName: string, opts?: { database?: string; hasPageDesign?: boolean }): Promise<Array<{ template: SitecoreTemplate; pageDesign: { itemId: string; name: string } }>>;
+
+  /**
+   * Create a new template.
+   * @param parent - Parent item ID where the template is created
+   * @param name - Template name
+   * @param opts - Optional: database, language, icon, baseTemplates, sections, createStandardValuesItem
+   */
+  createTemplate(parent: string, name: string, opts?: { database?: string; language?: string; icon?: string; baseTemplates?: string[]; sections?: any[]; createStandardValuesItem?: boolean }): Promise<SitecoreTemplate>;
+
+  /**
+   * Update an existing template.
+   * @param templateId - Template ID
+   * @param opts - Properties to update: name, icon, baseTemplates, sections, deleteMissingFields, etc.
+   */
+  updateTemplate(templateId: string, opts?: { name?: string; database?: string; language?: string; icon?: string; baseTemplates?: string[]; sections?: any[]; createStandardValuesItem?: boolean; deleteMissingFields?: boolean }): Promise<SitecoreTemplate>;
+
+  /**
+   * Delete a template.
+   * @param templateId - Template ID to delete
+   */
+  deleteTemplate(templateId: string, opts?: { database?: string }): Promise<{ successful: boolean }>;
+
+  /**
+   * Create a template folder.
+   * @param parent - Parent item ID
+   * @param name - Folder name
+   */
+  createTemplateFolder(parent: string, name: string, opts?: { database?: string; language?: string }): Promise<SitecoreItem>;
+
+  // ── Sites & Solutions ─────────────────────────────────
+
+  /**
+   * Get a single site by name with full details.
+   * @param name - Site name
+   */
+  getSite(name: string): Promise<SitecoreSite>;
+
+  /**
+   * Get all sites.
+   * @param includeSystem - Include system sites (default: false)
+   */
+  getSites(includeSystem?: boolean): Promise<Array<{ name: string; hostName: string; language: string; rootPath: string }>>;
+
+  /** Get all site collections. */
+  getSiteCollections(opts?: { database?: string }): Promise<SitecoreSiteCollection[]>;
+
+  /**
+   * Get solution sites.
+   * @param opts - Optional filters: siteName, siteId, siteCollectionID, rootItemId, includeNonSxaSites
+   */
+  getSolutionSites(opts?: { database?: string; siteName?: string; siteId?: string; siteCollectionID?: string; rootItemId?: string; includeNonSxaSites?: boolean }): Promise<SitecoreSolutionSite[]>;
+
+  /** Search solution sites with optional filter statement. */
+  searchSolutionSites(filter?: SearchStatementInput): Promise<Array<{ siteRoot: SitecoreItem; sites: SitecoreSolutionSite[] }>>;
+
+  /** Get solution templates. */
+  getSolutionTemplates(opts?: { database?: string }): Promise<Array<{ id: string; name: string; description: string; enabled: boolean; builtInTemplate: boolean; createdBy: string; updated: string; contents: Array<{ key: string; value: any }>; siteCollection: { id: string; name: string } }>>;
+
+  /**
+   * Scaffold a new solution with site, site collection, and template.
+   * @example
+   * await sc.scaffoldSolution({
+   *   siteName: "MySite",
+   *   hostName: "mysite.com",
+   *   language: "en",
+   *   templateId: templateId
+   * });
+   */
+  scaffoldSolution(input: { siteName: string; hostName: string; language: string; templateId: string; languages?: string[]; siteCollectionName?: string; siteCollectionDisplayName?: string; siteCollectionDescription?: string; siteDescription?: string; siteDisplayName?: string; posMappings?: any[]; database?: string }): Promise<{ job: SitecoreJob }>;
+
+  /**
+   * Create a site within an existing collection.
+   */
+  createSite(input: { siteName: string; hostName: string; language: string; templateId: string; collectionId: string; languages?: string[]; description?: string; displayName?: string; posMappings?: any[]; database?: string }): Promise<{ job: SitecoreJob }>;
+
+  /**
+   * Create a site collection.
+   * @example
+   * await sc.createSiteCollection({ name: "MyCollection", displayName: "My Collection" });
+   */
+  createSiteCollection(input: { name: string; displayName?: string; description?: string; database?: string }): Promise<{ job: SitecoreJob }>;
+
+  /** Remove a site by ID or name. */
+  removeSite(input: { siteId?: string; siteName?: string; database?: string }): Promise<{ job: SitecoreJob }>;
+
+  /** Remove a site collection by ID. */
+  removeSiteCollection(input: { id: string; database?: string }): Promise<{ job: SitecoreJob }>;
+
+  /** Rename a site. */
+  renameSite(input: { siteId?: string; siteName?: string; newName?: string; database?: string }): Promise<{ job: SitecoreJob }>;
+
+  /** Rename a site collection. */
+  renameSiteCollection(input: { id: string; name?: string; database?: string }): Promise<{ job: SitecoreJob }>;
+
+  /** Clone a site. */
+  cloneSite(input: { siteId?: string; siteName?: string; cloneName?: string; displayName?: string; description?: string; cloneSiteDefinitions?: boolean; posMappings?: any[]; database?: string }): Promise<{ job: SitecoreJob }>;
+
+  /** Update Point of Sale mappings for sites. */
+  updateSitesPos(input: { posMappingsInput: Array<{ id: string; newValue: Array<{ name: string; language: string }> }>; database?: string }): Promise<{ result: Array<{ id: string; success: boolean }> }>;
+
+  // ── Languages & Archiving ─────────────────────────────
+
+  /**
+   * Get a single language by name.
+   * @param name - Language code (e.g. "en", "fr-FR")
+   */
+  getLanguage(name: string): Promise<SitecoreLanguage>;
+
+  /**
+   * Get all languages.
+   * @param db - Optional database name
+   */
+  getLanguages(db?: string): Promise<SitecoreLanguage[]>;
+
+  /** Get all languages supported by Sitecore. */
+  getSupportedLanguages(): Promise<SitecoreSupportedLanguage[]>;
+
+  /**
+   * Get the fallback language for a given language.
+   * @param name - Language code
+   * @param db - Optional database name
+   */
+  getFallbackLanguage(name: string, db?: string): Promise<SitecoreLanguage>;
+
+  /**
+   * Get a single archived item by archival ID.
+   * @param archivalId - The archival ID
+   * @param archiveName - Optional archive name (default: "archive")
+   */
+  getArchivedItem(archivalId: string, archiveName?: string): Promise<SitecoreArchivedItem>;
+
+  /**
+   * List archived items.
+   * @param opts - Optional: archiveName, pageIndex, pageSize
+   */
+  getArchivedItems(opts?: { archiveName?: string; pageIndex?: number; pageSize?: number }): Promise<SitecoreArchivedItem[]>;
+
+  /**
+   * Add a language to the system.
+   * @param input - Language details; languageCode is required
+   * @example
+   * await sc.addLanguage({ languageCode: "fr-FR" });
+   */
+  addLanguage(input: AddLanguageInput): Promise<{ successful: boolean }>;
+
+  /**
+   * Delete a language. WARNING: Removes ALL versions of this language from every item.
+   * @param name - Language code to delete
+   * @param db - Optional database name
+   */
+  deleteLanguage(name: string, db?: string): Promise<{ successful: boolean }>;
+
+  /**
+   * Delete multiple languages at once.
+   * @param names - Array of language codes
+   * @param db - Optional database name
+   */
+  deleteLanguages(names: string[], db?: string): Promise<{ successful: boolean }>;
+
+  /**
+   * Archive an item.
+   * @param idOrPath - Item ID or path
+   * @param archiveName - Optional archive name
+   */
+  archiveItem(idOrPath: string, archiveName?: string): Promise<{ archiveItemId: string }>;
+
+  /**
+   * Archive a specific version of an item.
+   * @param idOrPath - Item ID or path
+   * @param language - Language code
+   * @param version - Version number (latest if not specified)
+   * @param archiveName - Optional archive name
+   */
+  archiveVersion(idOrPath: string, language: string, version?: number, archiveName?: string): Promise<{ archiveVersionId: string }>;
+
+  /**
+   * Schedule an item for archiving at a future date. Pass undefined to clear the date.
+   * @param idOrPath - Item ID or path
+   * @param date - ISO 8601 date string, or undefined to clear
+   */
+  setItemArchiveDate(idOrPath: string, date?: string): Promise<{ successful: boolean }>;
+
+  /**
+   * Schedule a version for archiving at a future date.
+   * @param idOrPath - Item ID or path
+   * @param language - Language code
+   * @param date - ISO 8601 date string, or undefined to clear
+   * @param version - Version number (latest if not specified)
+   */
+  setVersionArchiveDate(idOrPath: string, language: string, date?: string, version?: number): Promise<{ successful: boolean }>;
+
+  /** Restore an archived item. */
+  restoreArchivedItem(archivalId: string, archiveName?: string): Promise<{ successful: boolean }>;
+
+  /** Restore an archived version. */
+  restoreArchivedVersion(versionId: string, archiveName?: string): Promise<{ successful: boolean }>;
+
+  /** Permanently delete an archived item. */
+  deleteArchivedItem(archivalId: string, archiveName?: string): Promise<{ successful: boolean }>;
+
+  /** Permanently delete an archived version. */
+  deleteArchivedVersion(versionId: string, archiveName?: string): Promise<{ successful: boolean }>;
+
+  /** Empty the entire archive. */
+  emptyArchive(archiveName?: string): Promise<{ successful: boolean }>;
+
+  // ── Security ──────────────────────────────────────────
+
+  /** Get the current authenticated user with profile and roles. */
+  getCurrentUser(): Promise<SitecoreUser>;
+
+  /**
+   * Get a specific user by username.
+   * @param userName - User name in domain\\user format
+   */
+  getUser(userName: string): Promise<SitecoreUser>;
+
+  /** Get all users. */
+  getUsers(): Promise<SitecoreUser[]>;
+
+  /**
+   * Get a specific role with its members and memberships.
+   * @param roleName - Role name in domain\\role format
+   */
+  getRole(roleName: string): Promise<SitecoreRole>;
+
+  /** Get all roles. */
+  getRoles(): Promise<SitecoreRole[]>;
+
+  /**
+   * Get a specific security domain.
+   * @param domainName - Domain name
+   */
+  getDomain(domainName: string): Promise<SitecoreDomain>;
+
+  /** Get all security domains. */
+  getDomains(): Promise<SitecoreDomain[]>;
+
+  /** Get user profile selection profiles. */
+  getSelectionProfiles(): Promise<Array<{ name: string; profileId: string }>>;
+
+  /**
+   * Create a new user.
+   * @example
+   * await sc.createUser({ userName: "sitecore\\\\editor1", password: "P@ss1", email: "ed@co.com" });
+   */
+  createUser(input: CreateUserInput): Promise<SitecoreUser>;
+
+  /** Update user properties. Specify userName and fields to change. */
+  updateUser(input: UpdateUserInput): Promise<SitecoreUser>;
+
+  /** Delete a user. */
+  deleteUser(userName: string): Promise<{ successful: boolean }>;
+
+  /** Unlock a locked-out user. */
+  unlockUser(userName: string): Promise<{ successful: boolean }>;
+
+  /** Enable a disabled user. */
+  enableUser(userName: string): Promise<{ successful: boolean }>;
+
+  /** Disable a user. */
+  disableUser(userName: string): Promise<{ successful: boolean }>;
+
+  /** Reset user settings to defaults. */
+  resetUserSettings(userName: string): Promise<{ successful: boolean }>;
+
+  /**
+   * Change a user's password.
+   * @param userName - User name
+   * @param oldPw - Current password
+   * @param newPw - New password
+   */
+  changeUserPassword(userName: string, oldPw: string, newPw: string): Promise<{ successful: boolean }>;
+
+  /**
+   * Create a security domain.
+   * @param domainName - Domain name
+   * @param local - Whether the domain is locally managed
+   */
+  createDomain(domainName: string, local?: boolean): Promise<SitecoreDomain>;
+
+  /** Delete a security domain. */
+  deleteDomain(domainName: string): Promise<{ successful: boolean }>;
+
+  /**
+   * Create a security role.
+   * @param roleName - Role name in domain\\role format
+   */
+  createRole(roleName: string): Promise<SitecoreRole>;
+
+  /** Delete a security role. */
+  deleteRole(roleName: string): Promise<{ successful: boolean }>;
+
+  /**
+   * Add a role as member of parent roles.
+   * @param roleName - Role to add
+   * @param parentRoles - Parent roles to add it to
+   */
+  addRoleToRoles(roleName: string, parentRoles: string[]): Promise<{ successful: boolean }>;
+
+  /**
+   * Remove a role from parent roles.
+   * @param roleName - Role to remove
+   * @param parentRoles - Parent roles to remove it from
+   */
+  deleteRoleFromRoles(roleName: string, parentRoles: string[]): Promise<{ successful: boolean }>;
+
+  /**
+   * Add users and/or roles to a role.
+   * @param roleName - The parent role
+   * @param opts - Users and/or roles to add
+   */
+  addAccountsToRole(roleName: string, opts?: { users?: string[]; roles?: string[] }): Promise<{ successful: boolean }>;
+
+  /**
+   * Remove users and/or roles from a role.
+   * @param roleName - The parent role
+   * @param opts - Users and/or roles to remove
+   */
+  deleteAccountsFromRole(roleName: string, opts?: { users?: string[]; roles?: string[] }): Promise<{ successful: boolean }>;
+
+  // ── Presentation & Meta ───────────────────────────────
+
+  /**
+   * Get available renderings.
+   * @param opts - Optional: database, renderingId, siteRootItemId
+   */
+  getAvailableRenderings(opts?: { database?: string; renderingId?: string; siteRootItemId?: string }): Promise<SitecoreRendering[]>;
+
+  /**
+   * Get page designs for a site.
+   * @param siteName - Site name
+   */
+  getPageDesigns(siteName: string, opts?: { database?: string }): Promise<Array<{ siteName: string; pageDesign: SitecoreItem }>>;
+
+  /**
+   * Get partial designs for a site.
+   * @param siteName - Site name
+   */
+  getPartialDesigns(siteName: string, opts?: { database?: string }): Promise<Array<{ siteName: string; partialDesign: SitecoreItem }>>;
+
+  /**
+   * Get page branch roots for a site.
+   * @param siteName - Site name
+   */
+  getPageBranchesRoots(siteName: string, opts?: { database?: string }): Promise<Array<{ siteName: string; root: SitecoreItem }>>;
+
+  /** Get all databases. */
+  getDatabases(): Promise<Array<{ name: string }>>;
+
+  /** Get API version info. */
+  getMeta(): Promise<{ version: string; xMVersion: string }>;
+
+  /**
+   * Map templates to page designs for a site.
+   * @param siteName - Site name
+   * @param mapping - Array of template-to-page-design mappings
+   */
+  configurePageDesigns(siteName: string, mapping: Array<{ templateId?: string; pageDesignId?: string }>, opts?: { database?: string }): Promise<boolean>;
+
+  // ── Category Namespace Aliases ──────────────────────────
+
+  /** Content & Items — \`Sitecore.Content.getItem()\`, \`.search()\`, \`.createItem()\`, etc. */
+  Content: SitecoreContentNamespace;
+  /** Publishing — \`Sitecore.Publishing.publishItem()\`, \`.publishSite()\`, etc. */
+  Publishing: SitecorePublishingNamespace;
+  /** Search Indexes & Database — \`Sitecore.Indexes.getIndex()\`, \`.rebuildIndexes()\`, etc. */
+  Indexes: SitecoreIndexesNamespace;
+  /** Workflows & Jobs — \`Sitecore.Workflows.getWorkflow()\`, \`.startWorkflow()\`, etc. */
+  Workflows: SitecoreWorkflowsNamespace;
+  /** Translation — \`Sitecore.Translation.translatePage()\`, \`.translateSite()\` */
+  Translation: SitecoreTranslationNamespace;
+  /** Templates — \`Sitecore.Templates.getTemplate()\`, \`.createTemplate()\`, etc. */
+  Templates: SitecoreTemplatesNamespace;
+  /** Sites & Solutions — \`Sitecore.Sites.getSite()\`, \`.createSite()\`, etc. */
+  Sites: SitecoreSitesNamespace;
+  /** Languages & Archiving — \`Sitecore.Languages.getLanguage()\`, \`.archiveItem()\`, etc. */
+  Languages: SitecoreLanguagesNamespace;
+  /** Security — \`Sitecore.Security.getCurrentUser()\`, \`.createUser()\`, etc. */
+  Security: SitecoreSecurityNamespace;
+  /** Presentation & Meta — \`Sitecore.Presentation.getAvailableRenderings()\`, \`.getMeta()\`, etc. */
+  Presentation: SitecorePresentationNamespace;
+}
+
+/**
+ * Sitecore XM Cloud SDK — access all 118 GraphQL operations.
+ *
+ * Use \`Sitecore.*\` or \`sc.*\` (shorthand alias) to call any method.
+ *
+ * **Categories:**
+ * - Content & Items: \`getItem\`, \`search\`, \`createItem\`, \`updateItem\`, \`deleteItem\`, \`renameItem\`, \`moveItem\`, \`copyItem\`, ...
+ * - Publishing: \`publishItem\`, \`publishSite\`, \`getPublishingStatus\`, \`cancelPublishing\`, ...
+ * - Search Indexes: \`getIndexes\`, \`rebuildIndexes\`, \`populateManagedSchema\`, ...
+ * - Workflows & Jobs: \`getWorkflow\`, \`startWorkflow\`, \`executeWorkflowCommand\`, \`getJob\`, ...
+ * - Translation: \`translatePage\`, \`translateSite\`
+ * - Templates: \`getTemplate\`, \`createTemplate\`, \`updateTemplate\`, \`deleteTemplate\`, ...
+ * - Sites & Solutions: \`getSite\`, \`createSite\`, \`scaffoldSolution\`, \`cloneSite\`, ...
+ * - Languages & Archiving: \`getLanguages\`, \`addLanguage\`, \`archiveItem\`, \`restoreArchivedItem\`, ...
+ * - Security: \`getCurrentUser\`, \`createUser\`, \`createRole\`, \`addAccountsToRole\`, ...
+ * - Presentation & Meta: \`getAvailableRenderings\`, \`getPageDesigns\`, \`getMeta\`, ...
+ *
+ * @example
+ * // Get an item
+ * const item = await sc.getItem("/sitecore/content/Home");
+ *
+ * // Search for items
+ * const results = await sc.search({
+ *   searchStatement: { criteria: [{ field: "_name", value: "Home", criteriaType: "CONTAINS" }] },
+ *   paging: { pageSize: 10 }
+ * });
+ *
+ * // Publish
+ * const pub = await sc.publishItem({
+ *   rootItemId: item.itemId,
+ *   languages: ["en"],
+ *   targetDatabases: ["web"],
+ *   publishItemMode: "SMART"
+ * });
+ */
+declare const Sitecore: SitecoreSDK;
+
+/**
+ * Shorthand alias for \`Sitecore\`. All methods are identical.
+ * @see Sitecore
+ */
+declare const sc: SitecoreSDK;
+
+/**
+ * Print values to the Console output panel. Accepts multiple arguments.
+ * @param args - Values to print (objects are JSON-serialized)
+ * @example
+ * print("Hello", { key: "value" });
+ */
+declare function print(...args: any[]): void;
+
+/**
+ * Render HTML content in the Results tab.
+ * @param html - HTML string to render
+ * @example
+ * render(\`<h1>Hello World</h1><p>This is rendered HTML.</p>\`);
+ */
+declare function render(html: string): void;
+
+/**
+ * Display help for Sitecore SDK methods.
+ * - \`help()\` — overview of all categories
+ * - \`help("getItem")\` — full docs for a specific method
+ * - \`help("content")\` — all methods in a category
+ * - \`help("search term")\` — fuzzy search across method names and descriptions
+ * @param query - Method name, category name, or search term
+ * @example
+ * help();
+ * help("getItem");
+ * help("publishing");
+ */
+declare function help(query?: string): void;
+`;

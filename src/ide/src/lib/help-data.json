@@ -1,0 +1,4107 @@
+{
+  "categories": [
+    {
+      "id": "core",
+      "name": "Core",
+      "methods": [
+        "getContext",
+        "graphql",
+        "listSites",
+        "retrievePage",
+        "reloadCanvas",
+        "navigateTo"
+      ]
+    },
+    {
+      "id": "content-items",
+      "name": "Content & Items",
+      "methods": [
+        "getItem",
+        "getItemChildren",
+        "getMediaItem",
+        "search",
+        "createItem",
+        "createItemFromBranch",
+        "updateItem",
+        "deleteItem",
+        "renameItem",
+        "moveItem",
+        "copyItem",
+        "addItemVersion",
+        "deleteItemVersion",
+        "uploadMedia"
+      ]
+    },
+    {
+      "id": "publishing",
+      "name": "Publishing",
+      "methods": [
+        "getPublishingStatus",
+        "getPublishingTargets",
+        "getPublishingQueue",
+        "publishItem",
+        "publishLanguageSpecificItems",
+        "publishSite",
+        "publishWithOptions",
+        "cancelPublishing"
+      ]
+    },
+    {
+      "id": "search-indexes-database",
+      "name": "Search Indexes & Database",
+      "methods": [
+        "getIndex",
+        "getIndexes",
+        "rebuildIndexes",
+        "populateManagedSchema",
+        "rebuildLinkDatabase",
+        "cleanUpDatabases"
+      ]
+    },
+    {
+      "id": "workflows-jobs",
+      "name": "Workflows & Jobs",
+      "methods": [
+        "getWorkflow",
+        "getWorkflows",
+        "getJob",
+        "getJobs",
+        "isJobQueued",
+        "isJobRunning",
+        "startWorkflow",
+        "executeWorkflowCommand"
+      ]
+    },
+    {
+      "id": "translation",
+      "name": "Translation",
+      "methods": [
+        "translatePage",
+        "translateSite"
+      ]
+    },
+    {
+      "id": "templates",
+      "name": "Templates",
+      "methods": [
+        "getTemplate",
+        "getTemplates",
+        "getDataSourceTemplates",
+        "getTenantTemplates",
+        "createTemplate",
+        "updateTemplate",
+        "deleteTemplate",
+        "createTemplateFolder"
+      ]
+    },
+    {
+      "id": "sites-solutions",
+      "name": "Sites & Solutions",
+      "methods": [
+        "getSite",
+        "getSites",
+        "getSiteCollections",
+        "getSolutionSites",
+        "searchSolutionSites",
+        "getSolutionTemplates",
+        "scaffoldSolution",
+        "createSite",
+        "createSiteCollection",
+        "removeSite",
+        "removeSiteCollection",
+        "renameSite",
+        "renameSiteCollection",
+        "cloneSite",
+        "updateSitesPos"
+      ]
+    },
+    {
+      "id": "languages-archiving",
+      "name": "Languages & Archiving",
+      "methods": [
+        "getLanguage",
+        "getLanguages",
+        "getSupportedLanguages",
+        "getFallbackLanguage",
+        "getArchivedItem",
+        "getArchivedItems",
+        "addLanguage",
+        "deleteLanguage",
+        "deleteLanguages",
+        "archiveItem",
+        "archiveVersion",
+        "setItemArchiveDate",
+        "setVersionArchiveDate",
+        "restoreArchivedItem",
+        "restoreArchivedVersion",
+        "deleteArchivedItem",
+        "deleteArchivedVersion",
+        "emptyArchive"
+      ]
+    },
+    {
+      "id": "security",
+      "name": "Security",
+      "methods": [
+        "getCurrentUser",
+        "getUser",
+        "getUsers",
+        "getRole",
+        "getRoles",
+        "getDomain",
+        "getDomains",
+        "getSelectionProfiles",
+        "createUser",
+        "updateUser",
+        "deleteUser",
+        "unlockUser",
+        "enableUser",
+        "disableUser",
+        "resetUserSettings",
+        "changeUserPassword",
+        "createDomain",
+        "deleteDomain",
+        "createRole",
+        "deleteRole",
+        "addRoleToRoles",
+        "deleteRoleFromRoles",
+        "addAccountsToRole",
+        "deleteAccountsFromRole"
+      ]
+    },
+    {
+      "id": "presentation-meta",
+      "name": "Presentation & Meta",
+      "methods": [
+        "getAvailableRenderings",
+        "getPageDesigns",
+        "getPartialDesigns",
+        "getPageBranchesRoots",
+        "getDatabases",
+        "getMeta",
+        "configurePageDesigns"
+      ]
+    }
+  ],
+  "methods": {
+    "getContext": {
+      "name": "getContext",
+      "qualifiedName": "Sitecore.getContext",
+      "category": "Core",
+      "categoryId": "core",
+      "signature": "() => Promise<any>",
+      "description": "Get the current application context including tenant, organization, and resource access info.",
+      "params": [],
+      "returns": "Promise<any>",
+      "examples": [],
+      "snippet": "Sitecore.getContext()",
+      "danger": "safe"
+    },
+    "graphql": {
+      "name": "graphql",
+      "qualifiedName": "Sitecore.graphql",
+      "category": "Core",
+      "categoryId": "core",
+      "signature": "(query: string, variables?: Record<string, any>) => Promise<any>",
+      "description": "Execute a raw GraphQL query or mutation against the XM Cloud Authoring API.",
+      "params": [
+        {
+          "name": "query",
+          "type": "string",
+          "description": "GraphQL query or mutation string",
+          "optional": false
+        },
+        {
+          "name": "variables",
+          "type": "Record<string, any>",
+          "description": "Optional variables object",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<any>",
+      "examples": [
+        "const data = await sc.graphql(`\r\n  query {\r\n    item(where: { path: \"/sitecore/content\" }) {\r\n      itemId\r\n      name\r\n    }\r\n  }\r\n`);"
+      ],
+      "snippet": "Sitecore.graphql(`\\n  query {\\n    item(where: { path: \"/sitecore/content\" }) {\\n      itemId\\n      name\\n    }\\n  }\\n`)",
+      "danger": "safe"
+    },
+    "listSites": {
+      "name": "listSites",
+      "qualifiedName": "Sitecore.listSites",
+      "category": "Core",
+      "categoryId": "core",
+      "signature": "() => Promise<Array<{ name: string; hostName: string; language: string; rootPath: string }>>",
+      "description": "List all sites configured in XM Cloud. Returns array of sites with name, hostName, language, rootPath.",
+      "params": [],
+      "returns": "Promise<Array<{ name: string; hostName: string; language: string; rootPath: string }>>",
+      "examples": [],
+      "snippet": "Sitecore.listSites()",
+      "danger": "safe"
+    },
+    "retrievePage": {
+      "name": "retrievePage",
+      "qualifiedName": "Sitecore.retrievePage",
+      "category": "Core",
+      "categoryId": "core",
+      "signature": "(pageId: string, site: string, language?: string) => Promise<any>",
+      "description": "Retrieve a page by ID using the XM Cloud Pages API.",
+      "params": [
+        {
+          "name": "pageId",
+          "type": "string",
+          "description": "The page item ID",
+          "optional": false
+        },
+        {
+          "name": "site",
+          "type": "string",
+          "description": "Site name",
+          "optional": false
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "description": "Language code (default: \"en\")",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<any>",
+      "examples": [],
+      "snippet": "Sitecore.retrievePage(\"${1:pageId}\", \"${2:siteName}\")",
+      "danger": "safe"
+    },
+    "reloadCanvas": {
+      "name": "reloadCanvas",
+      "qualifiedName": "Sitecore.reloadCanvas",
+      "category": "Core",
+      "categoryId": "core",
+      "signature": "() => Promise<void>",
+      "description": "Reload the Pages editor canvas.",
+      "params": [],
+      "returns": "Promise<void>",
+      "examples": [],
+      "snippet": "Sitecore.reloadCanvas()",
+      "danger": "safe"
+    },
+    "navigateTo": {
+      "name": "navigateTo",
+      "qualifiedName": "Sitecore.navigateTo",
+      "category": "Core",
+      "categoryId": "core",
+      "signature": "(itemId: string) => Promise<void>",
+      "description": "Navigate the Pages editor to a specific item.",
+      "params": [
+        {
+          "name": "itemId",
+          "type": "string",
+          "description": "The item ID to navigate to",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<void>",
+      "examples": [],
+      "snippet": "Sitecore.navigateTo(\"${1:itemId}\")",
+      "danger": "safe"
+    },
+    "getItem": {
+      "name": "getItem",
+      "qualifiedName": "Sitecore.getItem",
+      "category": "Content & Items",
+      "categoryId": "content-items",
+      "signature": "(idOrPath: string, opts?: ItemQueryOptions) => Promise<SitecoreItem>",
+      "description": "Get a content item by ID or path. Automatically detects whether the argument is a GUID or path.",
+      "params": [
+        {
+          "name": "idOrPath",
+          "type": "string",
+          "description": "Item ID (GUID) or Sitecore path",
+          "optional": false
+        },
+        {
+          "name": "opts",
+          "type": "ItemQueryOptions",
+          "description": "Optional: language, version, database",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<SitecoreItem>",
+      "examples": [
+        "const item = await sc.getItem(\"/sitecore/content/Home\");\r\nconst item = await sc.getItem(\"110D559F-DEA5-42EA-9C1C-8A5DF7E70EF9\");"
+      ],
+      "snippet": "Sitecore.getItem(\"${1:/sitecore/content}\")",
+      "danger": "safe"
+    },
+    "getItemChildren": {
+      "name": "getItemChildren",
+      "qualifiedName": "Sitecore.getItemChildren",
+      "category": "Content & Items",
+      "categoryId": "content-items",
+      "signature": "(path: string) => Promise<SitecoreItem[]>",
+      "description": "Get child items of the item at the given path.",
+      "params": [
+        {
+          "name": "path",
+          "type": "string",
+          "description": "Sitecore path",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<SitecoreItem[]>",
+      "examples": [
+        "const children = await sc.getItemChildren(\"/sitecore/content/Home\");"
+      ],
+      "snippet": "Sitecore.getItemChildren(\"${1:/sitecore/content}\")",
+      "danger": "safe"
+    },
+    "getMediaItem": {
+      "name": "getMediaItem",
+      "qualifiedName": "Sitecore.getMediaItem",
+      "category": "Content & Items",
+      "categoryId": "content-items",
+      "signature": "(idOrPath: string, opts?: ItemQueryOptions) => Promise<SitecoreMediaItem>",
+      "description": "Get a media item by ID or path.",
+      "params": [
+        {
+          "name": "idOrPath",
+          "type": "string",
+          "description": "Media item ID or path (e.g. \"/sitecore/media library/Images/photo\")",
+          "optional": false
+        },
+        {
+          "name": "opts",
+          "type": "ItemQueryOptions",
+          "description": "Optional: language, version, database",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<SitecoreMediaItem>",
+      "examples": [],
+      "snippet": "Sitecore.getMediaItem(\"${1:/sitecore/media library/image}\")",
+      "danger": "safe"
+    },
+    "search": {
+      "name": "search",
+      "qualifiedName": "Sitecore.search",
+      "category": "Content & Items",
+      "categoryId": "content-items",
+      "signature": "(query: SearchQueryInput) => Promise<SitecoreSearchResult>",
+      "description": "Full-text and faceted search across the content tree.",
+      "params": [
+        {
+          "name": "query",
+          "type": "SearchQueryInput",
+          "description": "Search query with criteria, filters, paging, sorting, and facets",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<SitecoreSearchResult>",
+      "examples": [
+        "const results = await sc.search({\r\n  searchStatement: {\r\n    criteria: [{ field: \"_name\", value: \"Home\", criteriaType: \"CONTAINS\" }]\r\n  },\r\n  paging: { pageSize: 10 }\r\n});"
+      ],
+      "snippet": "Sitecore.search({\\n  searchStatement: {\\n    criteria: [{ field: \"_name\", value: \"${1:Home}\", criteriaType: \"CONTAINS\" }]\\n  },\\n  paging: { pageSize: 10 }\\n})",
+      "danger": "safe"
+    },
+    "createItem": {
+      "name": "createItem",
+      "qualifiedName": "Sitecore.createItem",
+      "category": "Content & Items",
+      "categoryId": "content-items",
+      "signature": "(parent: string, templateId: string, name: string, fields?: Record<string, string>, opts?: { language?: string; database?: string }) => Promise<SitecoreItem>",
+      "description": "Create a new content item.",
+      "params": [
+        {
+          "name": "parent",
+          "type": "string",
+          "description": "Parent item ID or path",
+          "optional": false
+        },
+        {
+          "name": "templateId",
+          "type": "string",
+          "description": "Template ID for the new item",
+          "optional": false
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Item name",
+          "optional": false
+        },
+        {
+          "name": "fields",
+          "type": "Record<string, string>",
+          "description": "Optional field values as `{ FieldName: \"value\" }`",
+          "optional": true
+        },
+        {
+          "name": "opts",
+          "type": "{ language?: string; database?: string }",
+          "description": "Optional: language, database",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<SitecoreItem>",
+      "examples": [
+        "const item = await sc.createItem(parentId, templateId, \"My Page\", { Title: \"Hello\" });"
+      ],
+      "snippet": "Sitecore.createItem(\"${1:parentId}\", \"${2:templateId}\", \"${3:ItemName}\", { \"${4:Title}\": \"${5:Value}\" })",
+      "danger": "mutating"
+    },
+    "createItemFromBranch": {
+      "name": "createItemFromBranch",
+      "qualifiedName": "Sitecore.createItemFromBranch",
+      "category": "Content & Items",
+      "categoryId": "content-items",
+      "signature": "(branchId: string, parent: string, name: string, fields?: Record<string, string>, opts?: { language?: string; database?: string }) => Promise<{ job: SitecoreJob }>",
+      "description": "Create an item from a branch template.",
+      "params": [
+        {
+          "name": "branchId",
+          "type": "string",
+          "description": "Branch template ID",
+          "optional": false
+        },
+        {
+          "name": "parent",
+          "type": "string",
+          "description": "Parent item ID",
+          "optional": false
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Item name",
+          "optional": false
+        },
+        {
+          "name": "fields",
+          "type": "Record<string, string>",
+          "description": "Optional field values",
+          "optional": true
+        },
+        {
+          "name": "opts",
+          "type": "{ language?: string; database?: string }",
+          "description": "Optional: language, database",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<{ job: SitecoreJob }>",
+      "examples": [],
+      "snippet": "Sitecore.createItemFromBranch(\"${1:branchId}\", \"${2:parentId}\", \"${3:ItemName}\")",
+      "danger": "mutating"
+    },
+    "updateItem": {
+      "name": "updateItem",
+      "qualifiedName": "Sitecore.updateItem",
+      "category": "Content & Items",
+      "categoryId": "content-items",
+      "signature": "(idOrPath: string, fields: Record<string, string>, opts?: ItemQueryOptions) => Promise<SitecoreItem>",
+      "description": "Update fields on a content item.",
+      "params": [
+        {
+          "name": "idOrPath",
+          "type": "string",
+          "description": "Item ID or path",
+          "optional": false
+        },
+        {
+          "name": "fields",
+          "type": "Record<string, string>",
+          "description": "Field values to update as `{ FieldName: \"value\" }`",
+          "optional": false
+        },
+        {
+          "name": "opts",
+          "type": "ItemQueryOptions",
+          "description": "Optional: language, version, database",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<SitecoreItem>",
+      "examples": [
+        "await sc.updateItem(itemId, { Title: \"New Title\", Body: \"<p>Content</p>\" });"
+      ],
+      "snippet": "Sitecore.updateItem(\"${1:itemId}\", { \"${2:Title}\": \"${3:New Value}\" })",
+      "danger": "mutating"
+    },
+    "deleteItem": {
+      "name": "deleteItem",
+      "qualifiedName": "Sitecore.deleteItem",
+      "category": "Content & Items",
+      "categoryId": "content-items",
+      "signature": "(idOrPath: string, permanently?: boolean) => Promise<{ successful: boolean }>",
+      "description": "Delete an item.",
+      "params": [
+        {
+          "name": "idOrPath",
+          "type": "string",
+          "description": "Item ID or path",
+          "optional": false
+        },
+        {
+          "name": "permanently",
+          "type": "boolean",
+          "description": "If true, permanently deletes (no recycle bin). Default: false",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<{ successful: boolean }>",
+      "examples": [],
+      "snippet": "Sitecore.deleteItem(\"${1:itemId}\")",
+      "danger": "destructive"
+    },
+    "renameItem": {
+      "name": "renameItem",
+      "qualifiedName": "Sitecore.renameItem",
+      "category": "Content & Items",
+      "categoryId": "content-items",
+      "signature": "(idOrPath: string, newName: string, opts?: { database?: string }) => Promise<SitecoreItem>",
+      "description": "Rename an item.",
+      "params": [
+        {
+          "name": "idOrPath",
+          "type": "string",
+          "description": "Item ID or path",
+          "optional": false
+        },
+        {
+          "name": "newName",
+          "type": "string",
+          "description": "New item name",
+          "optional": false
+        },
+        {
+          "name": "opts",
+          "type": "{ database?: string }",
+          "description": "",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<SitecoreItem>",
+      "examples": [],
+      "snippet": "Sitecore.renameItem(\"${1:itemId}\", \"${2:NewName}\")",
+      "danger": "mutating"
+    },
+    "moveItem": {
+      "name": "moveItem",
+      "qualifiedName": "Sitecore.moveItem",
+      "category": "Content & Items",
+      "categoryId": "content-items",
+      "signature": "(idOrPath: string, targetParent: string, opts?: { sortOrder?: number; database?: string }) => Promise<SitecoreItem>",
+      "description": "Move an item to a new parent.",
+      "params": [
+        {
+          "name": "idOrPath",
+          "type": "string",
+          "description": "Item ID or path to move",
+          "optional": false
+        },
+        {
+          "name": "targetParent",
+          "type": "string",
+          "description": "Target parent ID or path",
+          "optional": false
+        },
+        {
+          "name": "opts",
+          "type": "{ sortOrder?: number; database?: string }",
+          "description": "Optional: sortOrder, database",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<SitecoreItem>",
+      "examples": [],
+      "snippet": "Sitecore.moveItem(\"${1:itemId}\", \"${2:targetParentId}\")",
+      "danger": "mutating"
+    },
+    "copyItem": {
+      "name": "copyItem",
+      "qualifiedName": "Sitecore.copyItem",
+      "category": "Content & Items",
+      "categoryId": "content-items",
+      "signature": "(idOrPath: string, targetParent: string, opts?: { copyItemName?: string; deepCopy?: boolean; database?: string }) => Promise<SitecoreItem>",
+      "description": "Copy an item to a new parent.",
+      "params": [
+        {
+          "name": "idOrPath",
+          "type": "string",
+          "description": "Item ID or path to copy",
+          "optional": false
+        },
+        {
+          "name": "targetParent",
+          "type": "string",
+          "description": "Target parent ID or path",
+          "optional": false
+        },
+        {
+          "name": "opts",
+          "type": "{ copyItemName?: string; deepCopy?: boolean; database?: string }",
+          "description": "Optional: copyItemName, deepCopy (default: true), database",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<SitecoreItem>",
+      "examples": [],
+      "snippet": "Sitecore.copyItem(\"${1:itemId}\", \"${2:targetParentId}\")",
+      "danger": "mutating"
+    },
+    "addItemVersion": {
+      "name": "addItemVersion",
+      "qualifiedName": "Sitecore.addItemVersion",
+      "category": "Content & Items",
+      "categoryId": "content-items",
+      "signature": "(idOrPath: string, opts?: { language?: string; version?: number; versionName?: string; database?: string }) => Promise<SitecoreItem>",
+      "description": "Add a new version to an item.",
+      "params": [
+        {
+          "name": "idOrPath",
+          "type": "string",
+          "description": "Item ID or path",
+          "optional": false
+        },
+        {
+          "name": "opts",
+          "type": "{ language?: string; version?: number; versionName?: string; database?: string }",
+          "description": "Optional: language, version (base version), versionName, database",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<SitecoreItem>",
+      "examples": [],
+      "snippet": "Sitecore.addItemVersion(\"${1:itemId}\")",
+      "danger": "mutating"
+    },
+    "deleteItemVersion": {
+      "name": "deleteItemVersion",
+      "qualifiedName": "Sitecore.deleteItemVersion",
+      "category": "Content & Items",
+      "categoryId": "content-items",
+      "signature": "(idOrPath: string, opts?: { language?: string; version?: number; database?: string }) => Promise<SitecoreItem>",
+      "description": "Delete a version of an item.",
+      "params": [
+        {
+          "name": "idOrPath",
+          "type": "string",
+          "description": "Item ID or path",
+          "optional": false
+        },
+        {
+          "name": "opts",
+          "type": "{ language?: string; version?: number; database?: string }",
+          "description": "Optional: language, version (if not specified, deletes latest), database",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<SitecoreItem>",
+      "examples": [],
+      "snippet": "Sitecore.deleteItemVersion(\"${1:itemId}\")",
+      "danger": "destructive"
+    },
+    "uploadMedia": {
+      "name": "uploadMedia",
+      "qualifiedName": "Sitecore.uploadMedia",
+      "category": "Content & Items",
+      "categoryId": "content-items",
+      "signature": "(itemPath: string, opts?: { alt?: string; database?: string; language?: string; overwriteExisting?: boolean; versioned?: boolean; includeExtensionInItemName?: boolean }) => Promise<{ presignedUploadUrl: string }>",
+      "description": "Get a pre-signed upload URL for media.",
+      "params": [
+        {
+          "name": "itemPath",
+          "type": "string",
+          "description": "Relative path under sitecore media library",
+          "optional": false
+        },
+        {
+          "name": "opts",
+          "type": "{ alt?: string; database?: string; language?: string; overwriteExisting?: boolean; versioned?: boolean; includeExtensionInItemName?: boolean }",
+          "description": "Optional: alt, database, language, overwriteExisting, versioned, includeExtensionInItemName",
+          "optional": true
+        }
+      ],
+      "returns": "Object with `presignedUploadUrl` to PUT the file to",
+      "examples": [],
+      "snippet": "Sitecore.uploadMedia(\"${1:images/photo}\")",
+      "danger": "mutating"
+    },
+    "getPublishingStatus": {
+      "name": "getPublishingStatus",
+      "qualifiedName": "Sitecore.getPublishingStatus",
+      "category": "Publishing",
+      "categoryId": "publishing",
+      "signature": "(operationId: string) => Promise<SitecorePublishingStatus>",
+      "description": "Check the progress of a publishing operation.",
+      "params": [
+        {
+          "name": "operationId",
+          "type": "string",
+          "description": "The operation ID returned from a publish call",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<SitecorePublishingStatus>",
+      "examples": [],
+      "snippet": "Sitecore.getPublishingStatus(\"${1:operationId}\")",
+      "danger": "safe"
+    },
+    "getPublishingTargets": {
+      "name": "getPublishingTargets",
+      "qualifiedName": "Sitecore.getPublishingTargets",
+      "category": "Publishing",
+      "categoryId": "publishing",
+      "signature": "() => Promise<SitecorePublishingTarget[]>",
+      "description": "List all publishing targets (e.g. \"web\" database).",
+      "params": [],
+      "returns": "Promise<SitecorePublishingTarget[]>",
+      "examples": [],
+      "snippet": "Sitecore.getPublishingTargets()",
+      "danger": "safe"
+    },
+    "getPublishingQueue": {
+      "name": "getPublishingQueue",
+      "qualifiedName": "Sitecore.getPublishingQueue",
+      "category": "Publishing",
+      "categoryId": "publishing",
+      "signature": "(query: { sort: { field: string; direction: \"ASCENDING\" | \"DESCENDING\" }; paging?: { pageIndex: number; pageSize: number }; dateFilter?: { dateFrom: string; dateTo: string }; itemsFilter?: any }) => Promise<{ totalCount: number; results: any[] }>",
+      "description": "Get publishing queue entries.",
+      "params": [
+        {
+          "name": "query",
+          "type": "{ sort: { field: string; direction: \"ASCENDING\" | \"DESCENDING\" }; paging?: { pageIndex: number; pageSize: number }; dateFilter?: { dateFrom: string; dateTo: string }; itemsFilter?: any }",
+          "description": "Query with sort (required), paging, dateFilter, itemsFilter",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<{ totalCount: number; results: any[] }>",
+      "examples": [
+        "const queue = await sc.getPublishingQueue({\r\n  sort: { field: \"date\", direction: \"DESCENDING\" }\r\n});"
+      ],
+      "snippet": "Sitecore.getPublishingQueue({ sort: { field: \"date\", direction: \"DESCENDING\" } })",
+      "danger": "safe"
+    },
+    "publishItem": {
+      "name": "publishItem",
+      "qualifiedName": "Sitecore.publishItem",
+      "category": "Publishing",
+      "categoryId": "publishing",
+      "signature": "(input: PublishItemInput) => Promise<SitecorePublishResult>",
+      "description": "Publish one or more items.",
+      "params": [
+        {
+          "name": "input",
+          "type": "PublishItemInput",
+          "description": "",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<SitecorePublishResult>",
+      "examples": [
+        "const result = await sc.publishItem({\r\n  rootItemId: itemId,\r\n  languages: [\"en\"],\r\n  targetDatabases: [\"web\"],\r\n  publishItemMode: \"SMART\",\r\n  publishSubItems: true\r\n});\r\n// Track: await sc.getPublishingStatus(result.operationId);"
+      ],
+      "snippet": "Sitecore.publishItem({\\n  rootItemId: \"${1:itemId}\",\\n  languages: [\"en\"],\\n  targetDatabases: [\"web\"],\\n  publishItemMode: \"SMART\",\\n  publishSubItems: true\\n})",
+      "danger": "mutating"
+    },
+    "publishLanguageSpecificItems": {
+      "name": "publishLanguageSpecificItems",
+      "qualifiedName": "Sitecore.publishLanguageSpecificItems",
+      "category": "Publishing",
+      "categoryId": "publishing",
+      "signature": "(input: { itemsToPublish?: Array<{ id?: string; languages: string[] }>; targetDatabases: string[]; publishItemMode: \"FULL\" | \"SMART\"; publishSubItems?: boolean; publishRelatedItems?: boolean; sourceDatabase?: string; displayName?: string }) => Promise<SitecorePublishResult>",
+      "description": "Publish items with per-item language specifications.",
+      "params": [
+        {
+          "name": "input",
+          "type": "{ itemsToPublish?: Array<{ id?: string; languages: string[] }>; targetDatabases: string[]; publishItemMode: \"FULL\" | \"SMART\"; publishSubItems?: boolean; publishRelatedItems?: boolean; sourceDatabase?: string; displayName?: string }",
+          "description": "",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<SitecorePublishResult>",
+      "examples": [
+        "await sc.publishLanguageSpecificItems({\r\n  itemsToPublish: [{ id: itemId, languages: [\"en\", \"fr\"] }],\r\n  targetDatabases: [\"web\"],\r\n  publishItemMode: \"SMART\"\r\n});"
+      ],
+      "snippet": "Sitecore.publishLanguageSpecificItems({\\n  itemsToPublish: [{ id: \"${1:itemId}\", languages: [\"en\"] }],\\n  targetDatabases: [\"web\"],\\n  publishItemMode: \"SMART\"\\n})",
+      "danger": "mutating"
+    },
+    "publishSite": {
+      "name": "publishSite",
+      "qualifiedName": "Sitecore.publishSite",
+      "category": "Publishing",
+      "categoryId": "publishing",
+      "signature": "(input: PublishSiteInput) => Promise<SitecorePublishResult>",
+      "description": "Publish an entire site.",
+      "params": [
+        {
+          "name": "input",
+          "type": "PublishSiteInput",
+          "description": "",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<SitecorePublishResult>",
+      "examples": [
+        "await sc.publishSite({\r\n  languages: [\"en\"],\r\n  targetDatabases: [\"web\"],\r\n  publishSiteMode: \"INCREMENTAL\"\r\n});"
+      ],
+      "snippet": "Sitecore.publishSite({\\n  languages: [\"en\"],\\n  targetDatabases: [\"web\"],\\n  publishSiteMode: \"INCREMENTAL\"\\n})",
+      "danger": "mutating"
+    },
+    "publishWithOptions": {
+      "name": "publishWithOptions",
+      "qualifiedName": "Sitecore.publishWithOptions",
+      "category": "Publishing",
+      "categoryId": "publishing",
+      "signature": "(options: Array<{ language: string; targetDatabase: string; publishSiteMode?: \"FULL\" | \"INCREMENTAL\" | \"SMART\"; publishItemMode?: \"FULL\" | \"SMART\"; rootItemId?: string; rootItemPath?: string; publishSubItems?: boolean; publishRelatedItems?: boolean; sourceDatabase?: string; publishDate?: string }>) => Promise<SitecorePublishResult>",
+      "description": "Advanced publish with detailed options per language/target.",
+      "params": [
+        {
+          "name": "options",
+          "type": "Array<{ language: string; targetDatabase: string; publishSiteMode?: \"FULL\" | \"INCREMENTAL\" | \"SMART\"; publishItemMode?: \"FULL\" | \"SMART\"; rootItemId?: string; rootItemPath?: string; publishSubItems?: boolean; publishRelatedItems?: boolean; sourceDatabase?: string; publishDate?: string }>",
+          "description": "Array of publishing options",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<SitecorePublishResult>",
+      "examples": [],
+      "snippet": "Sitecore.publishWithOptions([{\\n  language: \"en\",\\n  targetDatabase: \"web\",\\n  publishSiteMode: \"SMART\"\\n}])",
+      "danger": "mutating"
+    },
+    "cancelPublishing": {
+      "name": "cancelPublishing",
+      "qualifiedName": "Sitecore.cancelPublishing",
+      "category": "Publishing",
+      "categoryId": "publishing",
+      "signature": "(operationId: string) => Promise<{ success: boolean; message: string; publishingOperationId: string }>",
+      "description": "Cancel an in-progress publishing operation.",
+      "params": [
+        {
+          "name": "operationId",
+          "type": "string",
+          "description": "The operation ID to cancel",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<{ success: boolean; message: string; publishingOperationId: string }>",
+      "examples": [],
+      "snippet": "Sitecore.cancelPublishing(\"${1:operationId}\")",
+      "danger": "mutating"
+    },
+    "getIndex": {
+      "name": "getIndex",
+      "qualifiedName": "Sitecore.getIndex",
+      "category": "Search Indexes & Database",
+      "categoryId": "search-indexes-database",
+      "signature": "(name: string) => Promise<SitecoreIndex>",
+      "description": "Get info about a single search index.",
+      "params": [
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Index name (e.g. \"sitecore_master_index\")",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<SitecoreIndex>",
+      "examples": [],
+      "snippet": "Sitecore.getIndex(\"${1:sitecore_master_index}\")",
+      "danger": "safe"
+    },
+    "getIndexes": {
+      "name": "getIndexes",
+      "qualifiedName": "Sitecore.getIndexes",
+      "category": "Search Indexes & Database",
+      "categoryId": "search-indexes-database",
+      "signature": "() => Promise<SitecoreIndex[]>",
+      "description": "Get all search indexes.",
+      "params": [],
+      "returns": "Promise<SitecoreIndex[]>",
+      "examples": [],
+      "snippet": "Sitecore.getIndexes()",
+      "danger": "safe"
+    },
+    "rebuildIndexes": {
+      "name": "rebuildIndexes",
+      "qualifiedName": "Sitecore.rebuildIndexes",
+      "category": "Search Indexes & Database",
+      "categoryId": "search-indexes-database",
+      "signature": "(names: string[]) => Promise<{ jobs: SitecoreJob[] }>",
+      "description": "Rebuild one or more search indexes.",
+      "params": [
+        {
+          "name": "names",
+          "type": "string[]",
+          "description": "Array of index names to rebuild",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<{ jobs: SitecoreJob[] }>",
+      "examples": [
+        "await sc.rebuildIndexes([\"sitecore_master_index\"]);"
+      ],
+      "snippet": "Sitecore.rebuildIndexes([\"${1:sitecore_master_index}\"])",
+      "danger": "mutating"
+    },
+    "populateManagedSchema": {
+      "name": "populateManagedSchema",
+      "qualifiedName": "Sitecore.populateManagedSchema",
+      "category": "Search Indexes & Database",
+      "categoryId": "search-indexes-database",
+      "signature": "(names: string[]) => Promise<{ jobs: SitecoreJob[] }>",
+      "description": "Populate managed schema for search indexes.",
+      "params": [
+        {
+          "name": "names",
+          "type": "string[]",
+          "description": "Array of index names",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<{ jobs: SitecoreJob[] }>",
+      "examples": [],
+      "snippet": "Sitecore.populateManagedSchema([\"${1:sitecore_master_index}\"])",
+      "danger": "mutating"
+    },
+    "rebuildLinkDatabase": {
+      "name": "rebuildLinkDatabase",
+      "qualifiedName": "Sitecore.rebuildLinkDatabase",
+      "category": "Search Indexes & Database",
+      "categoryId": "search-indexes-database",
+      "signature": "(dbNames: string[]) => Promise<{ job: SitecoreJob }>",
+      "description": "Rebuild the link database for specified databases.",
+      "params": [
+        {
+          "name": "dbNames",
+          "type": "string[]",
+          "description": "Array of database names (e.g. [\"master\"])",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<{ job: SitecoreJob }>",
+      "examples": [],
+      "snippet": "Sitecore.rebuildLinkDatabase([\"master\"])",
+      "danger": "mutating"
+    },
+    "cleanUpDatabases": {
+      "name": "cleanUpDatabases",
+      "qualifiedName": "Sitecore.cleanUpDatabases",
+      "category": "Search Indexes & Database",
+      "categoryId": "search-indexes-database",
+      "signature": "(dbNames: string[]) => Promise<{ job: SitecoreJob }>",
+      "description": "Clean up specified databases.",
+      "params": [
+        {
+          "name": "dbNames",
+          "type": "string[]",
+          "description": "Array of database names",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<{ job: SitecoreJob }>",
+      "examples": [],
+      "snippet": "Sitecore.cleanUpDatabases([\"master\"])",
+      "danger": "destructive"
+    },
+    "getWorkflow": {
+      "name": "getWorkflow",
+      "qualifiedName": "Sitecore.getWorkflow",
+      "category": "Workflows & Jobs",
+      "categoryId": "workflows-jobs",
+      "signature": "(idOrItem: string | { itemId?: string; path?: string; database?: string }) => Promise<SitecoreWorkflow>",
+      "description": "Get a workflow by workflow ID, or by item reference.",
+      "params": [
+        {
+          "name": "idOrItem",
+          "type": "string | { itemId?: string; path?: string; database?: string }",
+          "description": "Workflow ID (GUID string) or item reference object",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<SitecoreWorkflow>",
+      "examples": [
+        "const wf = await sc.getWorkflow(workflowId);\r\nconst wf = await sc.getWorkflow({ itemId: myItemId });"
+      ],
+      "snippet": "Sitecore.getWorkflow(\"${1:workflowId}\")",
+      "danger": "safe"
+    },
+    "getWorkflows": {
+      "name": "getWorkflows",
+      "qualifiedName": "Sitecore.getWorkflows",
+      "category": "Workflows & Jobs",
+      "categoryId": "workflows-jobs",
+      "signature": "() => Promise<SitecoreWorkflow[]>",
+      "description": "Get all configured workflows.",
+      "params": [],
+      "returns": "Promise<SitecoreWorkflow[]>",
+      "examples": [],
+      "snippet": "Sitecore.getWorkflows()",
+      "danger": "safe"
+    },
+    "getJob": {
+      "name": "getJob",
+      "qualifiedName": "Sitecore.getJob",
+      "category": "Workflows & Jobs",
+      "categoryId": "workflows-jobs",
+      "signature": "(nameOrHandle: string) => Promise<SitecoreJob>",
+      "description": "Get a specific job by name or handle. Names use simple string, handles contain \"|\".",
+      "params": [
+        {
+          "name": "nameOrHandle",
+          "type": "string",
+          "description": "Job name or job handle",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<SitecoreJob>",
+      "examples": [],
+      "snippet": "Sitecore.getJob(\"${1:jobName}\")",
+      "danger": "safe"
+    },
+    "getJobs": {
+      "name": "getJobs",
+      "qualifiedName": "Sitecore.getJobs",
+      "category": "Workflows & Jobs",
+      "categoryId": "workflows-jobs",
+      "signature": "() => Promise<SitecoreJob[]>",
+      "description": "Get all jobs.",
+      "params": [],
+      "returns": "Promise<SitecoreJob[]>",
+      "examples": [],
+      "snippet": "Sitecore.getJobs()",
+      "danger": "safe"
+    },
+    "isJobQueued": {
+      "name": "isJobQueued",
+      "qualifiedName": "Sitecore.isJobQueued",
+      "category": "Workflows & Jobs",
+      "categoryId": "workflows-jobs",
+      "signature": "(name: string) => Promise<boolean>",
+      "description": "Check if a job is queued.",
+      "params": [
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Job name",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<boolean>",
+      "examples": [],
+      "snippet": "Sitecore.isJobQueued(\"${1:jobName}\")",
+      "danger": "safe"
+    },
+    "isJobRunning": {
+      "name": "isJobRunning",
+      "qualifiedName": "Sitecore.isJobRunning",
+      "category": "Workflows & Jobs",
+      "categoryId": "workflows-jobs",
+      "signature": "(name: string) => Promise<boolean>",
+      "description": "Check if a job is running.",
+      "params": [
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Job name",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<boolean>",
+      "examples": [],
+      "snippet": "Sitecore.isJobRunning(\"${1:jobName}\")",
+      "danger": "safe"
+    },
+    "startWorkflow": {
+      "name": "startWorkflow",
+      "qualifiedName": "Sitecore.startWorkflow",
+      "category": "Workflows & Jobs",
+      "categoryId": "workflows-jobs",
+      "signature": "(item: { itemId?: string; path?: string; database?: string; language?: string }) => Promise<{ successful: boolean }>",
+      "description": "Start a workflow for an item. Sets the state to initial and clears all workflow history.",
+      "params": [
+        {
+          "name": "item",
+          "type": "{ itemId?: string; path?: string; database?: string; language?: string }",
+          "description": "Item reference with itemId or path",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<{ successful: boolean }>",
+      "examples": [],
+      "snippet": "Sitecore.startWorkflow({ itemId: \"${1:itemId}\" })",
+      "danger": "mutating"
+    },
+    "executeWorkflowCommand": {
+      "name": "executeWorkflowCommand",
+      "qualifiedName": "Sitecore.executeWorkflowCommand",
+      "category": "Workflows & Jobs",
+      "categoryId": "workflows-jobs",
+      "signature": "(commandId: string, item: { itemId?: string; path?: string; database?: string; language?: string }, comments?: string) => Promise<{ successful: boolean; completed: boolean; error: string; message: string; nextStateId: string }>",
+      "description": "Execute a workflow command on an item.",
+      "params": [
+        {
+          "name": "commandId",
+          "type": "string",
+          "description": "Workflow command ID",
+          "optional": false
+        },
+        {
+          "name": "item",
+          "type": "{ itemId?: string; path?: string; database?: string; language?: string }",
+          "description": "Item reference",
+          "optional": false
+        },
+        {
+          "name": "comments",
+          "type": "string",
+          "description": "Optional workflow comments",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<{ successful: boolean; completed: boolean; error: string; message: string; nextStateId: string }>",
+      "examples": [],
+      "snippet": "Sitecore.executeWorkflowCommand(\"${1:commandId}\", { itemId: \"${2:itemId}\" }, \"${3:comments}\")",
+      "danger": "mutating"
+    },
+    "translatePage": {
+      "name": "translatePage",
+      "qualifiedName": "Sitecore.translatePage",
+      "category": "Translation",
+      "categoryId": "translation",
+      "signature": "(pageId: string, targetLang: string, opts?: { sourceLanguage?: string; brandKitId?: string; translateIfTargetVersionExists?: boolean; database?: string }) => Promise<{ job: SitecoreJob }>",
+      "description": "Translate a page to a target language using AI translation.",
+      "params": [
+        {
+          "name": "pageId",
+          "type": "string",
+          "description": "Page item ID",
+          "optional": false
+        },
+        {
+          "name": "targetLang",
+          "type": "string",
+          "description": "Target language code (e.g. \"fr-FR\")",
+          "optional": false
+        },
+        {
+          "name": "opts",
+          "type": "{ sourceLanguage?: string; brandKitId?: string; translateIfTargetVersionExists?: boolean; database?: string }",
+          "description": "Optional: sourceLanguage, brandKitId, translateIfTargetVersionExists (default: false)",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<{ job: SitecoreJob }>",
+      "examples": [],
+      "snippet": "Sitecore.translatePage(\"${1:pageId}\", \"${2:fr-FR}\")",
+      "danger": "mutating"
+    },
+    "translateSite": {
+      "name": "translateSite",
+      "qualifiedName": "Sitecore.translateSite",
+      "category": "Translation",
+      "categoryId": "translation",
+      "signature": "(siteId: string, targetLang: string, opts?: { sourceLanguage?: string; brandKitId?: string; translateIfTargetVersionExists?: boolean; database?: string }) => Promise<{ job: SitecoreJob }>",
+      "description": "Translate an entire site to a target language using AI translation.",
+      "params": [
+        {
+          "name": "siteId",
+          "type": "string",
+          "description": "Site ID",
+          "optional": false
+        },
+        {
+          "name": "targetLang",
+          "type": "string",
+          "description": "Target language code",
+          "optional": false
+        },
+        {
+          "name": "opts",
+          "type": "{ sourceLanguage?: string; brandKitId?: string; translateIfTargetVersionExists?: boolean; database?: string }",
+          "description": "Optional: sourceLanguage, brandKitId, translateIfTargetVersionExists (default: false)",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<{ job: SitecoreJob }>",
+      "examples": [],
+      "snippet": "Sitecore.translateSite(\"${1:siteId}\", \"${2:fr-FR}\")",
+      "danger": "mutating"
+    },
+    "getTemplate": {
+      "name": "getTemplate",
+      "qualifiedName": "Sitecore.getTemplate",
+      "category": "Templates",
+      "categoryId": "templates",
+      "signature": "(idOrPath: string, opts?: { database?: string }) => Promise<SitecoreTemplate>",
+      "description": "Get a single template by ID or path, with fields, sections, and base templates.",
+      "params": [
+        {
+          "name": "idOrPath",
+          "type": "string",
+          "description": "Template ID or path",
+          "optional": false
+        },
+        {
+          "name": "opts",
+          "type": "{ database?: string }",
+          "description": "Optional: database",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<SitecoreTemplate>",
+      "examples": [],
+      "snippet": "Sitecore.getTemplate(\"${1:templateId}\")",
+      "danger": "safe"
+    },
+    "getTemplates": {
+      "name": "getTemplates",
+      "qualifiedName": "Sitecore.getTemplates",
+      "category": "Templates",
+      "categoryId": "templates",
+      "signature": "(opts?: { database?: string; path?: string; templateId?: string }) => Promise<SitecoreTemplate[]>",
+      "description": "List templates.",
+      "params": [
+        {
+          "name": "opts",
+          "type": "{ database?: string; path?: string; templateId?: string }",
+          "description": "Optional: database, path, templateId",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<SitecoreTemplate[]>",
+      "examples": [],
+      "snippet": "Sitecore.getTemplates()",
+      "danger": "safe"
+    },
+    "getDataSourceTemplates": {
+      "name": "getDataSourceTemplates",
+      "qualifiedName": "Sitecore.getDataSourceTemplates",
+      "category": "Templates",
+      "categoryId": "templates",
+      "signature": "(opts?: { database?: string }) => Promise<SitecoreTemplate[]>",
+      "description": "Get data source templates.",
+      "params": [
+        {
+          "name": "opts",
+          "type": "{ database?: string }",
+          "description": "",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<SitecoreTemplate[]>",
+      "examples": [],
+      "snippet": "Sitecore.getDataSourceTemplates()",
+      "danger": "safe"
+    },
+    "getTenantTemplates": {
+      "name": "getTenantTemplates",
+      "qualifiedName": "Sitecore.getTenantTemplates",
+      "category": "Templates",
+      "categoryId": "templates",
+      "signature": "(siteName: string, opts?: { database?: string; hasPageDesign?: boolean }) => Promise<Array<{ template: SitecoreTemplate; pageDesign: { itemId: string; name: string } }>>",
+      "description": "Get tenant templates for a site.",
+      "params": [
+        {
+          "name": "siteName",
+          "type": "string",
+          "description": "Site name",
+          "optional": false
+        },
+        {
+          "name": "opts",
+          "type": "{ database?: string; hasPageDesign?: boolean }",
+          "description": "Optional: database, hasPageDesign",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<Array<{ template: SitecoreTemplate; pageDesign: { itemId: string; name: string } }>>",
+      "examples": [],
+      "snippet": "Sitecore.getTenantTemplates(\"${1:siteName}\")",
+      "danger": "safe"
+    },
+    "createTemplate": {
+      "name": "createTemplate",
+      "qualifiedName": "Sitecore.createTemplate",
+      "category": "Templates",
+      "categoryId": "templates",
+      "signature": "(parent: string, name: string, opts?: { database?: string; language?: string; icon?: string; baseTemplates?: string[]; sections?: any[]; createStandardValuesItem?: boolean }) => Promise<SitecoreTemplate>",
+      "description": "Create a new template.",
+      "params": [
+        {
+          "name": "parent",
+          "type": "string",
+          "description": "Parent item ID where the template is created",
+          "optional": false
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Template name",
+          "optional": false
+        },
+        {
+          "name": "opts",
+          "type": "{ database?: string; language?: string; icon?: string; baseTemplates?: string[]; sections?: any[]; createStandardValuesItem?: boolean }",
+          "description": "Optional: database, language, icon, baseTemplates, sections, createStandardValuesItem",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<SitecoreTemplate>",
+      "examples": [],
+      "snippet": "Sitecore.createTemplate(\"${1:parentId}\", \"${2:TemplateName}\")",
+      "danger": "mutating"
+    },
+    "updateTemplate": {
+      "name": "updateTemplate",
+      "qualifiedName": "Sitecore.updateTemplate",
+      "category": "Templates",
+      "categoryId": "templates",
+      "signature": "(templateId: string, opts?: { name?: string; database?: string; language?: string; icon?: string; baseTemplates?: string[]; sections?: any[]; createStandardValuesItem?: boolean; deleteMissingFields?: boolean }) => Promise<SitecoreTemplate>",
+      "description": "Update an existing template.",
+      "params": [
+        {
+          "name": "templateId",
+          "type": "string",
+          "description": "Template ID",
+          "optional": false
+        },
+        {
+          "name": "opts",
+          "type": "{ name?: string; database?: string; language?: string; icon?: string; baseTemplates?: string[]; sections?: any[]; createStandardValuesItem?: boolean; deleteMissingFields?: boolean }",
+          "description": "Properties to update: name, icon, baseTemplates, sections, deleteMissingFields, etc.",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<SitecoreTemplate>",
+      "examples": [],
+      "snippet": "Sitecore.updateTemplate(\"${1:templateId}\", { name: \"${2:NewName}\" })",
+      "danger": "mutating"
+    },
+    "deleteTemplate": {
+      "name": "deleteTemplate",
+      "qualifiedName": "Sitecore.deleteTemplate",
+      "category": "Templates",
+      "categoryId": "templates",
+      "signature": "(templateId: string, opts?: { database?: string }) => Promise<{ successful: boolean }>",
+      "description": "Delete a template.",
+      "params": [
+        {
+          "name": "templateId",
+          "type": "string",
+          "description": "Template ID to delete",
+          "optional": false
+        },
+        {
+          "name": "opts",
+          "type": "{ database?: string }",
+          "description": "",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<{ successful: boolean }>",
+      "examples": [],
+      "snippet": "Sitecore.deleteTemplate(\"${1:templateId}\")",
+      "danger": "destructive"
+    },
+    "createTemplateFolder": {
+      "name": "createTemplateFolder",
+      "qualifiedName": "Sitecore.createTemplateFolder",
+      "category": "Templates",
+      "categoryId": "templates",
+      "signature": "(parent: string, name: string, opts?: { database?: string; language?: string }) => Promise<SitecoreItem>",
+      "description": "Create a template folder.",
+      "params": [
+        {
+          "name": "parent",
+          "type": "string",
+          "description": "Parent item ID",
+          "optional": false
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Folder name",
+          "optional": false
+        },
+        {
+          "name": "opts",
+          "type": "{ database?: string; language?: string }",
+          "description": "",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<SitecoreItem>",
+      "examples": [],
+      "snippet": "Sitecore.createTemplateFolder(\"${1:parentId}\", \"${2:FolderName}\")",
+      "danger": "mutating"
+    },
+    "getSite": {
+      "name": "getSite",
+      "qualifiedName": "Sitecore.getSite",
+      "category": "Sites & Solutions",
+      "categoryId": "sites-solutions",
+      "signature": "(name: string) => Promise<SitecoreSite>",
+      "description": "Get a single site by name with full details.",
+      "params": [
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Site name",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<SitecoreSite>",
+      "examples": [],
+      "snippet": "Sitecore.getSite(\"${1:siteName}\")",
+      "danger": "safe"
+    },
+    "getSites": {
+      "name": "getSites",
+      "qualifiedName": "Sitecore.getSites",
+      "category": "Sites & Solutions",
+      "categoryId": "sites-solutions",
+      "signature": "(includeSystem?: boolean) => Promise<Array<{ name: string; hostName: string; language: string; rootPath: string }>>",
+      "description": "Get all sites.",
+      "params": [
+        {
+          "name": "includeSystem",
+          "type": "boolean",
+          "description": "Include system sites (default: false)",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<Array<{ name: string; hostName: string; language: string; rootPath: string }>>",
+      "examples": [],
+      "snippet": "Sitecore.getSites()",
+      "danger": "safe"
+    },
+    "getSiteCollections": {
+      "name": "getSiteCollections",
+      "qualifiedName": "Sitecore.getSiteCollections",
+      "category": "Sites & Solutions",
+      "categoryId": "sites-solutions",
+      "signature": "(opts?: { database?: string }) => Promise<SitecoreSiteCollection[]>",
+      "description": "Get all site collections.",
+      "params": [
+        {
+          "name": "opts",
+          "type": "{ database?: string }",
+          "description": "",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<SitecoreSiteCollection[]>",
+      "examples": [],
+      "snippet": "Sitecore.getSiteCollections()",
+      "danger": "safe"
+    },
+    "getSolutionSites": {
+      "name": "getSolutionSites",
+      "qualifiedName": "Sitecore.getSolutionSites",
+      "category": "Sites & Solutions",
+      "categoryId": "sites-solutions",
+      "signature": "(opts?: { database?: string; siteName?: string; siteId?: string; siteCollectionID?: string; rootItemId?: string; includeNonSxaSites?: boolean }) => Promise<SitecoreSolutionSite[]>",
+      "description": "Get solution sites.",
+      "params": [
+        {
+          "name": "opts",
+          "type": "{ database?: string; siteName?: string; siteId?: string; siteCollectionID?: string; rootItemId?: string; includeNonSxaSites?: boolean }",
+          "description": "Optional filters: siteName, siteId, siteCollectionID, rootItemId, includeNonSxaSites",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<SitecoreSolutionSite[]>",
+      "examples": [],
+      "snippet": "Sitecore.getSolutionSites()",
+      "danger": "safe"
+    },
+    "searchSolutionSites": {
+      "name": "searchSolutionSites",
+      "qualifiedName": "Sitecore.searchSolutionSites",
+      "category": "Sites & Solutions",
+      "categoryId": "sites-solutions",
+      "signature": "(filter?: SearchStatementInput) => Promise<Array<{ siteRoot: SitecoreItem; sites: SitecoreSolutionSite[] }>>",
+      "description": "Search solution sites with optional filter statement.",
+      "params": [
+        {
+          "name": "filter",
+          "type": "SearchStatementInput",
+          "description": "",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<Array<{ siteRoot: SitecoreItem; sites: SitecoreSolutionSite[] }>>",
+      "examples": [],
+      "snippet": "Sitecore.searchSolutionSites()",
+      "danger": "safe"
+    },
+    "getSolutionTemplates": {
+      "name": "getSolutionTemplates",
+      "qualifiedName": "Sitecore.getSolutionTemplates",
+      "category": "Sites & Solutions",
+      "categoryId": "sites-solutions",
+      "signature": "(opts?: { database?: string }) => Promise<Array<{ id: string; name: string; description: string; enabled: boolean; builtInTemplate: boolean; createdBy: string; updated: string; contents: Array<{ key: string; value: any }>",
+      "description": "Get solution templates.",
+      "params": [
+        {
+          "name": "opts",
+          "type": "{ database?: string }",
+          "description": "",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<Array<{ id: string; name: string; description: string; enabled: boolean; builtInTemplate: boolean; createdBy: string; updated: string; contents: Array<{ key: string; value: any }>",
+      "examples": [],
+      "snippet": "Sitecore.getSolutionTemplates()",
+      "danger": "safe"
+    },
+    "scaffoldSolution": {
+      "name": "scaffoldSolution",
+      "qualifiedName": "Sitecore.scaffoldSolution",
+      "category": "Sites & Solutions",
+      "categoryId": "sites-solutions",
+      "signature": "(input: { siteName: string; hostName: string; language: string; templateId: string; languages?: string[]; siteCollectionName?: string; siteCollectionDisplayName?: string; siteCollectionDescription?: string; siteDescription?: string; siteDisplayName?: string; posMappings?: any[]; database?: string }) => Promise<{ job: SitecoreJob }>",
+      "description": "Scaffold a new solution with site, site collection, and template.",
+      "params": [
+        {
+          "name": "input",
+          "type": "{ siteName: string; hostName: string; language: string; templateId: string; languages?: string[]; siteCollectionName?: string; siteCollectionDisplayName?: string; siteCollectionDescription?: string; siteDescription?: string; siteDisplayName?: string; posMappings?: any[]; database?: string }",
+          "description": "",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<{ job: SitecoreJob }>",
+      "examples": [
+        "await sc.scaffoldSolution({\r\n  siteName: \"MySite\",\r\n  hostName: \"mysite.com\",\r\n  language: \"en\",\r\n  templateId: templateId\r\n});"
+      ],
+      "snippet": "Sitecore.scaffoldSolution({\\n  siteName: \"${1:MySite}\",\\n  hostName: \"${2:mysite.com}\",\\n  language: \"en\",\\n  templateId: \"${3:templateId}\"\\n})",
+      "danger": "mutating"
+    },
+    "createSite": {
+      "name": "createSite",
+      "qualifiedName": "Sitecore.createSite",
+      "category": "Sites & Solutions",
+      "categoryId": "sites-solutions",
+      "signature": "(input: { siteName: string; hostName: string; language: string; templateId: string; collectionId: string; languages?: string[]; description?: string; displayName?: string; posMappings?: any[]; database?: string }) => Promise<{ job: SitecoreJob }>",
+      "description": "Create a site within an existing collection.",
+      "params": [
+        {
+          "name": "input",
+          "type": "{ siteName: string; hostName: string; language: string; templateId: string; collectionId: string; languages?: string[]; description?: string; displayName?: string; posMappings?: any[]; database?: string }",
+          "description": "",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<{ job: SitecoreJob }>",
+      "examples": [],
+      "snippet": "Sitecore.createSite({\\n  siteName: \"${1:MySite}\",\\n  hostName: \"${2:mysite.com}\",\\n  language: \"en\",\\n  templateId: \"${3:templateId}\",\\n  collectionId: \"${4:collectionId}\"\\n})",
+      "danger": "mutating"
+    },
+    "createSiteCollection": {
+      "name": "createSiteCollection",
+      "qualifiedName": "Sitecore.createSiteCollection",
+      "category": "Sites & Solutions",
+      "categoryId": "sites-solutions",
+      "signature": "(input: { name: string; displayName?: string; description?: string; database?: string }) => Promise<{ job: SitecoreJob }>",
+      "description": "Create a site collection.",
+      "params": [
+        {
+          "name": "input",
+          "type": "{ name: string; displayName?: string; description?: string; database?: string }",
+          "description": "",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<{ job: SitecoreJob }>",
+      "examples": [
+        "await sc.createSiteCollection({ name: \"MyCollection\", displayName: \"My Collection\" });"
+      ],
+      "snippet": "Sitecore.createSiteCollection({ name: \"${1:CollectionName}\" })",
+      "danger": "mutating"
+    },
+    "removeSite": {
+      "name": "removeSite",
+      "qualifiedName": "Sitecore.removeSite",
+      "category": "Sites & Solutions",
+      "categoryId": "sites-solutions",
+      "signature": "(input: { siteId?: string; siteName?: string; database?: string }) => Promise<{ job: SitecoreJob }>",
+      "description": "Remove a site by ID or name.",
+      "params": [
+        {
+          "name": "input",
+          "type": "{ siteId?: string; siteName?: string; database?: string }",
+          "description": "",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<{ job: SitecoreJob }>",
+      "examples": [],
+      "snippet": "Sitecore.removeSite({ siteName: \"${1:siteName}\" })",
+      "danger": "destructive"
+    },
+    "removeSiteCollection": {
+      "name": "removeSiteCollection",
+      "qualifiedName": "Sitecore.removeSiteCollection",
+      "category": "Sites & Solutions",
+      "categoryId": "sites-solutions",
+      "signature": "(input: { id: string; database?: string }) => Promise<{ job: SitecoreJob }>",
+      "description": "Remove a site collection by ID.",
+      "params": [
+        {
+          "name": "input",
+          "type": "{ id: string; database?: string }",
+          "description": "",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<{ job: SitecoreJob }>",
+      "examples": [],
+      "snippet": "Sitecore.removeSiteCollection({ id: \"${1:collectionId}\" })",
+      "danger": "destructive"
+    },
+    "renameSite": {
+      "name": "renameSite",
+      "qualifiedName": "Sitecore.renameSite",
+      "category": "Sites & Solutions",
+      "categoryId": "sites-solutions",
+      "signature": "(input: { siteId?: string; siteName?: string; newName?: string; database?: string }) => Promise<{ job: SitecoreJob }>",
+      "description": "Rename a site.",
+      "params": [
+        {
+          "name": "input",
+          "type": "{ siteId?: string; siteName?: string; newName?: string; database?: string }",
+          "description": "",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<{ job: SitecoreJob }>",
+      "examples": [],
+      "snippet": "Sitecore.renameSite({ siteName: \"${1:oldName}\", newName: \"${2:newName}\" })",
+      "danger": "mutating"
+    },
+    "renameSiteCollection": {
+      "name": "renameSiteCollection",
+      "qualifiedName": "Sitecore.renameSiteCollection",
+      "category": "Sites & Solutions",
+      "categoryId": "sites-solutions",
+      "signature": "(input: { id: string; name?: string; database?: string }) => Promise<{ job: SitecoreJob }>",
+      "description": "Rename a site collection.",
+      "params": [
+        {
+          "name": "input",
+          "type": "{ id: string; name?: string; database?: string }",
+          "description": "",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<{ job: SitecoreJob }>",
+      "examples": [],
+      "snippet": "Sitecore.renameSiteCollection({ id: \"${1:collectionId}\", name: \"${2:newName}\" })",
+      "danger": "mutating"
+    },
+    "cloneSite": {
+      "name": "cloneSite",
+      "qualifiedName": "Sitecore.cloneSite",
+      "category": "Sites & Solutions",
+      "categoryId": "sites-solutions",
+      "signature": "(input: { siteId?: string; siteName?: string; cloneName?: string; displayName?: string; description?: string; cloneSiteDefinitions?: boolean; posMappings?: any[]; database?: string }) => Promise<{ job: SitecoreJob }>",
+      "description": "Clone a site.",
+      "params": [
+        {
+          "name": "input",
+          "type": "{ siteId?: string; siteName?: string; cloneName?: string; displayName?: string; description?: string; cloneSiteDefinitions?: boolean; posMappings?: any[]; database?: string }",
+          "description": "",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<{ job: SitecoreJob }>",
+      "examples": [],
+      "snippet": "Sitecore.cloneSite({ siteName: \"${1:sourceSite}\", cloneName: \"${2:clonedSite}\" })",
+      "danger": "mutating"
+    },
+    "updateSitesPos": {
+      "name": "updateSitesPos",
+      "qualifiedName": "Sitecore.updateSitesPos",
+      "category": "Sites & Solutions",
+      "categoryId": "sites-solutions",
+      "signature": "(input: { posMappingsInput: Array<{ id: string; newValue: Array<{ name: string; language: string }> }>; database?: string }) => Promise<{ result: Array<{ id: string; success: boolean }> }>",
+      "description": "Update Point of Sale mappings for sites.",
+      "params": [
+        {
+          "name": "input",
+          "type": "{ posMappingsInput: Array<{ id: string; newValue: Array<{ name: string; language: string }> }>; database?: string }",
+          "description": "",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<{ result: Array<{ id: string; success: boolean }> }>",
+      "examples": [],
+      "snippet": "Sitecore.updateSitesPos({ posMappingsInput: [{ id: \"${1:siteId}\", newValue: [{ name: \"${2:pos}\", language: \"en\" }] }] })",
+      "danger": "mutating"
+    },
+    "getLanguage": {
+      "name": "getLanguage",
+      "qualifiedName": "Sitecore.getLanguage",
+      "category": "Languages & Archiving",
+      "categoryId": "languages-archiving",
+      "signature": "(name: string) => Promise<SitecoreLanguage>",
+      "description": "Get a single language by name.",
+      "params": [
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Language code (e.g. \"en\", \"fr-FR\")",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<SitecoreLanguage>",
+      "examples": [],
+      "snippet": "Sitecore.getLanguage(\"${1:en}\")",
+      "danger": "safe"
+    },
+    "getLanguages": {
+      "name": "getLanguages",
+      "qualifiedName": "Sitecore.getLanguages",
+      "category": "Languages & Archiving",
+      "categoryId": "languages-archiving",
+      "signature": "(db?: string) => Promise<SitecoreLanguage[]>",
+      "description": "Get all languages.",
+      "params": [
+        {
+          "name": "db",
+          "type": "string",
+          "description": "Optional database name",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<SitecoreLanguage[]>",
+      "examples": [],
+      "snippet": "Sitecore.getLanguages()",
+      "danger": "safe"
+    },
+    "getSupportedLanguages": {
+      "name": "getSupportedLanguages",
+      "qualifiedName": "Sitecore.getSupportedLanguages",
+      "category": "Languages & Archiving",
+      "categoryId": "languages-archiving",
+      "signature": "() => Promise<SitecoreSupportedLanguage[]>",
+      "description": "Get all languages supported by Sitecore.",
+      "params": [],
+      "returns": "Promise<SitecoreSupportedLanguage[]>",
+      "examples": [],
+      "snippet": "Sitecore.getSupportedLanguages()",
+      "danger": "safe"
+    },
+    "getFallbackLanguage": {
+      "name": "getFallbackLanguage",
+      "qualifiedName": "Sitecore.getFallbackLanguage",
+      "category": "Languages & Archiving",
+      "categoryId": "languages-archiving",
+      "signature": "(name: string, db?: string) => Promise<SitecoreLanguage>",
+      "description": "Get the fallback language for a given language.",
+      "params": [
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Language code",
+          "optional": false
+        },
+        {
+          "name": "db",
+          "type": "string",
+          "description": "Optional database name",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<SitecoreLanguage>",
+      "examples": [],
+      "snippet": "Sitecore.getFallbackLanguage(\"${1:en}\")",
+      "danger": "safe"
+    },
+    "getArchivedItem": {
+      "name": "getArchivedItem",
+      "qualifiedName": "Sitecore.getArchivedItem",
+      "category": "Languages & Archiving",
+      "categoryId": "languages-archiving",
+      "signature": "(archivalId: string, archiveName?: string) => Promise<SitecoreArchivedItem>",
+      "description": "Get a single archived item by archival ID.",
+      "params": [
+        {
+          "name": "archivalId",
+          "type": "string",
+          "description": "The archival ID",
+          "optional": false
+        },
+        {
+          "name": "archiveName",
+          "type": "string",
+          "description": "Optional archive name (default: \"archive\")",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<SitecoreArchivedItem>",
+      "examples": [],
+      "snippet": "Sitecore.getArchivedItem(\"${1:archivalId}\")",
+      "danger": "safe"
+    },
+    "getArchivedItems": {
+      "name": "getArchivedItems",
+      "qualifiedName": "Sitecore.getArchivedItems",
+      "category": "Languages & Archiving",
+      "categoryId": "languages-archiving",
+      "signature": "(opts?: { archiveName?: string; pageIndex?: number; pageSize?: number }) => Promise<SitecoreArchivedItem[]>",
+      "description": "List archived items.",
+      "params": [
+        {
+          "name": "opts",
+          "type": "{ archiveName?: string; pageIndex?: number; pageSize?: number }",
+          "description": "Optional: archiveName, pageIndex, pageSize",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<SitecoreArchivedItem[]>",
+      "examples": [],
+      "snippet": "Sitecore.getArchivedItems()",
+      "danger": "safe"
+    },
+    "addLanguage": {
+      "name": "addLanguage",
+      "qualifiedName": "Sitecore.addLanguage",
+      "category": "Languages & Archiving",
+      "categoryId": "languages-archiving",
+      "signature": "(input: AddLanguageInput) => Promise<{ successful: boolean }>",
+      "description": "Add a language to the system.",
+      "params": [
+        {
+          "name": "input",
+          "type": "AddLanguageInput",
+          "description": "Language details; languageCode is required",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<{ successful: boolean }>",
+      "examples": [
+        "await sc.addLanguage({ languageCode: \"fr-FR\" });"
+      ],
+      "snippet": "Sitecore.addLanguage({ languageCode: \"${1:fr-FR}\" })",
+      "danger": "mutating"
+    },
+    "deleteLanguage": {
+      "name": "deleteLanguage",
+      "qualifiedName": "Sitecore.deleteLanguage",
+      "category": "Languages & Archiving",
+      "categoryId": "languages-archiving",
+      "signature": "(name: string, db?: string) => Promise<{ successful: boolean }>",
+      "description": "Delete a language. WARNING: Removes ALL versions of this language from every item.",
+      "params": [
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Language code to delete",
+          "optional": false
+        },
+        {
+          "name": "db",
+          "type": "string",
+          "description": "Optional database name",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<{ successful: boolean }>",
+      "examples": [],
+      "snippet": "Sitecore.deleteLanguage(\"${1:fr-FR}\")",
+      "danger": "destructive"
+    },
+    "deleteLanguages": {
+      "name": "deleteLanguages",
+      "qualifiedName": "Sitecore.deleteLanguages",
+      "category": "Languages & Archiving",
+      "categoryId": "languages-archiving",
+      "signature": "(names: string[], db?: string) => Promise<{ successful: boolean }>",
+      "description": "Delete multiple languages at once.",
+      "params": [
+        {
+          "name": "names",
+          "type": "string[]",
+          "description": "Array of language codes",
+          "optional": false
+        },
+        {
+          "name": "db",
+          "type": "string",
+          "description": "Optional database name",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<{ successful: boolean }>",
+      "examples": [],
+      "snippet": "Sitecore.deleteLanguages([\"${1:fr-FR}\", \"${2:de-DE}\"])",
+      "danger": "destructive"
+    },
+    "archiveItem": {
+      "name": "archiveItem",
+      "qualifiedName": "Sitecore.archiveItem",
+      "category": "Languages & Archiving",
+      "categoryId": "languages-archiving",
+      "signature": "(idOrPath: string, archiveName?: string) => Promise<{ archiveItemId: string }>",
+      "description": "Archive an item.",
+      "params": [
+        {
+          "name": "idOrPath",
+          "type": "string",
+          "description": "Item ID or path",
+          "optional": false
+        },
+        {
+          "name": "archiveName",
+          "type": "string",
+          "description": "Optional archive name",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<{ archiveItemId: string }>",
+      "examples": [],
+      "snippet": "Sitecore.archiveItem(\"${1:itemId}\")",
+      "danger": "mutating"
+    },
+    "archiveVersion": {
+      "name": "archiveVersion",
+      "qualifiedName": "Sitecore.archiveVersion",
+      "category": "Languages & Archiving",
+      "categoryId": "languages-archiving",
+      "signature": "(idOrPath: string, language: string, version?: number, archiveName?: string) => Promise<{ archiveVersionId: string }>",
+      "description": "Archive a specific version of an item.",
+      "params": [
+        {
+          "name": "idOrPath",
+          "type": "string",
+          "description": "Item ID or path",
+          "optional": false
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "description": "Language code",
+          "optional": false
+        },
+        {
+          "name": "version",
+          "type": "number",
+          "description": "Version number (latest if not specified)",
+          "optional": true
+        },
+        {
+          "name": "archiveName",
+          "type": "string",
+          "description": "Optional archive name",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<{ archiveVersionId: string }>",
+      "examples": [],
+      "snippet": "Sitecore.archiveVersion(\"${1:itemId}\", \"en\")",
+      "danger": "mutating"
+    },
+    "setItemArchiveDate": {
+      "name": "setItemArchiveDate",
+      "qualifiedName": "Sitecore.setItemArchiveDate",
+      "category": "Languages & Archiving",
+      "categoryId": "languages-archiving",
+      "signature": "(idOrPath: string, date?: string) => Promise<{ successful: boolean }>",
+      "description": "Schedule an item for archiving at a future date. Pass undefined to clear the date.",
+      "params": [
+        {
+          "name": "idOrPath",
+          "type": "string",
+          "description": "Item ID or path",
+          "optional": false
+        },
+        {
+          "name": "date",
+          "type": "string",
+          "description": "ISO 8601 date string, or undefined to clear",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<{ successful: boolean }>",
+      "examples": [],
+      "snippet": "Sitecore.setItemArchiveDate(\"${1:itemId}\", \"${2:2025-12-31T00:00:00Z}\")",
+      "danger": "mutating"
+    },
+    "setVersionArchiveDate": {
+      "name": "setVersionArchiveDate",
+      "qualifiedName": "Sitecore.setVersionArchiveDate",
+      "category": "Languages & Archiving",
+      "categoryId": "languages-archiving",
+      "signature": "(idOrPath: string, language: string, date?: string, version?: number) => Promise<{ successful: boolean }>",
+      "description": "Schedule a version for archiving at a future date.",
+      "params": [
+        {
+          "name": "idOrPath",
+          "type": "string",
+          "description": "Item ID or path",
+          "optional": false
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "description": "Language code",
+          "optional": false
+        },
+        {
+          "name": "date",
+          "type": "string",
+          "description": "ISO 8601 date string, or undefined to clear",
+          "optional": true
+        },
+        {
+          "name": "version",
+          "type": "number",
+          "description": "Version number (latest if not specified)",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<{ successful: boolean }>",
+      "examples": [],
+      "snippet": "Sitecore.setVersionArchiveDate(\"${1:itemId}\", \"en\", \"${2:2025-12-31T00:00:00Z}\")",
+      "danger": "mutating"
+    },
+    "restoreArchivedItem": {
+      "name": "restoreArchivedItem",
+      "qualifiedName": "Sitecore.restoreArchivedItem",
+      "category": "Languages & Archiving",
+      "categoryId": "languages-archiving",
+      "signature": "(archivalId: string, archiveName?: string) => Promise<{ successful: boolean }>",
+      "description": "Restore an archived item.",
+      "params": [
+        {
+          "name": "archivalId",
+          "type": "string",
+          "description": "",
+          "optional": false
+        },
+        {
+          "name": "archiveName",
+          "type": "string",
+          "description": "",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<{ successful: boolean }>",
+      "examples": [],
+      "snippet": "Sitecore.restoreArchivedItem(\"${1:archivalId}\")",
+      "danger": "mutating"
+    },
+    "restoreArchivedVersion": {
+      "name": "restoreArchivedVersion",
+      "qualifiedName": "Sitecore.restoreArchivedVersion",
+      "category": "Languages & Archiving",
+      "categoryId": "languages-archiving",
+      "signature": "(versionId: string, archiveName?: string) => Promise<{ successful: boolean }>",
+      "description": "Restore an archived version.",
+      "params": [
+        {
+          "name": "versionId",
+          "type": "string",
+          "description": "",
+          "optional": false
+        },
+        {
+          "name": "archiveName",
+          "type": "string",
+          "description": "",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<{ successful: boolean }>",
+      "examples": [],
+      "snippet": "Sitecore.restoreArchivedVersion(\"${1:versionId}\")",
+      "danger": "mutating"
+    },
+    "deleteArchivedItem": {
+      "name": "deleteArchivedItem",
+      "qualifiedName": "Sitecore.deleteArchivedItem",
+      "category": "Languages & Archiving",
+      "categoryId": "languages-archiving",
+      "signature": "(archivalId: string, archiveName?: string) => Promise<{ successful: boolean }>",
+      "description": "Permanently delete an archived item.",
+      "params": [
+        {
+          "name": "archivalId",
+          "type": "string",
+          "description": "",
+          "optional": false
+        },
+        {
+          "name": "archiveName",
+          "type": "string",
+          "description": "",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<{ successful: boolean }>",
+      "examples": [],
+      "snippet": "Sitecore.deleteArchivedItem(\"${1:archivalId}\")",
+      "danger": "destructive"
+    },
+    "deleteArchivedVersion": {
+      "name": "deleteArchivedVersion",
+      "qualifiedName": "Sitecore.deleteArchivedVersion",
+      "category": "Languages & Archiving",
+      "categoryId": "languages-archiving",
+      "signature": "(versionId: string, archiveName?: string) => Promise<{ successful: boolean }>",
+      "description": "Permanently delete an archived version.",
+      "params": [
+        {
+          "name": "versionId",
+          "type": "string",
+          "description": "",
+          "optional": false
+        },
+        {
+          "name": "archiveName",
+          "type": "string",
+          "description": "",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<{ successful: boolean }>",
+      "examples": [],
+      "snippet": "Sitecore.deleteArchivedVersion(\"${1:versionId}\")",
+      "danger": "destructive"
+    },
+    "emptyArchive": {
+      "name": "emptyArchive",
+      "qualifiedName": "Sitecore.emptyArchive",
+      "category": "Languages & Archiving",
+      "categoryId": "languages-archiving",
+      "signature": "(archiveName?: string) => Promise<{ successful: boolean }>",
+      "description": "Empty the entire archive.",
+      "params": [
+        {
+          "name": "archiveName",
+          "type": "string",
+          "description": "",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<{ successful: boolean }>",
+      "examples": [],
+      "snippet": "Sitecore.emptyArchive()",
+      "danger": "destructive"
+    },
+    "getCurrentUser": {
+      "name": "getCurrentUser",
+      "qualifiedName": "Sitecore.getCurrentUser",
+      "category": "Security",
+      "categoryId": "security",
+      "signature": "() => Promise<SitecoreUser>",
+      "description": "Get the current authenticated user with profile and roles.",
+      "params": [],
+      "returns": "Promise<SitecoreUser>",
+      "examples": [],
+      "snippet": "Sitecore.getCurrentUser()",
+      "danger": "safe"
+    },
+    "getUser": {
+      "name": "getUser",
+      "qualifiedName": "Sitecore.getUser",
+      "category": "Security",
+      "categoryId": "security",
+      "signature": "(userName: string) => Promise<SitecoreUser>",
+      "description": "Get a specific user by username.",
+      "params": [
+        {
+          "name": "userName",
+          "type": "string",
+          "description": "User name in domain\\user format",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<SitecoreUser>",
+      "examples": [],
+      "snippet": "Sitecore.getUser(\"${1:sitecore\\\\\\\\admin}\")",
+      "danger": "safe"
+    },
+    "getUsers": {
+      "name": "getUsers",
+      "qualifiedName": "Sitecore.getUsers",
+      "category": "Security",
+      "categoryId": "security",
+      "signature": "() => Promise<SitecoreUser[]>",
+      "description": "Get all users.",
+      "params": [],
+      "returns": "Promise<SitecoreUser[]>",
+      "examples": [],
+      "snippet": "Sitecore.getUsers()",
+      "danger": "safe"
+    },
+    "getRole": {
+      "name": "getRole",
+      "qualifiedName": "Sitecore.getRole",
+      "category": "Security",
+      "categoryId": "security",
+      "signature": "(roleName: string) => Promise<SitecoreRole>",
+      "description": "Get a specific role with its members and memberships.",
+      "params": [
+        {
+          "name": "roleName",
+          "type": "string",
+          "description": "Role name in domain\\role format",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<SitecoreRole>",
+      "examples": [],
+      "snippet": "Sitecore.getRole(\"${1:sitecore\\\\\\\\Author}\")",
+      "danger": "safe"
+    },
+    "getRoles": {
+      "name": "getRoles",
+      "qualifiedName": "Sitecore.getRoles",
+      "category": "Security",
+      "categoryId": "security",
+      "signature": "() => Promise<SitecoreRole[]>",
+      "description": "Get all roles.",
+      "params": [],
+      "returns": "Promise<SitecoreRole[]>",
+      "examples": [],
+      "snippet": "Sitecore.getRoles()",
+      "danger": "safe"
+    },
+    "getDomain": {
+      "name": "getDomain",
+      "qualifiedName": "Sitecore.getDomain",
+      "category": "Security",
+      "categoryId": "security",
+      "signature": "(domainName: string) => Promise<SitecoreDomain>",
+      "description": "Get a specific security domain.",
+      "params": [
+        {
+          "name": "domainName",
+          "type": "string",
+          "description": "Domain name",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<SitecoreDomain>",
+      "examples": [],
+      "snippet": "Sitecore.getDomain(\"${1:sitecore}\")",
+      "danger": "safe"
+    },
+    "getDomains": {
+      "name": "getDomains",
+      "qualifiedName": "Sitecore.getDomains",
+      "category": "Security",
+      "categoryId": "security",
+      "signature": "() => Promise<SitecoreDomain[]>",
+      "description": "Get all security domains.",
+      "params": [],
+      "returns": "Promise<SitecoreDomain[]>",
+      "examples": [],
+      "snippet": "Sitecore.getDomains()",
+      "danger": "safe"
+    },
+    "getSelectionProfiles": {
+      "name": "getSelectionProfiles",
+      "qualifiedName": "Sitecore.getSelectionProfiles",
+      "category": "Security",
+      "categoryId": "security",
+      "signature": "() => Promise<Array<{ name: string; profileId: string }>>",
+      "description": "Get user profile selection profiles.",
+      "params": [],
+      "returns": "Promise<Array<{ name: string; profileId: string }>>",
+      "examples": [],
+      "snippet": "Sitecore.getSelectionProfiles()",
+      "danger": "safe"
+    },
+    "createUser": {
+      "name": "createUser",
+      "qualifiedName": "Sitecore.createUser",
+      "category": "Security",
+      "categoryId": "security",
+      "signature": "(input: CreateUserInput) => Promise<SitecoreUser>",
+      "description": "Create a new user.",
+      "params": [
+        {
+          "name": "input",
+          "type": "CreateUserInput",
+          "description": "",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<SitecoreUser>",
+      "examples": [
+        "await sc.createUser({ userName: \"sitecore\\\\editor1\", password: \"P@ss1\", email: \"ed@co.com\" });"
+      ],
+      "snippet": "Sitecore.createUser({ userName: \"${1:domain\\\\\\\\user}\", password: \"${2:password}\", email: \"${3:user@example.com}\" })",
+      "danger": "mutating"
+    },
+    "updateUser": {
+      "name": "updateUser",
+      "qualifiedName": "Sitecore.updateUser",
+      "category": "Security",
+      "categoryId": "security",
+      "signature": "(input: UpdateUserInput) => Promise<SitecoreUser>",
+      "description": "Update user properties. Specify userName and fields to change.",
+      "params": [
+        {
+          "name": "input",
+          "type": "UpdateUserInput",
+          "description": "",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<SitecoreUser>",
+      "examples": [],
+      "snippet": "Sitecore.updateUser({ userName: \"${1:domain\\\\\\\\user}\", fullName: \"${2:Full Name}\" })",
+      "danger": "mutating"
+    },
+    "deleteUser": {
+      "name": "deleteUser",
+      "qualifiedName": "Sitecore.deleteUser",
+      "category": "Security",
+      "categoryId": "security",
+      "signature": "(userName: string) => Promise<{ successful: boolean }>",
+      "description": "Delete a user.",
+      "params": [
+        {
+          "name": "userName",
+          "type": "string",
+          "description": "",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<{ successful: boolean }>",
+      "examples": [],
+      "snippet": "Sitecore.deleteUser(\"${1:domain\\\\\\\\user}\")",
+      "danger": "destructive"
+    },
+    "unlockUser": {
+      "name": "unlockUser",
+      "qualifiedName": "Sitecore.unlockUser",
+      "category": "Security",
+      "categoryId": "security",
+      "signature": "(userName: string) => Promise<{ successful: boolean }>",
+      "description": "Unlock a locked-out user.",
+      "params": [
+        {
+          "name": "userName",
+          "type": "string",
+          "description": "",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<{ successful: boolean }>",
+      "examples": [],
+      "snippet": "Sitecore.unlockUser(\"${1:domain\\\\\\\\user}\")",
+      "danger": "mutating"
+    },
+    "enableUser": {
+      "name": "enableUser",
+      "qualifiedName": "Sitecore.enableUser",
+      "category": "Security",
+      "categoryId": "security",
+      "signature": "(userName: string) => Promise<{ successful: boolean }>",
+      "description": "Enable a disabled user.",
+      "params": [
+        {
+          "name": "userName",
+          "type": "string",
+          "description": "",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<{ successful: boolean }>",
+      "examples": [],
+      "snippet": "Sitecore.enableUser(\"${1:domain\\\\\\\\user}\")",
+      "danger": "mutating"
+    },
+    "disableUser": {
+      "name": "disableUser",
+      "qualifiedName": "Sitecore.disableUser",
+      "category": "Security",
+      "categoryId": "security",
+      "signature": "(userName: string) => Promise<{ successful: boolean }>",
+      "description": "Disable a user.",
+      "params": [
+        {
+          "name": "userName",
+          "type": "string",
+          "description": "",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<{ successful: boolean }>",
+      "examples": [],
+      "snippet": "Sitecore.disableUser(\"${1:domain\\\\\\\\user}\")",
+      "danger": "mutating"
+    },
+    "resetUserSettings": {
+      "name": "resetUserSettings",
+      "qualifiedName": "Sitecore.resetUserSettings",
+      "category": "Security",
+      "categoryId": "security",
+      "signature": "(userName: string) => Promise<{ successful: boolean }>",
+      "description": "Reset user settings to defaults.",
+      "params": [
+        {
+          "name": "userName",
+          "type": "string",
+          "description": "",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<{ successful: boolean }>",
+      "examples": [],
+      "snippet": "Sitecore.resetUserSettings(\"${1:domain\\\\\\\\user}\")",
+      "danger": "mutating"
+    },
+    "changeUserPassword": {
+      "name": "changeUserPassword",
+      "qualifiedName": "Sitecore.changeUserPassword",
+      "category": "Security",
+      "categoryId": "security",
+      "signature": "(userName: string, oldPw: string, newPw: string) => Promise<{ successful: boolean }>",
+      "description": "Change a user's password.",
+      "params": [
+        {
+          "name": "userName",
+          "type": "string",
+          "description": "User name",
+          "optional": false
+        },
+        {
+          "name": "oldPw",
+          "type": "string",
+          "description": "Current password",
+          "optional": false
+        },
+        {
+          "name": "newPw",
+          "type": "string",
+          "description": "New password",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<{ successful: boolean }>",
+      "examples": [],
+      "snippet": "Sitecore.changeUserPassword(\"${1:domain\\\\\\\\user}\", \"${2:oldPassword}\", \"${3:newPassword}\")",
+      "danger": "mutating"
+    },
+    "createDomain": {
+      "name": "createDomain",
+      "qualifiedName": "Sitecore.createDomain",
+      "category": "Security",
+      "categoryId": "security",
+      "signature": "(domainName: string, local?: boolean) => Promise<SitecoreDomain>",
+      "description": "Create a security domain.",
+      "params": [
+        {
+          "name": "domainName",
+          "type": "string",
+          "description": "Domain name",
+          "optional": false
+        },
+        {
+          "name": "local",
+          "type": "boolean",
+          "description": "Whether the domain is locally managed",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<SitecoreDomain>",
+      "examples": [],
+      "snippet": "Sitecore.createDomain(\"${1:domainName}\")",
+      "danger": "mutating"
+    },
+    "deleteDomain": {
+      "name": "deleteDomain",
+      "qualifiedName": "Sitecore.deleteDomain",
+      "category": "Security",
+      "categoryId": "security",
+      "signature": "(domainName: string) => Promise<{ successful: boolean }>",
+      "description": "Delete a security domain.",
+      "params": [
+        {
+          "name": "domainName",
+          "type": "string",
+          "description": "",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<{ successful: boolean }>",
+      "examples": [],
+      "snippet": "Sitecore.deleteDomain(\"${1:domainName}\")",
+      "danger": "destructive"
+    },
+    "createRole": {
+      "name": "createRole",
+      "qualifiedName": "Sitecore.createRole",
+      "category": "Security",
+      "categoryId": "security",
+      "signature": "(roleName: string) => Promise<SitecoreRole>",
+      "description": "Create a security role.",
+      "params": [
+        {
+          "name": "roleName",
+          "type": "string",
+          "description": "Role name in domain\\role format",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<SitecoreRole>",
+      "examples": [],
+      "snippet": "Sitecore.createRole(\"${1:domain\\\\\\\\RoleName}\")",
+      "danger": "mutating"
+    },
+    "deleteRole": {
+      "name": "deleteRole",
+      "qualifiedName": "Sitecore.deleteRole",
+      "category": "Security",
+      "categoryId": "security",
+      "signature": "(roleName: string) => Promise<{ successful: boolean }>",
+      "description": "Delete a security role.",
+      "params": [
+        {
+          "name": "roleName",
+          "type": "string",
+          "description": "",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<{ successful: boolean }>",
+      "examples": [],
+      "snippet": "Sitecore.deleteRole(\"${1:domain\\\\\\\\RoleName}\")",
+      "danger": "destructive"
+    },
+    "addRoleToRoles": {
+      "name": "addRoleToRoles",
+      "qualifiedName": "Sitecore.addRoleToRoles",
+      "category": "Security",
+      "categoryId": "security",
+      "signature": "(roleName: string, parentRoles: string[]) => Promise<{ successful: boolean }>",
+      "description": "Add a role as member of parent roles.",
+      "params": [
+        {
+          "name": "roleName",
+          "type": "string",
+          "description": "Role to add",
+          "optional": false
+        },
+        {
+          "name": "parentRoles",
+          "type": "string[]",
+          "description": "Parent roles to add it to",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<{ successful: boolean }>",
+      "examples": [],
+      "snippet": "Sitecore.addRoleToRoles(\"${1:domain\\\\\\\\Role}\", [\"${2:domain\\\\\\\\ParentRole}\"])",
+      "danger": "mutating"
+    },
+    "deleteRoleFromRoles": {
+      "name": "deleteRoleFromRoles",
+      "qualifiedName": "Sitecore.deleteRoleFromRoles",
+      "category": "Security",
+      "categoryId": "security",
+      "signature": "(roleName: string, parentRoles: string[]) => Promise<{ successful: boolean }>",
+      "description": "Remove a role from parent roles.",
+      "params": [
+        {
+          "name": "roleName",
+          "type": "string",
+          "description": "Role to remove",
+          "optional": false
+        },
+        {
+          "name": "parentRoles",
+          "type": "string[]",
+          "description": "Parent roles to remove it from",
+          "optional": false
+        }
+      ],
+      "returns": "Promise<{ successful: boolean }>",
+      "examples": [],
+      "snippet": "Sitecore.deleteRoleFromRoles(\"${1:domain\\\\\\\\Role}\", [\"${2:domain\\\\\\\\ParentRole}\"])",
+      "danger": "destructive"
+    },
+    "addAccountsToRole": {
+      "name": "addAccountsToRole",
+      "qualifiedName": "Sitecore.addAccountsToRole",
+      "category": "Security",
+      "categoryId": "security",
+      "signature": "(roleName: string, opts?: { users?: string[]; roles?: string[] }) => Promise<{ successful: boolean }>",
+      "description": "Add users and/or roles to a role.",
+      "params": [
+        {
+          "name": "roleName",
+          "type": "string",
+          "description": "The parent role",
+          "optional": false
+        },
+        {
+          "name": "opts",
+          "type": "{ users?: string[]; roles?: string[] }",
+          "description": "Users and/or roles to add",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<{ successful: boolean }>",
+      "examples": [],
+      "snippet": "Sitecore.addAccountsToRole(\"${1:domain\\\\\\\\Role}\", { users: [\"${2:domain\\\\\\\\user}\"] })",
+      "danger": "mutating"
+    },
+    "deleteAccountsFromRole": {
+      "name": "deleteAccountsFromRole",
+      "qualifiedName": "Sitecore.deleteAccountsFromRole",
+      "category": "Security",
+      "categoryId": "security",
+      "signature": "(roleName: string, opts?: { users?: string[]; roles?: string[] }) => Promise<{ successful: boolean }>",
+      "description": "Remove users and/or roles from a role.",
+      "params": [
+        {
+          "name": "roleName",
+          "type": "string",
+          "description": "The parent role",
+          "optional": false
+        },
+        {
+          "name": "opts",
+          "type": "{ users?: string[]; roles?: string[] }",
+          "description": "Users and/or roles to remove",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<{ successful: boolean }>",
+      "examples": [],
+      "snippet": "Sitecore.deleteAccountsFromRole(\"${1:domain\\\\\\\\Role}\", { users: [\"${2:domain\\\\\\\\user}\"] })",
+      "danger": "destructive"
+    },
+    "getAvailableRenderings": {
+      "name": "getAvailableRenderings",
+      "qualifiedName": "Sitecore.getAvailableRenderings",
+      "category": "Presentation & Meta",
+      "categoryId": "presentation-meta",
+      "signature": "(opts?: { database?: string; renderingId?: string; siteRootItemId?: string }) => Promise<SitecoreRendering[]>",
+      "description": "Get available renderings.",
+      "params": [
+        {
+          "name": "opts",
+          "type": "{ database?: string; renderingId?: string; siteRootItemId?: string }",
+          "description": "Optional: database, renderingId, siteRootItemId",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<SitecoreRendering[]>",
+      "examples": [],
+      "snippet": "Sitecore.getAvailableRenderings()",
+      "danger": "safe"
+    },
+    "getPageDesigns": {
+      "name": "getPageDesigns",
+      "qualifiedName": "Sitecore.getPageDesigns",
+      "category": "Presentation & Meta",
+      "categoryId": "presentation-meta",
+      "signature": "(siteName: string, opts?: { database?: string }) => Promise<Array<{ siteName: string; pageDesign: SitecoreItem }>>",
+      "description": "Get page designs for a site.",
+      "params": [
+        {
+          "name": "siteName",
+          "type": "string",
+          "description": "Site name",
+          "optional": false
+        },
+        {
+          "name": "opts",
+          "type": "{ database?: string }",
+          "description": "",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<Array<{ siteName: string; pageDesign: SitecoreItem }>>",
+      "examples": [],
+      "snippet": "Sitecore.getPageDesigns(\"${1:siteName}\")",
+      "danger": "safe"
+    },
+    "getPartialDesigns": {
+      "name": "getPartialDesigns",
+      "qualifiedName": "Sitecore.getPartialDesigns",
+      "category": "Presentation & Meta",
+      "categoryId": "presentation-meta",
+      "signature": "(siteName: string, opts?: { database?: string }) => Promise<Array<{ siteName: string; partialDesign: SitecoreItem }>>",
+      "description": "Get partial designs for a site.",
+      "params": [
+        {
+          "name": "siteName",
+          "type": "string",
+          "description": "Site name",
+          "optional": false
+        },
+        {
+          "name": "opts",
+          "type": "{ database?: string }",
+          "description": "",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<Array<{ siteName: string; partialDesign: SitecoreItem }>>",
+      "examples": [],
+      "snippet": "Sitecore.getPartialDesigns(\"${1:siteName}\")",
+      "danger": "safe"
+    },
+    "getPageBranchesRoots": {
+      "name": "getPageBranchesRoots",
+      "qualifiedName": "Sitecore.getPageBranchesRoots",
+      "category": "Presentation & Meta",
+      "categoryId": "presentation-meta",
+      "signature": "(siteName: string, opts?: { database?: string }) => Promise<Array<{ siteName: string; root: SitecoreItem }>>",
+      "description": "Get page branch roots for a site.",
+      "params": [
+        {
+          "name": "siteName",
+          "type": "string",
+          "description": "Site name",
+          "optional": false
+        },
+        {
+          "name": "opts",
+          "type": "{ database?: string }",
+          "description": "",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<Array<{ siteName: string; root: SitecoreItem }>>",
+      "examples": [],
+      "snippet": "Sitecore.getPageBranchesRoots(\"${1:siteName}\")",
+      "danger": "safe"
+    },
+    "getDatabases": {
+      "name": "getDatabases",
+      "qualifiedName": "Sitecore.getDatabases",
+      "category": "Presentation & Meta",
+      "categoryId": "presentation-meta",
+      "signature": "() => Promise<Array<{ name: string }>>",
+      "description": "Get all databases.",
+      "params": [],
+      "returns": "Promise<Array<{ name: string }>>",
+      "examples": [],
+      "snippet": "Sitecore.getDatabases()",
+      "danger": "safe"
+    },
+    "getMeta": {
+      "name": "getMeta",
+      "qualifiedName": "Sitecore.getMeta",
+      "category": "Presentation & Meta",
+      "categoryId": "presentation-meta",
+      "signature": "() => Promise<{ version: string; xMVersion: string }>",
+      "description": "Get API version info.",
+      "params": [],
+      "returns": "Promise<{ version: string; xMVersion: string }>",
+      "examples": [],
+      "snippet": "Sitecore.getMeta()",
+      "danger": "safe"
+    },
+    "configurePageDesigns": {
+      "name": "configurePageDesigns",
+      "qualifiedName": "Sitecore.configurePageDesigns",
+      "category": "Presentation & Meta",
+      "categoryId": "presentation-meta",
+      "signature": "(siteName: string, mapping: Array<{ templateId?: string; pageDesignId?: string }>, opts?: { database?: string }) => Promise<boolean>",
+      "description": "Map templates to page designs for a site.",
+      "params": [
+        {
+          "name": "siteName",
+          "type": "string",
+          "description": "Site name",
+          "optional": false
+        },
+        {
+          "name": "mapping",
+          "type": "Array<{ templateId?: string; pageDesignId?: string }>",
+          "description": "Array of template-to-page-design mappings",
+          "optional": false
+        },
+        {
+          "name": "opts",
+          "type": "{ database?: string }",
+          "description": "",
+          "optional": true
+        }
+      ],
+      "returns": "Promise<boolean>",
+      "examples": [],
+      "snippet": "Sitecore.configurePageDesigns(\"${1:siteName}\", [{ templateId: \"${2:templateId}\", pageDesignId: \"${3:pageDesignId}\" }])",
+      "danger": "mutating"
+    }
+  },
+  "types": {
+    "SitecoreItem": {
+      "name": "SitecoreItem",
+      "description": "",
+      "fields": [
+        {
+          "name": "itemId",
+          "type": "string",
+          "description": "The globally-unique identifier for the item"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "description": "The item name (not localized)"
+        },
+        {
+          "name": "path",
+          "type": "string",
+          "description": "The full item path from root"
+        },
+        {
+          "name": "database",
+          "type": "string",
+          "description": "The database name"
+        },
+        {
+          "name": "displayName",
+          "type": "string",
+          "description": "The localized display name"
+        },
+        {
+          "name": "version",
+          "type": "number",
+          "description": "The version number"
+        },
+        {
+          "name": "template",
+          "type": "{ templateId: string",
+          "description": "The item's template"
+        },
+        {
+          "name": "fields",
+          "type": "{ nodes: Array<{ name: string",
+          "description": "Item fields (own, non-standard)"
+        },
+        {
+          "name": "children",
+          "type": "{ nodes: Array<{ itemId: string",
+          "description": "Direct child items"
+        }
+      ]
+    },
+    "SitecoreMediaItem": {
+      "name": "SitecoreMediaItem",
+      "description": "",
+      "fields": [
+        {
+          "name": "alt",
+          "type": "string",
+          "description": "Alternative text"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "description": "Media description"
+        },
+        {
+          "name": "extension",
+          "type": "string",
+          "description": "File extension"
+        },
+        {
+          "name": "mediaPath",
+          "type": "string",
+          "description": "Path in the media library"
+        },
+        {
+          "name": "mimeType",
+          "type": "string",
+          "description": "MIME type"
+        },
+        {
+          "name": "size",
+          "type": "number",
+          "description": "File size in bytes"
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "description": "Media title"
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "description": "Public URL"
+        },
+        {
+          "name": "innerItem",
+          "type": "{ itemId: string",
+          "description": "The underlying Sitecore item"
+        }
+      ]
+    },
+    "SitecoreSearchResult": {
+      "name": "SitecoreSearchResult",
+      "description": "",
+      "fields": [
+        {
+          "name": "totalCount",
+          "type": "number",
+          "description": "Total number of matching items"
+        },
+        {
+          "name": "facets",
+          "type": "Array<{ name: string",
+          "description": "Facet categories"
+        }
+      ]
+    },
+    "SitecorePublishingStatus": {
+      "name": "SitecorePublishingStatus",
+      "description": "",
+      "fields": [
+        {
+          "name": "isDone",
+          "type": "boolean",
+          "description": "Whether the operation is complete"
+        },
+        {
+          "name": "isFailed",
+          "type": "boolean",
+          "description": "Whether the operation failed"
+        },
+        {
+          "name": "processed",
+          "type": "number",
+          "description": "Number of items processed"
+        },
+        {
+          "name": "state",
+          "type": "string",
+          "description": "Current state: INITIALIZING, QUEUED, RUNNING, FINISHED, ABORTED, etc."
+        },
+        {
+          "name": "languages",
+          "type": "Array<{ name: string }>",
+          "description": "Published languages"
+        },
+        {
+          "name": "targetDatabase",
+          "type": "{ name: string }",
+          "description": "Target database"
+        }
+      ]
+    },
+    "SitecorePublishResult": {
+      "name": "SitecorePublishResult",
+      "description": "",
+      "fields": [
+        {
+          "name": "operationId",
+          "type": "string",
+          "description": "The operation ID for tracking progress via getPublishingStatus()"
+        }
+      ]
+    },
+    "SitecoreIndex": {
+      "name": "SitecoreIndex",
+      "description": "",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Index name"
+        },
+        {
+          "name": "documentsCount",
+          "type": "number",
+          "description": "Number of documents"
+        },
+        {
+          "name": "hasDeletions",
+          "type": "boolean",
+          "description": "Whether any documents have been deleted"
+        },
+        {
+          "name": "lastRebuildDuration",
+          "type": "string",
+          "description": "Duration of last rebuild"
+        },
+        {
+          "name": "lastUpdated",
+          "type": "string",
+          "description": "Last update timestamp"
+        },
+        {
+          "name": "numberOfFields",
+          "type": "number",
+          "description": "Number of fields"
+        },
+        {
+          "name": "numberOfTerms",
+          "type": "number",
+          "description": "Number of terms"
+        },
+        {
+          "name": "outOfDate",
+          "type": "boolean",
+          "description": "Whether the index is out of date"
+        }
+      ]
+    },
+    "SitecoreJob": {
+      "name": "SitecoreJob",
+      "description": "",
+      "fields": [
+        {
+          "name": "handle",
+          "type": "string",
+          "description": "Job handle (unique identifier)"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Job name"
+        },
+        {
+          "name": "displayName",
+          "type": "string",
+          "description": "Job display name"
+        },
+        {
+          "name": "done",
+          "type": "boolean",
+          "description": "Whether the job is finished"
+        },
+        {
+          "name": "queueTime",
+          "type": "string",
+          "description": "When the job was queued"
+        },
+        {
+          "name": "status",
+          "type": "{ jobState: string",
+          "description": "Job status"
+        },
+        {
+          "name": "options?",
+          "type": "{ jobName: string",
+          "description": "Job options"
+        }
+      ]
+    },
+    "SitecoreWorkflow": {
+      "name": "SitecoreWorkflow",
+      "description": "",
+      "fields": [
+        {
+          "name": "workflowId",
+          "type": "string",
+          "description": "Workflow ID"
+        },
+        {
+          "name": "displayName",
+          "type": "string",
+          "description": "Display name"
+        },
+        {
+          "name": "initialState",
+          "type": "{ stateId: string",
+          "description": "Initial workflow state"
+        },
+        {
+          "name": "states",
+          "type": "{ nodes: Array<{ stateId: string",
+          "description": "All workflow states"
+        }
+      ]
+    },
+    "SitecoreLanguage": {
+      "name": "SitecoreLanguage",
+      "description": "",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Language code (e.g. \"en\", \"fr-FR\")"
+        },
+        {
+          "name": "displayName",
+          "type": "string",
+          "description": "Localized display name"
+        },
+        {
+          "name": "englishName",
+          "type": "string",
+          "description": "English name"
+        },
+        {
+          "name": "nativeName",
+          "type": "string",
+          "description": "Native name"
+        },
+        {
+          "name": "iso",
+          "type": "string",
+          "description": "Two-letter ISO code"
+        }
+      ]
+    },
+    "SitecoreSupportedLanguage": {
+      "name": "SitecoreSupportedLanguage",
+      "description": "",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Language code"
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "description": "Language display name"
+        },
+        {
+          "name": "charset",
+          "type": "string",
+          "description": "Charset"
+        },
+        {
+          "name": "codePage",
+          "type": "string",
+          "description": "Code page"
+        },
+        {
+          "name": "customCode",
+          "type": "string",
+          "description": "Custom code"
+        },
+        {
+          "name": "encoding",
+          "type": "string",
+          "description": "Encoding"
+        },
+        {
+          "name": "regionCode",
+          "type": "string",
+          "description": "Region code"
+        },
+        {
+          "name": "spellChecker",
+          "type": "string",
+          "description": "Spell checker"
+        }
+      ]
+    },
+    "SitecoreArchivedItem": {
+      "name": "SitecoreArchivedItem",
+      "description": "",
+      "fields": [
+        {
+          "name": "archivalId",
+          "type": "string",
+          "description": "Archival ID"
+        },
+        {
+          "name": "itemId",
+          "type": "string",
+          "description": "Item ID"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Item name"
+        },
+        {
+          "name": "database",
+          "type": "string",
+          "description": "Database"
+        },
+        {
+          "name": "originalLocation",
+          "type": "string",
+          "description": "Original location path"
+        },
+        {
+          "name": "archivedBy",
+          "type": "string",
+          "description": "User who archived"
+        },
+        {
+          "name": "archivedDate",
+          "type": "string",
+          "description": "Archival date"
+        },
+        {
+          "name": "parentId",
+          "type": "string",
+          "description": "Parent item ID"
+        },
+        {
+          "name": "versions?",
+          "type": "Array<{ versionId: string",
+          "description": "Archived versions"
+        }
+      ]
+    },
+    "SitecoreTemplate": {
+      "name": "SitecoreTemplate",
+      "description": "",
+      "fields": [
+        {
+          "name": "templateId",
+          "type": "string",
+          "description": "Template ID"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Template name"
+        },
+        {
+          "name": "fullName",
+          "type": "string",
+          "description": "Full template path name"
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "description": "Template icon"
+        },
+        {
+          "name": "ownFields?",
+          "type": "{ nodes: Array<{ templateFieldId: string",
+          "description": "Own field definitions"
+        },
+        {
+          "name": "sections?",
+          "type": "{ nodes: Array<{ itemTemplateSectionId: string",
+          "description": "Template sections"
+        },
+        {
+          "name": "baseTemplates?",
+          "type": "{ nodes: Array<{ templateId: string",
+          "description": "Direct base templates"
+        }
+      ]
+    },
+    "SitecoreSite": {
+      "name": "SitecoreSite",
+      "description": "",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Site name"
+        },
+        {
+          "name": "hostName",
+          "type": "string",
+          "description": "Host name"
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "description": "Default language"
+        },
+        {
+          "name": "rootPath",
+          "type": "string",
+          "description": "Root path"
+        },
+        {
+          "name": "startPath",
+          "type": "string",
+          "description": "Start path"
+        },
+        {
+          "name": "contentStartPath",
+          "type": "string",
+          "description": "Content start path"
+        },
+        {
+          "name": "database",
+          "type": "{ name: string }",
+          "description": "Database info"
+        },
+        {
+          "name": "contentDatabase",
+          "type": "{ name: string }",
+          "description": "Content database"
+        },
+        {
+          "name": "contentLanguage",
+          "type": "{ name: string }",
+          "description": "Content language"
+        },
+        {
+          "name": "rootItem",
+          "type": "{ itemId: string",
+          "description": "Root item"
+        },
+        {
+          "name": "startItem",
+          "type": "{ itemId: string",
+          "description": "Start item"
+        },
+        {
+          "name": "properties",
+          "type": "Array<{ key: string",
+          "description": "Site properties"
+        }
+      ]
+    },
+    "SitecoreSolutionSite": {
+      "name": "SitecoreSolutionSite",
+      "description": "",
+      "fields": [
+        {
+          "name": "id",
+          "type": "string",
+          "description": "Site ID"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Site name"
+        },
+        {
+          "name": "displayName",
+          "type": "string",
+          "description": "Display name"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "description": "Description"
+        },
+        {
+          "name": "hostname",
+          "type": "string",
+          "description": "Hostname"
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "description": "Default language"
+        },
+        {
+          "name": "created",
+          "type": "string",
+          "description": "Creation date"
+        },
+        {
+          "name": "sortOrder",
+          "type": "number",
+          "description": "Sort order"
+        },
+        {
+          "name": "linkableSite",
+          "type": "boolean",
+          "description": "Whether site is linkable"
+        },
+        {
+          "name": "rootItem",
+          "type": "{ itemId: string",
+          "description": "Root item"
+        },
+        {
+          "name": "siteCollection",
+          "type": "{ id: string",
+          "description": "Site collection"
+        },
+        {
+          "name": "languages",
+          "type": "Array<{ name: string }>",
+          "description": "Site languages"
+        },
+        {
+          "name": "posMappings",
+          "type": "Array<{ name: string",
+          "description": "Point of sale mappings"
+        }
+      ]
+    },
+    "SitecoreSiteCollection": {
+      "name": "SitecoreSiteCollection",
+      "description": "",
+      "fields": [
+        {
+          "name": "id",
+          "type": "string",
+          "description": "Collection ID"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Collection name"
+        },
+        {
+          "name": "displayName",
+          "type": "string",
+          "description": "Display name"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "description": "Description"
+        },
+        {
+          "name": "collectionName",
+          "type": "string",
+          "description": "Collection name"
+        },
+        {
+          "name": "collectionDescription",
+          "type": "string",
+          "description": "Collection description"
+        },
+        {
+          "name": "created",
+          "type": "string",
+          "description": "Created date"
+        },
+        {
+          "name": "createdBy",
+          "type": "string",
+          "description": "Creator"
+        },
+        {
+          "name": "itemPath",
+          "type": "string",
+          "description": "Item path"
+        },
+        {
+          "name": "sortOrder",
+          "type": "number",
+          "description": "Sort order"
+        },
+        {
+          "name": "sharedSites",
+          "type": "string[]",
+          "description": "Shared sites"
+        }
+      ]
+    },
+    "SitecoreUser": {
+      "name": "SitecoreUser",
+      "description": "",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "description": "User name (domain\\user)"
+        },
+        {
+          "name": "displayName",
+          "type": "string",
+          "description": "Display name"
+        },
+        {
+          "name": "localName",
+          "type": "string",
+          "description": "Local name (without domain)"
+        },
+        {
+          "name": "isAdministrator",
+          "type": "boolean",
+          "description": "Whether the user is an administrator"
+        },
+        {
+          "name": "isAuthenticated",
+          "type": "boolean",
+          "description": "Whether the user is authenticated"
+        },
+        {
+          "name": "domain",
+          "type": "{ name: string }",
+          "description": "User domain"
+        },
+        {
+          "name": "profile?",
+          "type": "{ email: string",
+          "description": "User profile"
+        },
+        {
+          "name": "roles?",
+          "type": "Array<{ name: string",
+          "description": "Assigned roles"
+        }
+      ]
+    },
+    "SitecoreRole": {
+      "name": "SitecoreRole",
+      "description": "",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Role name (domain\\role)"
+        },
+        {
+          "name": "displayName",
+          "type": "string",
+          "description": "Display name"
+        },
+        {
+          "name": "localName",
+          "type": "string",
+          "description": "Local name (without domain)"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "description": "Description"
+        },
+        {
+          "name": "isEveryone",
+          "type": "boolean",
+          "description": "Whether this is the everyone role"
+        },
+        {
+          "name": "isGlobal",
+          "type": "boolean",
+          "description": "Whether this is a global role"
+        },
+        {
+          "name": "domain",
+          "type": "{ name: string }",
+          "description": "Role domain"
+        },
+        {
+          "name": "members?",
+          "type": "{ nodes: Array<{ name: string",
+          "description": "Accounts that are members of this role"
+        },
+        {
+          "name": "memberOf?",
+          "type": "{ nodes: Array<{ name: string",
+          "description": "Roles this role is a member of"
+        }
+      ]
+    },
+    "SitecoreDomain": {
+      "name": "SitecoreDomain",
+      "description": "",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Domain name"
+        },
+        {
+          "name": "accountPrefix",
+          "type": "string",
+          "description": "Account prefix"
+        },
+        {
+          "name": "isDefault",
+          "type": "boolean",
+          "description": "Whether this is the default domain"
+        },
+        {
+          "name": "ensureAnonymousUser",
+          "type": "boolean",
+          "description": "Whether anonymous user is ensured"
+        },
+        {
+          "name": "anonymousUserName",
+          "type": "string",
+          "description": "Anonymous user name"
+        },
+        {
+          "name": "everyoneRoleName",
+          "type": "string",
+          "description": "Everyone role name"
+        },
+        {
+          "name": "defaultProfileItemId",
+          "type": "string",
+          "description": "Default profile item ID"
+        },
+        {
+          "name": "accountNameValidation",
+          "type": "string",
+          "description": "Account name validation pattern"
+        },
+        {
+          "name": "anonymousUserEmailPattern",
+          "type": "string",
+          "description": "Anonymous user email pattern"
+        }
+      ]
+    },
+    "SitecorePublishingTarget": {
+      "name": "SitecorePublishingTarget",
+      "description": "",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Target name"
+        },
+        {
+          "name": "targetDatabase",
+          "type": "string",
+          "description": "Target database name"
+        },
+        {
+          "name": "previewPublishingTarget",
+          "type": "boolean",
+          "description": "Whether this is a preview publishing target"
+        }
+      ]
+    },
+    "SitecoreRendering": {
+      "name": "SitecoreRendering",
+      "description": "",
+      "fields": [
+        {
+          "name": "itemId",
+          "type": "string",
+          "description": "Rendering item ID"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "description": "Rendering name"
+        },
+        {
+          "name": "path",
+          "type": "string",
+          "description": "Rendering path"
+        },
+        {
+          "name": "displayName",
+          "type": "string",
+          "description": "Display name"
+        },
+        {
+          "name": "datasourceTemplate",
+          "type": "{ templateId: string",
+          "description": "Datasource template"
+        },
+        {
+          "name": "renderingParametersTemplate",
+          "type": "{ templateId: string",
+          "description": "Rendering parameters template"
+        }
+      ]
+    },
+    "ItemQueryOptions": {
+      "name": "ItemQueryOptions",
+      "description": "",
+      "fields": [
+        {
+          "name": "language?",
+          "type": "string",
+          "description": "Item language (e.g. \"en\")"
+        },
+        {
+          "name": "version?",
+          "type": "number",
+          "description": "Item version number"
+        },
+        {
+          "name": "database?",
+          "type": "string",
+          "description": "Database name (default: \"master\")"
+        }
+      ]
+    },
+    "SearchQueryInput": {
+      "name": "SearchQueryInput",
+      "description": "",
+      "fields": [
+        {
+          "name": "searchStatement?",
+          "type": "SearchStatementInput",
+          "description": "Search criteria statement"
+        },
+        {
+          "name": "filterStatement?",
+          "type": "SearchStatementInput",
+          "description": "Filter criteria statement"
+        },
+        {
+          "name": "facetOnFields?",
+          "type": "string[]",
+          "description": "Fields to build facets on"
+        },
+        {
+          "name": "facetMetrics?",
+          "type": "Array<{ function: string",
+          "description": "Facet metrics"
+        },
+        {
+          "name": "index?",
+          "type": "string",
+          "description": "Index name to search in"
+        },
+        {
+          "name": "language?",
+          "type": "string",
+          "description": "Language to search in"
+        },
+        {
+          "name": "latestVersionOnly?",
+          "type": "boolean",
+          "description": "Whether to return only latest versions"
+        },
+        {
+          "name": "paging?",
+          "type": "{ pageIndex?: number",
+          "description": "Paging parameters"
+        },
+        {
+          "name": "sort?",
+          "type": "Array<{ field: string",
+          "description": "Sort parameters"
+        }
+      ]
+    },
+    "SearchStatementInput": {
+      "name": "SearchStatementInput",
+      "description": "",
+      "fields": [
+        {
+          "name": "field",
+          "type": "string",
+          "description": "Field name (e.g. \"_name\", \"_fullpath\", \"_templatename\")"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "description": "Search value"
+        },
+        {
+          "name": "criteriaType?",
+          "type": "\"EXACT\" | \"STARTSWITH\" | \"CONTAINS\" | \"ENDSWITH\" | \"WILDCARD\" | \"SEARCH\" | \"RANGE\" | \"FUZZY\" | \"PROXIMITY\" | \"REGEXP\"",
+          "description": "Criteria type: EXACT, STARTSWITH, CONTAINS, ENDSWITH, WILDCARD, SEARCH, RANGE, FUZZY, PROXIMITY, REGEXP"
+        },
+        {
+          "name": "operator?",
+          "type": "\"SHOULD\" | \"MUST\" | \"NOT\"",
+          "description": "Operator: SHOULD, MUST, NOT"
+        },
+        {
+          "name": "boost?",
+          "type": "number",
+          "description": "Boost value"
+        },
+        {
+          "name": "parameters?",
+          "type": "string",
+          "description": "Additional parameters"
+        },
+        {
+          "name": "operator?",
+          "type": "\"SHOULD\" | \"MUST\" | \"NOT\"",
+          "description": "Boolean operator for combining criteria: SHOULD, MUST, NOT"
+        },
+        {
+          "name": "subStatements?",
+          "type": "SearchStatementInput[]",
+          "description": "Nested sub-statements"
+        }
+      ]
+    },
+    "PublishItemInput": {
+      "name": "PublishItemInput",
+      "description": "",
+      "fields": [
+        {
+          "name": "rootItemId?",
+          "type": "string",
+          "description": "Root item ID to publish"
+        },
+        {
+          "name": "rootItemPath?",
+          "type": "string",
+          "description": "Root item path to publish"
+        },
+        {
+          "name": "rootItemIds?",
+          "type": "string[]",
+          "description": "Multiple root item IDs"
+        },
+        {
+          "name": "rootItemPaths?",
+          "type": "string[]",
+          "description": "Multiple root item paths"
+        },
+        {
+          "name": "languages",
+          "type": "string[]",
+          "description": "Languages to publish"
+        },
+        {
+          "name": "targetDatabases",
+          "type": "string[]",
+          "description": "Target database names"
+        },
+        {
+          "name": "publishItemMode",
+          "type": "\"FULL\" | \"SMART\"",
+          "description": "Publish mode: \"FULL\" or \"SMART\""
+        },
+        {
+          "name": "publishSubItems?",
+          "type": "boolean",
+          "description": "Whether to publish sub-items"
+        },
+        {
+          "name": "publishRelatedItems?",
+          "type": "boolean",
+          "description": "Whether to publish related items"
+        },
+        {
+          "name": "sourceDatabase?",
+          "type": "string",
+          "description": "Source database name"
+        },
+        {
+          "name": "displayName?",
+          "type": "string",
+          "description": "Display name for the publish request"
+        }
+      ]
+    },
+    "PublishSiteInput": {
+      "name": "PublishSiteInput",
+      "description": "",
+      "fields": [
+        {
+          "name": "languages",
+          "type": "string[]",
+          "description": "Languages to publish"
+        },
+        {
+          "name": "targetDatabases",
+          "type": "string[]",
+          "description": "Target database names"
+        },
+        {
+          "name": "publishSiteMode",
+          "type": "\"FULL\" | \"INCREMENTAL\" | \"SMART\"",
+          "description": "Publish site mode: \"FULL\", \"INCREMENTAL\", or \"SMART\""
+        },
+        {
+          "name": "sourceDatabase?",
+          "type": "string",
+          "description": "Source database name"
+        },
+        {
+          "name": "displayName?",
+          "type": "string",
+          "description": "Display name for the publish request"
+        }
+      ]
+    },
+    "CreateUserInput": {
+      "name": "CreateUserInput",
+      "description": "",
+      "fields": [
+        {
+          "name": "userName",
+          "type": "string",
+          "description": "User name (domain\\user format)"
+        },
+        {
+          "name": "password",
+          "type": "string",
+          "description": "User password"
+        },
+        {
+          "name": "email?",
+          "type": "string",
+          "description": "Email address"
+        },
+        {
+          "name": "fullName?",
+          "type": "string",
+          "description": "Full name"
+        },
+        {
+          "name": "isAdministrator?",
+          "type": "boolean",
+          "description": "Whether the user is an administrator"
+        },
+        {
+          "name": "roleNames?",
+          "type": "string[]",
+          "description": "Role names to assign"
+        },
+        {
+          "name": "comment?",
+          "type": "string",
+          "description": "Comment about the user"
+        },
+        {
+          "name": "clientLanguage?",
+          "type": "string",
+          "description": "Client language"
+        },
+        {
+          "name": "defaultContentLanguage?",
+          "type": "string",
+          "description": "Default content language"
+        },
+        {
+          "name": "portrait?",
+          "type": "string",
+          "description": "Portrait"
+        },
+        {
+          "name": "regionalIsoCode?",
+          "type": "string",
+          "description": "Regional ISO code"
+        },
+        {
+          "name": "startUrl?",
+          "type": "string",
+          "description": "Start URL"
+        },
+        {
+          "name": "userProfileId?",
+          "type": "string",
+          "description": "User profile ID"
+        },
+        {
+          "name": "wallpaper?",
+          "type": "string",
+          "description": "Wallpaper"
+        }
+      ]
+    },
+    "UpdateUserInput": {
+      "name": "UpdateUserInput",
+      "description": "",
+      "fields": [
+        {
+          "name": "userName",
+          "type": "string",
+          "description": "User name (domain\\user format)"
+        },
+        {
+          "name": "email?",
+          "type": "string",
+          "description": "Email address"
+        },
+        {
+          "name": "fullName?",
+          "type": "string",
+          "description": "Full name"
+        },
+        {
+          "name": "isAdministrator?",
+          "type": "boolean",
+          "description": "Whether the user is an administrator"
+        },
+        {
+          "name": "roleNames?",
+          "type": "string[]",
+          "description": "Role names to assign"
+        },
+        {
+          "name": "comment?",
+          "type": "string",
+          "description": "Comment about the user"
+        },
+        {
+          "name": "clientLanguage?",
+          "type": "string",
+          "description": "Client language"
+        },
+        {
+          "name": "defaultContentLanguage?",
+          "type": "string",
+          "description": "Default content language"
+        },
+        {
+          "name": "portrait?",
+          "type": "string",
+          "description": "Portrait"
+        },
+        {
+          "name": "regionalIsoCode?",
+          "type": "string",
+          "description": "Regional ISO code"
+        },
+        {
+          "name": "startUrl?",
+          "type": "string",
+          "description": "Start URL"
+        },
+        {
+          "name": "userProfileId?",
+          "type": "string",
+          "description": "User profile ID"
+        },
+        {
+          "name": "wallpaper?",
+          "type": "string",
+          "description": "Wallpaper"
+        }
+      ]
+    },
+    "AddLanguageInput": {
+      "name": "AddLanguageInput",
+      "description": "",
+      "fields": [
+        {
+          "name": "languageCode",
+          "type": "string",
+          "description": "Language code (e.g. \"fr-FR\")"
+        },
+        {
+          "name": "name?",
+          "type": "string",
+          "description": "Language name"
+        },
+        {
+          "name": "database?",
+          "type": "string",
+          "description": "Database name"
+        },
+        {
+          "name": "charset?",
+          "type": "string",
+          "description": "Charset"
+        },
+        {
+          "name": "codePage?",
+          "type": "string",
+          "description": "Code page"
+        },
+        {
+          "name": "customCode?",
+          "type": "string",
+          "description": "Custom code"
+        },
+        {
+          "name": "encoding?",
+          "type": "string",
+          "description": "Encoding"
+        },
+        {
+          "name": "fallbackCode?",
+          "type": "string",
+          "description": "Fallback language code"
+        },
+        {
+          "name": "regionCode?",
+          "type": "string",
+          "description": "Region code"
+        },
+        {
+          "name": "spellChecker?",
+          "type": "string",
+          "description": "Spell checker"
+        },
+        {
+          "name": "useSupportedLanguageAsFallback?",
+          "type": "boolean",
+          "description": "Use supported language definition as fallback (default: true)"
+        }
+      ]
+    }
+  }
+}
