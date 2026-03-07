@@ -1,12 +1,13 @@
-import type { TemplateItem } from "../constants";
-import { TEMPLATES_ROOT_PATH, TEMPLATE_IDS } from "../constants";
+import type { TemplateDef } from "../constants";
+import { ICONS } from "../constants";
 
-export const jsScriptTemplate: TemplateItem = {
-  parent: TEMPLATES_ROOT_PATH,
+export const jsScriptTemplate: TemplateDef = {
   name: "JS Script",
-  id: TEMPLATE_IDS.jsScript,
-  icon: "/~/icon/software/32x32/text_code_javascript.png",
-  fields: [
-    { section: "Data", name: "Script", type: "Multi-Line Text" },
+  icon: ICONS.jsScript,
+  sections: [
+    {
+      name: "Data",
+      fields: [{ name: "Script", type: "Multi-Line Text" }],
+    },
   ],
 };

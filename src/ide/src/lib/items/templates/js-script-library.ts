@@ -1,10 +1,8 @@
-import type { TemplateItem } from "../constants";
-import { TEMPLATES_ROOT_PATH, TEMPLATE_IDS } from "../constants";
+import type { TemplateDef } from "../constants";
+import { ICONS } from "../constants";
 
-export const jsScriptLibraryTemplate: TemplateItem = {
-  parent: TEMPLATES_ROOT_PATH,
+export const jsScriptLibraryTemplate: TemplateDef = {
   name: "JS Script Library",
-  id: TEMPLATE_IDS.jsScriptLibrary,
-  icon: "/~/icon/apps/32x32/Codes.png",
-  fields: [],
+  icon: ICONS.jsScriptLibrary,
+  sections: [],
 };

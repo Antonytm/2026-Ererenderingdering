@@ -1,9 +1,9 @@
 import type { ContentItem } from "../../constants";
-import { TEMPLATE_IDS } from "../../constants";
+import { ICONS } from "../../constants";
 
 export const userScriptsFolder: ContentItem = {
   name: "User Scripts",
-  template: TEMPLATE_IDS.jsScriptLibrary,
-  icon: "/~/icon/apps/32x32/Codes.png",
+  template: "jsScriptLibrary",
+  icon: ICONS.jsScriptLibrary,
   fields: {},
 };

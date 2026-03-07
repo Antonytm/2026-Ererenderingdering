@@ -3,7 +3,6 @@ import type { ScriptStorageBackend, SavedScript } from "./script-storage";
 import {
   EXAMPLES_PATH,
   USER_SCRIPTS_PATH,
-  TEMPLATE_IDS,
 } from "./items";
 
 function itemToScript(item: any): SavedScript {
@@ -16,15 +15,17 @@ function itemToScript(item: any): SavedScript {
   };
 }
 
-export function createSitecoreScriptStorage(helpers: SitecoreHelpers): ScriptStorageBackend {
+export function createSitecoreScriptStorage(helpers: SitecoreHelpers, jsScriptTemplateId: string): ScriptStorageBackend {
+  async function listScripts(): Promise<SavedScript[]> {
+    const [examples, userScripts] = await Promise.all([
+      helpers.getItemChildren(EXAMPLES_PATH),
+      helpers.getItemChildren(USER_SCRIPTS_PATH),
+    ]);
+    return [...examples, ...userScripts].map(itemToScript);
+  }
+
   return {
-    async listScripts() {
-      const [examples, userScripts] = await Promise.all([
-        helpers.getItemChildren(EXAMPLES_PATH),
-        helpers.getItemChildren(USER_SCRIPTS_PATH),
-      ]);
-      return [...examples, ...userScripts].map(itemToScript);
-    },
+    listScripts,
 
     async saveScript(name: string, code: string) {
       const userScripts = await helpers.getItem(USER_SCRIPTS_PATH);
@@ -33,7 +34,7 @@ export function createSitecoreScriptStorage(helpers: SitecoreHelpers): ScriptSto
       }
       const created = await helpers.createItem(
         userScripts.itemId,
-        TEMPLATE_IDS.jsScript,
+        jsScriptTemplateId,
         name,
         { Script: code }
       );
@@ -46,21 +47,18 @@ export function createSitecoreScriptStorage(helpers: SitecoreHelpers): ScriptSto
     },
 
     async loadScript(id: string) {
-      // Search in both paths
-      const scripts = await this.listScripts();
-      return scripts.find((s) => s.id === id);
+      const scripts = await listScripts();
+      return scripts.find((s: SavedScript) => s.id === id);
     },
 
     async updateScript(id: string, updates: Partial<Pick<SavedScript, "name" | "code">>) {
       const fields: Record<string, string> = {};
       if (updates.code !== undefined) fields["Script"] = updates.code;
-      // Sitecore item rename is not straightforward via GraphQL, so we only update fields
       if (Object.keys(fields).length > 0) {
         await helpers.updateItem(id, fields);
       }
-      // Return updated script
-      const scripts = await this.listScripts();
-      return scripts.find((s) => s.id === id);
+      const scripts = await listScripts();
+      return scripts.find((s: SavedScript) => s.id === id);
     },
 
     async deleteScript(id: string) {

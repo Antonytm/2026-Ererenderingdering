@@ -17,7 +17,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={cn("font-sans", geist.variable)}>
-      <body className="min-h-screen antialiased">{children}</body>
+      <body className="min-h-screen antialiased">
+        {children}
+        {process.env.NODE_ENV === "development" && (
+          <div className="fixed bottom-2 right-2 rounded bg-black/70 px-2 py-1 font-mono text-xs text-white">
+            {process.env.NEXT_PUBLIC_GIT_BRANCH}
+          </div>
+        )}
+      </body>
     </html>
   )
 }
