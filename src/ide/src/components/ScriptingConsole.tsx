@@ -69,8 +69,8 @@ export function ScriptingConsole() {
       const result = await installModule(helpers);
       if (cancelled) return;
 
-      if (result.storageMode === "sitecore") {
-        setStorageBackend(createSitecoreScriptStorage(helpers));
+      if (result.storageMode === "sitecore" && result.templateIds) {
+        setStorageBackend(createSitecoreScriptStorage(helpers, result.templateIds.jsScript));
         setStorageMode("sitecore");
       } else {
         setStorageBackend(createLocalScriptStorage());

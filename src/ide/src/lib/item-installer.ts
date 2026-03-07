@@ -6,90 +6,101 @@ import {
   USER_SCRIPTS_PATH,
   TEMPLATES_ROOT_PATH,
   TEMPLATE_DEFINITIONS,
-  TEMPLATE_IDS,
-  MODULE_DEFINITION,
-  type ItemDefinition,
+  EXAMPLE_SCRIPTS,
 } from "./items/module-definition";
 
 export interface InstallResult {
   installed: boolean;
   version: string;
   storageMode: "sitecore" | "local";
+  templateIds?: ResolvedTemplateIds;
 }
 
-async function createTreeRecursive(
-  helpers: SitecoreHelpers,
-  parentPath: string,
-  parentId: string,
-  definition: ItemDefinition
-): Promise<void> {
-  const itemPath = `${parentPath}/${definition.name}`;
-
-  const created = await helpers.createItem(
-    parentId,
-    definition.templateId,
-    definition.name,
-    definition.fields
-  );
-  const itemId = created?.itemId;
-  if (!itemId) return;
-
-  if (definition.children) {
-    for (const child of definition.children) {
-      await createTreeRecursive(helpers, itemPath, itemId, child);
-    }
-  }
+export interface ResolvedTemplateIds {
+  jsScriptModule: string;
+  jsScriptLibrary: string;
+  jsScript: string;
 }
 
-async function installTemplates(helpers: SitecoreHelpers): Promise<void> {
-  // Ensure templates root folder exists: /sitecore/templates/Modules/JavaScript Extensions
-  let templatesRoot = await helpers.getItem(TEMPLATES_ROOT_PATH);
-  if (!templatesRoot) {
-    const modulesPath = "/sitecore/templates/Modules";
-    let modules = await helpers.getItem(modulesPath);
-    if (!modules) {
-      const templatesFolder = await helpers.getItem("/sitecore/templates");
-      if (!templatesFolder) throw new Error("Cannot find /sitecore/templates");
-      const created = await helpers.createItem(
-        templatesFolder.itemId,
-        "{E269FBB5-3750-427A-9149-7AA950B49301}",
-        "Modules"
-      );
-      modules = created;
-    }
-    const created = await helpers.createItem(
-      modules.itemId,
-      "{E269FBB5-3750-427A-9149-7AA950B49301}",
-      "JavaScript Extensions"
-    );
-    templatesRoot = created;
-  }
+async function ensureTemplateFolder(helpers: SitecoreHelpers): Promise<string> {
+  const existing = await helpers.getItem(TEMPLATES_ROOT_PATH);
+  if (existing?.itemId) return existing.itemId;
 
-  if (!templatesRoot?.itemId) throw new Error("Failed to create templates root");
+  const modulesPath = "/sitecore/templates/Modules";
+  let modules = await helpers.getItem(modulesPath);
+  if (!modules) {
+    const templates = await helpers.getItem("/sitecore/templates");
+    if (!templates?.itemId) throw new Error("Cannot find /sitecore/templates");
+    console.log("[JSE] Creating /sitecore/templates/Modules");
+    modules = await helpers.createTemplateFolder(templates.itemId, "Modules");
+  }
+  if (!modules?.itemId) throw new Error("Failed to create /sitecore/templates/Modules");
+
+  console.log("[JSE] Creating template folder: JavaScript Extensions");
+  const folder = await helpers.createTemplateFolder(modules.itemId, "JavaScript Extensions");
+  if (!folder?.itemId) throw new Error("Failed to create JavaScript Extensions template folder");
+  return folder.itemId;
+}
+
+// Template name -> key mapping
+const TEMPLATE_KEY_MAP: Record<string, keyof ResolvedTemplateIds> = {
+  "JS Script Module": "jsScriptModule",
+  "JS Script Library": "jsScriptLibrary",
+  "JS Script": "jsScript",
+};
+
+async function installTemplates(helpers: SitecoreHelpers): Promise<ResolvedTemplateIds> {
+  const folderId = await ensureTemplateFolder(helpers);
+  const ids: Partial<ResolvedTemplateIds> = {};
 
   for (const tmpl of TEMPLATE_DEFINITIONS) {
-    const tmplPath = `${TEMPLATES_ROOT_PATH}/${tmpl.name}`;
-    const existing = await helpers.getItem(tmplPath);
-    if (!existing) {
-      await createTreeRecursive(helpers, TEMPLATES_ROOT_PATH, templatesRoot.itemId, tmpl);
+    const key = TEMPLATE_KEY_MAP[tmpl.name];
+    if (!key) continue;
+
+    // Check if template already exists by looking up the item in the folder
+    const tmplItemPath = `${TEMPLATES_ROOT_PATH}/${tmpl.name}`;
+    const existingItem = await helpers.getItem(tmplItemPath);
+
+    if (existingItem?.itemId) {
+      // Template exists — use the item ID as template ID
+      // (in Sitecore, the template's item ID is its templateId for createItem)
+      console.log(`[JSE] Template already exists: ${tmpl.name} (${existingItem.itemId})`);
+      ids[key] = existingItem.itemId;
+    } else {
+      console.log(`[JSE] Creating template: ${tmpl.name}`);
+      const opts: any = {};
+      if (tmpl.sections && tmpl.sections.length > 0) {
+        opts.sections = tmpl.sections;
+      }
+      const created = await helpers.createTemplate(folderId, tmpl.name, opts);
+      if (!created?.templateId) throw new Error(`Failed to create template: ${tmpl.name}`);
+      console.log(`[JSE] Created template: ${tmpl.name} (${created.templateId})`);
+      ids[key] = created.templateId;
     }
   }
+
+  if (!ids.jsScriptModule || !ids.jsScriptLibrary || !ids.jsScript) {
+    throw new Error("Failed to resolve all template IDs");
+  }
+
+  return ids as ResolvedTemplateIds;
 }
 
 async function deleteScriptLibrary(helpers: SitecoreHelpers): Promise<void> {
   const scriptLib = await helpers.getItem(SCRIPT_LIBRARY_PATH);
   if (scriptLib?.itemId) {
+    console.log("[JSE] Deleting Script Library for reinstall");
     await helpers.deleteItem(scriptLib.itemId);
   }
 }
 
-async function installModuleRoot(helpers: SitecoreHelpers): Promise<string> {
-  // Ensure /sitecore/system/Modules exists
+async function installModuleRoot(helpers: SitecoreHelpers, templateIds: ResolvedTemplateIds): Promise<string> {
   const systemModulesPath = "/sitecore/system/Modules";
   let systemModules = await helpers.getItem(systemModulesPath);
   if (!systemModules) {
     const system = await helpers.getItem("/sitecore/system");
-    if (!system) throw new Error("Cannot find /sitecore/system");
+    if (!system?.itemId) throw new Error("Cannot find /sitecore/system");
+    console.log("[JSE] Creating /sitecore/system/Modules");
     systemModules = await helpers.createItem(
       system.itemId,
       "{E269FBB5-3750-427A-9149-7AA950B49301}",
@@ -98,10 +109,10 @@ async function installModuleRoot(helpers: SitecoreHelpers): Promise<string> {
   }
   if (!systemModules?.itemId) throw new Error("Failed to find/create system Modules");
 
-  // Create JavaScript Extensions root item
+  console.log("[JSE] Creating module root: JavaScript Extensions");
   const moduleRoot = await helpers.createItem(
     systemModules.itemId,
-    TEMPLATE_IDS.jsScriptModule,
+    templateIds.jsScriptModule,
     "JavaScript Extensions",
     { Version: MODULE_VERSION }
   );
@@ -109,17 +120,47 @@ async function installModuleRoot(helpers: SitecoreHelpers): Promise<string> {
   return moduleRoot.itemId;
 }
 
-async function installScriptLibrary(helpers: SitecoreHelpers, moduleRootId: string): Promise<void> {
-  // Find the Script Library definition from MODULE_DEFINITION
-  const scriptLibDef = MODULE_DEFINITION.children?.find((c) => c.name === "Script Library");
-  if (!scriptLibDef) return;
-  await createTreeRecursive(helpers, MODULE_ROOT_PATH, moduleRootId, scriptLibDef);
+async function installScriptLibrary(
+  helpers: SitecoreHelpers,
+  moduleRootId: string,
+  templateIds: ResolvedTemplateIds
+): Promise<void> {
+  console.log("[JSE] Creating Script Library");
+  const scriptLib = await helpers.createItem(
+    moduleRootId,
+    templateIds.jsScriptLibrary,
+    "Script Library"
+  );
+  if (!scriptLib?.itemId) throw new Error("Failed to create Script Library");
+
+  console.log("[JSE] Creating Examples folder");
+  const examples = await helpers.createItem(
+    scriptLib.itemId,
+    templateIds.jsScriptLibrary,
+    "Examples"
+  );
+  if (!examples?.itemId) throw new Error("Failed to create Examples folder");
+
+  for (const [name, code] of Object.entries(EXAMPLE_SCRIPTS)) {
+    console.log(`[JSE] Creating example script: ${name}`);
+    await helpers.createItem(
+      examples.itemId,
+      templateIds.jsScript,
+      name,
+      { Script: code }
+    );
+  }
 }
 
-async function ensureUserScripts(helpers: SitecoreHelpers, moduleRootId: string): Promise<void> {
+async function ensureUserScripts(
+  helpers: SitecoreHelpers,
+  moduleRootId: string,
+  templateIds: ResolvedTemplateIds
+): Promise<void> {
   const existing = await helpers.getItem(USER_SCRIPTS_PATH);
   if (existing) return;
-  await helpers.createItem(moduleRootId, TEMPLATE_IDS.jsScriptLibrary, "User Scripts");
+  console.log("[JSE] Creating User Scripts folder");
+  await helpers.createItem(moduleRootId, templateIds.jsScriptLibrary, "User Scripts");
 }
 
 function compareVersions(a: string, b: string): number {
@@ -135,33 +176,42 @@ function compareVersions(a: string, b: string): number {
 
 export async function installModule(helpers: SitecoreHelpers): Promise<InstallResult> {
   try {
+    console.log("[JSE] Starting module installation, version:", MODULE_VERSION);
+
+    // Step 1: Ensure templates exist and get their real IDs
+    const templateIds = await installTemplates(helpers);
+
+    // Step 2: Check module root
     const existing = await helpers.getItem(MODULE_ROOT_PATH);
 
     if (!existing) {
-      // Fresh install: templates + full content tree
-      await installTemplates(helpers);
-      const moduleRootId = await installModuleRoot(helpers);
-      await installScriptLibrary(helpers, moduleRootId);
-      await ensureUserScripts(helpers, moduleRootId);
-      return { installed: true, version: MODULE_VERSION, storageMode: "sitecore" };
+      console.log("[JSE] Fresh install - creating module tree");
+      const moduleRootId = await installModuleRoot(helpers, templateIds);
+      await installScriptLibrary(helpers, moduleRootId, templateIds);
+      await ensureUserScripts(helpers, moduleRootId, templateIds);
+      console.log("[JSE] Installation complete");
+      return { installed: true, version: MODULE_VERSION, storageMode: "sitecore", templateIds };
     }
 
-    // Check version
+    // Step 3: Check version
     const installedVersion =
       existing.fields?.nodes?.find((f: any) => f.name === "Version")?.value ?? "0.0.0";
+    console.log("[JSE] Installed version:", installedVersion, "Current:", MODULE_VERSION);
 
     if (compareVersions(MODULE_VERSION, installedVersion) > 0) {
-      // Upgrade: reinstall templates, delete Script Library and recreate, preserve User Scripts
-      await installTemplates(helpers);
+      console.log("[JSE] Upgrading module");
       await deleteScriptLibrary(helpers);
-      await installScriptLibrary(helpers, existing.itemId);
-      await ensureUserScripts(helpers, existing.itemId);
+      await installScriptLibrary(helpers, existing.itemId, templateIds);
+      await ensureUserScripts(helpers, existing.itemId, templateIds);
       await helpers.updateItem(existing.itemId, { Version: MODULE_VERSION });
+      console.log("[JSE] Upgrade complete");
+    } else {
+      console.log("[JSE] Module up to date, skipping");
     }
 
-    return { installed: true, version: MODULE_VERSION, storageMode: "sitecore" };
+    return { installed: true, version: MODULE_VERSION, storageMode: "sitecore", templateIds };
   } catch (err) {
-    console.warn("[JSE] Module installation failed, falling back to localStorage:", err);
+    console.error("[JSE] Module installation failed, falling back to localStorage:", err);
     return { installed: false, version: MODULE_VERSION, storageMode: "local" };
   }
 }
