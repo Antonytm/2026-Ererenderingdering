@@ -504,16 +504,16 @@ for (const r of results) {
 let tableRows = '';
 for (const g of groupOrder) {
   const gResults = results.filter(r => r.group === g);
-  tableRows += '<tr><td colspan="4" style="background:#1e293b;color:#94a3b8;font-weight:bold;padding:8px 12px;font-size:13px;">' + g + ' (' + gResults.filter(r=>r.passed).length + '/' + gResults.length + ')</td></tr>';
+  tableRows += '<tr><td colspan="4" style="background:var(--muted);color:var(--muted-foreground);font-weight:600;padding:8px 12px;font-size:var(--text-sm);">' + g + ' (' + gResults.filter(r=>r.passed).length + '/' + gResults.length + ')</td></tr>';
   for (const r of gResults) {
     const status = r.passed
-      ? '<span style="color:#22c55e;font-weight:bold;">PASS</span>'
-      : '<span style="color:#ef4444;font-weight:bold;">FAIL</span>';
-    const errCell = r.error ? '<span style="color:#fbbf24;font-size:12px;">' + r.error.replace(/</g,'&lt;').substring(0, 120) + '</span>' : '';
-    tableRows += '<tr style="border-bottom:1px solid #334155;">'
+      ? '<span style="color:var(--success-foreground);font-weight:600;">PASS</span>'
+      : '<span style="color:var(--destructive-foreground);font-weight:600;">FAIL</span>';
+    const errCell = r.error ? '<span style="color:var(--warning-foreground);font-size:var(--text-xs);">' + r.error.replace(/</g,'&lt;').substring(0, 120) + '</span>' : '';
+    tableRows += '<tr style="border-bottom:1px solid var(--border);">'
       + '<td style="padding:6px 12px;">' + r.name + '</td>'
       + '<td style="padding:6px 12px;text-align:center;">' + status + '</td>'
-      + '<td style="padding:6px 12px;text-align:right;">' + r.duration + 'ms</td>'
+      + '<td style="padding:6px 12px;text-align:right;color:var(--muted-foreground);">' + r.duration + 'ms</td>'
       + '<td style="padding:6px 12px;">' + errCell + '</td>'
       + '</tr>';
   }
@@ -531,38 +531,39 @@ const skippedAPIs = [
   'Presentation: configurePageDesigns, getPageDesigns, getPartialDesigns, getPageBranchesRoots (need site name)',
   'Sites: scaffoldSolution, createSite, createSiteCollection, removeSite, removeSiteCollection, renameSite, renameSiteCollection, cloneSite, updateSitesPos'
 ];
-const skippedHtml = skippedAPIs.map(s => '<li style="margin:2px 0;color:#94a3b8;">' + s + '</li>').join('');
+const skippedHtml = skippedAPIs.map(s => '<li style="margin:2px 0;color:var(--muted-foreground);">' + s + '</li>').join('');
 
-const statusColor = failed === 0 ? '#22c55e' : '#ef4444';
+const statusBg = failed === 0 ? 'var(--success-background)' : 'var(--destructive-background)';
+const statusFg = failed === 0 ? 'var(--success-foreground)' : 'var(--destructive-foreground)';
 const statusText = failed === 0 ? 'ALL TESTS PASSED' : failed + ' TEST(S) FAILED';
 
 render(\`
-<div style="font-family:system-ui,-apple-system,sans-serif;background:#0f172a;color:#e2e8f0;padding:24px;border-radius:12px;max-width:900px;">
+<div style="font-family:var(--font-sans),system-ui,sans-serif;background:var(--background);color:var(--foreground);padding:24px;border-radius:var(--radius);max-width:900px;">
   <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
-    <h2 style="margin:0;font-size:20px;">API Test Suite Results</h2>
-    <span style="background:\${statusColor};color:#0f172a;padding:4px 12px;border-radius:6px;font-weight:bold;font-size:13px;">\${statusText}</span>
+    <h2 style="margin:0;font-size:var(--text-xl);font-weight:600;">API Test Suite Results</h2>
+    <span style="background:\${statusBg};color:\${statusFg};padding:4px 12px;border-radius:var(--rounded-full);font-weight:600;font-size:var(--text-xs);">\${statusText}</span>
   </div>
-  <div style="display:flex;gap:24px;margin-bottom:20px;font-size:14px;">
-    <div><strong style="color:#22c55e;">\${passed}</strong> passed</div>
-    <div><strong style="color:\${failed > 0 ? '#ef4444' : '#94a3b8'};">\${failed}</strong> failed</div>
+  <div style="display:flex;gap:24px;margin-bottom:20px;font-size:var(--text-sm);">
+    <div><strong style="color:var(--success-foreground);">\${passed}</strong> passed</div>
+    <div><strong style="color:\${failed > 0 ? 'var(--destructive-foreground)' : 'var(--muted-foreground)'};">\${failed}</strong> failed</div>
     <div><strong>\${total}</strong> total</div>
-    <div style="color:#94a3b8;">\${totalDuration}ms total</div>
-    \${cleanupErrors.length > 0 ? '<div style="color:#fbbf24;">' + cleanupErrors.length + ' cleanup error(s)</div>' : ''}
+    <div style="color:var(--muted-foreground);">\${totalDuration}ms total</div>
+    \${cleanupErrors.length > 0 ? '<div style="color:var(--warning-foreground);">' + cleanupErrors.length + ' cleanup error(s)</div>' : ''}
   </div>
-  <table style="width:100%;border-collapse:collapse;font-size:13px;">
+  <table style="width:100%;border-collapse:collapse;font-size:var(--text-sm);">
     <thead>
-      <tr style="border-bottom:2px solid #334155;">
-        <th style="text-align:left;padding:8px 12px;">Test</th>
-        <th style="text-align:center;padding:8px 12px;">Status</th>
-        <th style="text-align:right;padding:8px 12px;">Duration</th>
-        <th style="text-align:left;padding:8px 12px;">Error</th>
+      <tr style="border-bottom:2px solid var(--border);">
+        <th style="text-align:left;padding:8px 12px;color:var(--muted-foreground);font-weight:600;">Test</th>
+        <th style="text-align:center;padding:8px 12px;color:var(--muted-foreground);font-weight:600;">Status</th>
+        <th style="text-align:right;padding:8px 12px;color:var(--muted-foreground);font-weight:600;">Duration</th>
+        <th style="text-align:left;padding:8px 12px;color:var(--muted-foreground);font-weight:600;">Error</th>
       </tr>
     </thead>
     <tbody>\${tableRows}</tbody>
   </table>
   <details style="margin-top:20px;">
-    <summary style="cursor:pointer;color:#94a3b8;font-size:13px;">Skipped APIs (destructive/expensive/need preconditions)</summary>
-    <ul style="margin-top:8px;padding-left:20px;font-size:12px;">\${skippedHtml}</ul>
+    <summary style="cursor:pointer;color:var(--muted-foreground);font-size:var(--text-sm);">Skipped APIs (destructive/expensive/need preconditions)</summary>
+    <ul style="margin-top:8px;padding-left:20px;font-size:var(--text-xs);">\${skippedHtml}</ul>
   </details>
 </div>
 \`);
