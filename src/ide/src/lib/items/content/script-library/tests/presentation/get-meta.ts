@@ -4,6 +4,7 @@ export const getMetaTest: ContentItem = {
   name: "getMeta",
   template: "jsScript",
   fields: {
+    "__Display name": "Get Meta",
     Script: `// Test: Presentation > getMeta
 const t0 = Date.now();
 let passed = false;

@@ -4,6 +4,7 @@ export const rebuildIndexesTest: ContentItem = {
   name: "rebuildIndexes",
   template: "jsScript",
   fields: {
+    "__Display name": "Rebuild Indexes",
     Script: `// Test: Indexes > rebuildIndexes
 const t0 = Date.now();
 let passed = false;

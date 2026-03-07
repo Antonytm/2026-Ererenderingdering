@@ -4,6 +4,7 @@ export const getFallbackLanguageTest: ContentItem = {
   name: "getFallbackLanguage",
   template: "jsScript",
   fields: {
+    "__Display name": "Get Fallback Language",
     Script: `// Test: Languages > getFallbackLanguage
 const t0 = Date.now();
 let passed = false;

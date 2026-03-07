@@ -4,6 +4,7 @@ export const getJobTest: ContentItem = {
   name: "getJob",
   template: "jsScript",
   fields: {
+    "__Display name": "Get Job",
     Script: `// Test: Workflows > getJob
 const t0 = Date.now();
 let passed = false;

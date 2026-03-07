@@ -4,6 +4,7 @@ export const copyItemTest: ContentItem = {
   name: "copyItem",
   template: "jsScript",
   fields: {
+    "__Display name": "Copy Item",
     Script: `// Test: Content > copyItem
 const t0 = Date.now();
 let passed = false;

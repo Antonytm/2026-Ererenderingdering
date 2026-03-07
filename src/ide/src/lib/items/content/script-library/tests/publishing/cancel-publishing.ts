@@ -4,6 +4,7 @@ export const cancelPublishingTest: ContentItem = {
   name: "cancelPublishing",
   template: "jsScript",
   fields: {
+    "__Display name": "Cancel Publishing",
     Script: `// Test: Publishing > cancelPublishing
 const t0 = Date.now();
 let passed = false;

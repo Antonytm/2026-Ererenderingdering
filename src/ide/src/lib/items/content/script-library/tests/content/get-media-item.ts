@@ -4,6 +4,7 @@ export const getMediaItemTest: ContentItem = {
   name: "getMediaItem",
   template: "jsScript",
   fields: {
+    "__Display name": "Get Media Item",
     Script: `// Test: Content > getMediaItem
 const t0 = Date.now();
 let passed = false;

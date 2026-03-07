@@ -4,6 +4,7 @@ export const getAvailableRenderingsTest: ContentItem = {
   name: "getAvailableRenderings",
   template: "jsScript",
   fields: {
+    "__Display name": "Get Available Renderings",
     Script: `// Test: Presentation > getAvailableRenderings
 const t0 = Date.now();
 let passed = false;

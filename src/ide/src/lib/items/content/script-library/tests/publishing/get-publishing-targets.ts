@@ -4,6 +4,7 @@ export const getPublishingTargetsTest: ContentItem = {
   name: "getPublishingTargets",
   template: "jsScript",
   fields: {
+    "__Display name": "Get Publishing Targets",
     Script: `// Test: Publishing > getPublishingTargets
 const t0 = Date.now();
 let passed = false;

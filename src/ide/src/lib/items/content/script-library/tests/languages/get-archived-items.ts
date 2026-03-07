@@ -4,6 +4,7 @@ export const getArchivedItemsTest: ContentItem = {
   name: "getArchivedItems",
   template: "jsScript",
   fields: {
+    "__Display name": "Get Archived Items",
     Script: `// Test: Languages > getArchivedItems
 const t0 = Date.now();
 let passed = false;

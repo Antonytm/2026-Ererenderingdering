@@ -11,6 +11,7 @@ export interface SavedScript {
 export interface ScriptTreeNode {
   id: string;
   name: string;
+  displayName?: string;
   type: "folder" | "script";
   children?: ScriptTreeNode[];
   code?: string;

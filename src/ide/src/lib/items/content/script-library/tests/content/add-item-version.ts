@@ -4,6 +4,7 @@ export const addItemVersionTest: ContentItem = {
   name: "addItemVersion",
   template: "jsScript",
   fields: {
+    "__Display name": "Add Item Version",
     Script: `// Test: Content > addItemVersion
 const t0 = Date.now();
 let passed = false;

@@ -4,6 +4,7 @@ export const configurePageDesignsTest: ContentItem = {
   name: "configurePageDesigns",
   template: "jsScript",
   fields: {
+    "__Display name": "Configure Page Designs",
     Script: `// Test: Presentation > configurePageDesigns
 const t0 = Date.now();
 let passed = false;

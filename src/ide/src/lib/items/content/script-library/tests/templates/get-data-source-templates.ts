@@ -4,6 +4,7 @@ export const getDataSourceTemplatesTest: ContentItem = {
   name: "getDataSourceTemplates",
   template: "jsScript",
   fields: {
+    "__Display name": "Get Data Source Templates",
     Script: `// Test: Templates > getDataSourceTemplates
 const t0 = Date.now();
 let passed = false;

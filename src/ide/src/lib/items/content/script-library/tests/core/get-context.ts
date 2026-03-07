@@ -4,6 +4,7 @@ export const getContextTest: ContentItem = {
   name: "getContext",
   template: "jsScript",
   fields: {
+    "__Display name": "Get Context",
     Script: `// Test: Core > getContext
 const t0 = Date.now();
 let passed = false;

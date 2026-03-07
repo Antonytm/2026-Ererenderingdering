@@ -4,6 +4,7 @@ export const graphqlTest: ContentItem = {
   name: "graphql",
   template: "jsScript",
   fields: {
+    "__Display name": "GraphQL",
     Script: `// Test: Core > graphql
 const t0 = Date.now();
 let passed = false;

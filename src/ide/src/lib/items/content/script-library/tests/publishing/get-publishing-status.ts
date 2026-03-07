@@ -4,6 +4,7 @@ export const getPublishingStatusTest: ContentItem = {
   name: "getPublishingStatus",
   template: "jsScript",
   fields: {
+    "__Display name": "Get Publishing Status",
     Script: `// Test: Publishing > getPublishingStatus
 const t0 = Date.now();
 let passed = false;

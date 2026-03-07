@@ -4,6 +4,7 @@ export const getUserTest: ContentItem = {
   name: "getUser",
   template: "jsScript",
   fields: {
+    "__Display name": "Get User",
     Script: `// Test: Security > getUser
 const t0 = Date.now();
 let passed = false;

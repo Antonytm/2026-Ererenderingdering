@@ -4,6 +4,7 @@ export const setItemArchiveDateTest: ContentItem = {
   name: "setItemArchiveDate",
   template: "jsScript",
   fields: {
+    "__Display name": "Set Item Archive Date",
     Script: `// Test: Languages > setItemArchiveDate
 const t0 = Date.now();
 let passed = false;

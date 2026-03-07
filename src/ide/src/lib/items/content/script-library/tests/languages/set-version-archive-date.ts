@@ -4,6 +4,7 @@ export const setVersionArchiveDateTest: ContentItem = {
   name: "setVersionArchiveDate",
   template: "jsScript",
   fields: {
+    "__Display name": "Set Version Archive Date",
     Script: `// Test: Languages > setVersionArchiveDate
 const t0 = Date.now();
 let passed = false;

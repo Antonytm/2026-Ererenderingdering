@@ -4,6 +4,7 @@ export const isJobRunningTest: ContentItem = {
   name: "isJobRunning",
   template: "jsScript",
   fields: {
+    "__Display name": "Is Job Running",
     Script: `// Test: Workflows > isJobRunning
 const t0 = Date.now();
 let passed = false;

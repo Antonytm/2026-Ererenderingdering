@@ -4,6 +4,7 @@ export const deleteArchivedVersionTest: ContentItem = {
   name: "deleteArchivedVersion",
   template: "jsScript",
   fields: {
+    "__Display name": "Delete Archived Version",
     Script: `// Test: Languages > deleteArchivedVersion
 const t0 = Date.now();
 let passed = false;

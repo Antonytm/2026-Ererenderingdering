@@ -4,6 +4,7 @@ export const resetUserSettingsTest: ContentItem = {
   name: "resetUserSettings",
   template: "jsScript",
   fields: {
+    "__Display name": "Reset User Settings",
     Script: `// Test: Security > resetUserSettings
 const t0 = Date.now();
 let passed = false;

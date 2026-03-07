@@ -4,6 +4,7 @@ export const deleteLanguagesTest: ContentItem = {
   name: "deleteLanguages",
   template: "jsScript",
   fields: {
+    "__Display name": "Delete Languages",
     Script: `// Test: Languages > deleteLanguages
 const t0 = Date.now();
 let passed = false;

@@ -4,6 +4,7 @@ export const getSelectionProfilesTest: ContentItem = {
   name: "getSelectionProfiles",
   template: "jsScript",
   fields: {
+    "__Display name": "Get Selection Profiles",
     Script: `// Test: Security > getSelectionProfiles
 const t0 = Date.now();
 let passed = false;

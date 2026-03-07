@@ -4,6 +4,7 @@ export const moveItemTest: ContentItem = {
   name: "moveItem",
   template: "jsScript",
   fields: {
+    "__Display name": "Move Item",
     Script: `// Test: Content > moveItem
 const t0 = Date.now();
 let passed = false;

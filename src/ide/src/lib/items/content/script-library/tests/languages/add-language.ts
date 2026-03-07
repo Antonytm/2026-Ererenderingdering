@@ -4,6 +4,7 @@ export const addLanguageTest: ContentItem = {
   name: "addLanguage",
   template: "jsScript",
   fields: {
+    "__Display name": "Add Language",
     Script: `// Test: Languages > addLanguage
 const t0 = Date.now();
 let passed = false;

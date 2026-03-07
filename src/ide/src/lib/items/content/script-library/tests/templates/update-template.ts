@@ -4,6 +4,7 @@ export const updateTemplateTest: ContentItem = {
   name: "updateTemplate",
   template: "jsScript",
   fields: {
+    "__Display name": "Update Template",
     Script: `// Test: Templates > updateTemplate
 const t0 = Date.now();
 let passed = false;

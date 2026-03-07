@@ -4,6 +4,7 @@ export const createDomainTest: ContentItem = {
   name: "createDomain",
   template: "jsScript",
   fields: {
+    "__Display name": "Create Domain",
     Script: `// Test: Security > createDomain
 const t0 = Date.now();
 let passed = false;

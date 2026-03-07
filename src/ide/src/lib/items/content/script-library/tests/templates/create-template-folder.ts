@@ -4,6 +4,7 @@ export const createTemplateFolderTest: ContentItem = {
   name: "createTemplateFolder",
   template: "jsScript",
   fields: {
+    "__Display name": "Create Template Folder",
     Script: `// Test: Templates > createTemplateFolder
 const t0 = Date.now();
 let passed = false;

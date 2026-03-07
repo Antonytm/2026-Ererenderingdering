@@ -4,6 +4,7 @@ export const getPublishingQueueTest: ContentItem = {
   name: "getPublishingQueue",
   template: "jsScript",
   fields: {
+    "__Display name": "Get Publishing Queue",
     Script: `// Test: Publishing > getPublishingQueue
 const t0 = Date.now();
 let passed = false;

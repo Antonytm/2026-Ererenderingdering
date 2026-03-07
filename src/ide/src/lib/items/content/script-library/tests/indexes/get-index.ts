@@ -4,6 +4,7 @@ export const getIndexTest: ContentItem = {
   name: "getIndex",
   template: "jsScript",
   fields: {
+    "__Display name": "Get Index",
     Script: `// Test: Indexes > getIndex
 const t0 = Date.now();
 let passed = false;

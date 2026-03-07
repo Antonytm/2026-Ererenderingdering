@@ -4,6 +4,7 @@ export const cleanUpDatabasesTest: ContentItem = {
   name: "cleanUpDatabases",
   template: "jsScript",
   fields: {
+    "__Display name": "Clean Up Databases",
     Script: `// Test: Indexes > cleanUpDatabases
 const t0 = Date.now();
 let passed = false;

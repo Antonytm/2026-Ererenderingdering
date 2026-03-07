@@ -4,6 +4,7 @@ export const getPageBranchesRootsTest: ContentItem = {
   name: "getPageBranchesRoots",
   template: "jsScript",
   fields: {
+    "__Display name": "Get Page Branches Roots",
     Script: `// Test: Presentation > getPageBranchesRoots
 const t0 = Date.now();
 let passed = false;

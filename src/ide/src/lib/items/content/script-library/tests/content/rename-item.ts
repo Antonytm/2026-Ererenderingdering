@@ -4,6 +4,7 @@ export const renameItemTest: ContentItem = {
   name: "renameItem",
   template: "jsScript",
   fields: {
+    "__Display name": "Rename Item",
     Script: `// Test: Content > renameItem
 const t0 = Date.now();
 let passed = false;

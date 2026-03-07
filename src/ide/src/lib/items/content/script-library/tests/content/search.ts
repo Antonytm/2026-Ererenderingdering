@@ -4,6 +4,7 @@ export const searchTest: ContentItem = {
   name: "search",
   template: "jsScript",
   fields: {
+    "__Display name": "Search",
     Script: `// Test: Content > search
 const t0 = Date.now();
 let passed = false;

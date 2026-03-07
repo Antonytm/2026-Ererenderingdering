@@ -4,6 +4,7 @@ export const publishWithOptionsTest: ContentItem = {
   name: "publishWithOptions",
   template: "jsScript",
   fields: {
+    "__Display name": "Publish with Options",
     Script: `// Test: Publishing > publishWithOptions
 const t0 = Date.now();
 let passed = false;

@@ -4,6 +4,7 @@ export const getSupportedLanguagesTest: ContentItem = {
   name: "getSupportedLanguages",
   template: "jsScript",
   fields: {
+    "__Display name": "Get Supported Languages",
     Script: `// Test: Languages > getSupportedLanguages
 const t0 = Date.now();
 let passed = false;

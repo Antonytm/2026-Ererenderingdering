@@ -4,6 +4,7 @@ export const archiveItemTest: ContentItem = {
   name: "archiveItem",
   template: "jsScript",
   fields: {
+    "__Display name": "Archive Item",
     Script: `// Test: Languages > archiveItem
 const t0 = Date.now();
 let passed = false;

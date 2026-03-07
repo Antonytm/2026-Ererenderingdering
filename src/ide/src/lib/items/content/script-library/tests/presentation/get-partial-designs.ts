@@ -4,6 +4,7 @@ export const getPartialDesignsTest: ContentItem = {
   name: "getPartialDesigns",
   template: "jsScript",
   fields: {
+    "__Display name": "Get Partial Designs",
     Script: `// Test: Presentation > getPartialDesigns
 const t0 = Date.now();
 let passed = false;

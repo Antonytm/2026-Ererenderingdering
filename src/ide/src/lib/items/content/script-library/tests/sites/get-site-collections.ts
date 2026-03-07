@@ -4,6 +4,7 @@ export const getSiteCollectionsTest: ContentItem = {
   name: "getSiteCollections",
   template: "jsScript",
   fields: {
+    "__Display name": "Get Site Collections",
     Script: `// Test: Sites > getSiteCollections
 const t0 = Date.now();
 let passed = false;

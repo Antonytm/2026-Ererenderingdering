@@ -4,6 +4,7 @@ export const populateManagedSchemaTest: ContentItem = {
   name: "populateManagedSchema",
   template: "jsScript",
   fields: {
+    "__Display name": "Populate Managed Schema",
     Script: `// Test: Indexes > populateManagedSchema
 const t0 = Date.now();
 let passed = false;

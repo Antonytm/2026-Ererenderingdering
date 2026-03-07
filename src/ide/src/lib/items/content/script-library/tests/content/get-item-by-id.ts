@@ -4,6 +4,7 @@ export const getItemByIdTest: ContentItem = {
   name: "getItemById",
   template: "jsScript",
   fields: {
+    "__Display name": "Get Item by ID",
     Script: `// Test: Content > getItemById
 const t0 = Date.now();
 let passed = false;

@@ -4,6 +4,7 @@ export const archiveVersionTest: ContentItem = {
   name: "archiveVersion",
   template: "jsScript",
   fields: {
+    "__Display name": "Archive Version",
     Script: `// Test: Languages > archiveVersion
 const t0 = Date.now();
 let passed = false;

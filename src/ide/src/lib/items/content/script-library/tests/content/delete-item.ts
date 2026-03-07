@@ -4,6 +4,7 @@ export const deleteItemTest: ContentItem = {
   name: "deleteItem",
   template: "jsScript",
   fields: {
+    "__Display name": "Delete Item",
     Script: `// Test: Content > deleteItem
 const t0 = Date.now();
 let passed = false;

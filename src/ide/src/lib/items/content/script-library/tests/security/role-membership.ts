@@ -4,6 +4,7 @@ export const roleMembershipTest: ContentItem = {
   name: "roleMembership",
   template: "jsScript",
   fields: {
+    "__Display name": "Role Membership",
     Script: `// Test: Security > roleMembership
 const t0 = Date.now();
 let passed = false;

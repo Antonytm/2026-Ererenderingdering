@@ -4,6 +4,7 @@ export const publishLanguageSpecificTest: ContentItem = {
   name: "publishLanguageSpecific",
   template: "jsScript",
   fields: {
+    "__Display name": "Publish Language Specific",
     Script: `// Test: Publishing > publishLanguageSpecific
 const t0 = Date.now();
 let passed = false;

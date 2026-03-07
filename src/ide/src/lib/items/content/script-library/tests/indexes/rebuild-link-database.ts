@@ -4,6 +4,7 @@ export const rebuildLinkDatabaseTest: ContentItem = {
   name: "rebuildLinkDatabase",
   template: "jsScript",
   fields: {
+    "__Display name": "Rebuild Link Database",
     Script: `// Test: Indexes > rebuildLinkDatabase
 const t0 = Date.now();
 let passed = false;

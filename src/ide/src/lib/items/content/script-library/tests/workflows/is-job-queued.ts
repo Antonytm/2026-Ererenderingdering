@@ -4,6 +4,7 @@ export const isJobQueuedTest: ContentItem = {
   name: "isJobQueued",
   template: "jsScript",
   fields: {
+    "__Display name": "Is Job Queued",
     Script: `// Test: Workflows > isJobQueued
 const t0 = Date.now();
 let passed = false;
