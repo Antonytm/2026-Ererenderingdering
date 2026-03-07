@@ -7,9 +7,9 @@ export const apiTestSuiteScript: ContentItem = {
     Script: `// ============================================================
 // Sitecore Scripting Console - Comprehensive API Test Suite
 // Exercises all safe-to-test APIs with Arrange/Act/Assert
-// Version: 1.8.1
+// Version: 1.8.2
 // ============================================================
-print('API Test Suite v1.8.1');
+print('API Test Suite v1.8.2');
 
 // ── Section 1: Config & Test Mini-Framework ─────────────
 
@@ -620,6 +620,16 @@ await test('deleteDomain', async () => {
 // ── Publishing - Mutations ──
 group('Publishing - Mutations');
 
+// Resolve the actual target database name from publishing targets
+let publishTargetDb = 'web';
+await test('resolvePublishingTarget', async () => {
+  const targets = await sc.Publishing.getPublishingTargets();
+  if (targets && targets.length > 0) {
+    publishTargetDb = targets[0].targetDatabase || 'web';
+  }
+  assertNotNull(publishTargetDb, 'resolved target database');
+});
+
 await test('publishItem', async () => {
   publishTestItemId = testItemId;
   if (!publishTestItemId) {
@@ -627,7 +637,7 @@ await test('publishItem', async () => {
     publishTestItemId = item.itemId;
     cleanup.items.push(item.itemId);
   }
-  const result = await sc.Publishing.publishItem({ rootItemId: publishTestItemId, languages: ['en'], targetDatabases: ['Internet'], publishItemMode: 'SMART' });
+  const result = await sc.Publishing.publishItem({ rootItemId: publishTestItemId, languages: ['en'], targetDatabases: [publishTargetDb], publishItemMode: 'SMART' });
   assertNotNull(result, 'publish item result');
   if (result && (result.operationId || result.handle)) {
     publishOperationId = result.operationId || result.handle;
@@ -652,18 +662,18 @@ await test('cancelPublishing', async () => {
 
 await test('publishSite', async () => {
   if (!firstSiteName) throw new Error('Skipped: no site name');
-  const result = await sc.Publishing.publishSite({ languages: ['en'], targetDatabases: ['Internet'], publishSiteMode: 'SMART' });
+  const result = await sc.Publishing.publishSite({ languages: ['en'], targetDatabases: [publishTargetDb], publishSiteMode: 'SMART' });
   assertNotNull(result, 'publish site result');
 });
 
 await test('publishWithOptions', async () => {
-  const result = await sc.Publishing.publishWithOptions([{ language: 'en', targetDatabase: 'Internet', publishSiteMode: 'SMART' }]);
+  const result = await sc.Publishing.publishWithOptions([{ language: 'en', sourceDatabase: 'master', targetDatabase: publishTargetDb, publishSiteMode: 'SMART' }]);
   assertNotNull(result, 'publish with options result');
 });
 
 await test('publishLanguageSpecificItems', async () => {
   if (!publishTestItemId) throw new Error('Skipped: no publish test item');
-  const result = await sc.Publishing.publishLanguageSpecificItems({ itemsToPublish: [{ id: publishTestItemId, languages: ['en'] }], targetDatabases: ['Internet'], publishItemMode: 'SMART' });
+  const result = await sc.Publishing.publishLanguageSpecificItems({ itemsToPublish: [{ id: publishTestItemId, languages: ['en'] }], targetDatabases: [publishTargetDb], publishItemMode: 'SMART' });
   assertNotNull(result, 'publish language specific items result');
 });
 
