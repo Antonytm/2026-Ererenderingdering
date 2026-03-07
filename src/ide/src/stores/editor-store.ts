@@ -15,6 +15,7 @@ export interface EditorTab {
   scriptId?: string;
   name: string;
   code: string;
+  path?: string;
 }
 
 interface EditorState {
@@ -22,13 +23,13 @@ interface EditorState {
   activeTabId: string;
   setActiveTab: (tabId: string) => void;
   updateTabCode: (tabId: string, code: string) => void;
-  openTab: (tab: { scriptId?: string; name: string; code: string }) => string;
+  openTab: (tab: { scriptId?: string; name: string; code: string; path?: string }) => string;
   closeTab: (tabId: string) => void;
-  linkTabToScript: (tabId: string, scriptId: string, name: string) => void;
+  linkTabToScript: (tabId: string, scriptId: string, name: string, path?: string) => void;
 }
 
-function createTab(name: string, code: string, scriptId?: string): EditorTab {
-  return { id: crypto.randomUUID(), scriptId, name, code };
+function createTab(name: string, code: string, scriptId?: string, path?: string): EditorTab {
+  return { id: crypto.randomUUID(), scriptId, name, code, path };
 }
 
 function createDefaultTab(): EditorTab {
@@ -60,7 +61,7 @@ export const useEditorStore = create<EditorState>()(
             return existing.id;
           }
         }
-        const newTab = createTab(tab.name, tab.code, tab.scriptId);
+        const newTab = createTab(tab.name, tab.code, tab.scriptId, tab.path);
         set({ tabs: [...state.tabs, newTab], activeTabId: newTab.id });
         return newTab.id;
       },
@@ -83,10 +84,10 @@ export const useEditorStore = create<EditorState>()(
           };
         }),
 
-      linkTabToScript: (tabId, scriptId, name) =>
+      linkTabToScript: (tabId, scriptId, name, path?) =>
         set((state) => ({
           tabs: state.tabs.map((t) =>
-            t.id === tabId ? { ...t, scriptId, name } : t
+            t.id === tabId ? { ...t, scriptId, name, path } : t
           ),
         })),
     }),

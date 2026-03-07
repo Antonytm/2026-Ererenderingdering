@@ -218,6 +218,7 @@ export function ScriptLibraryDialog({
       // Overwrite existing script
       const updated = await backend.updateScript(overwriteTarget.id, { code: currentCode });
       script = updated ?? { id: overwriteTarget.id, name: overwriteTarget.name, code: currentCode, lastModified: Date.now() };
+      script.path = overwriteTarget.path;
     } else {
       script = await backend.saveScript(saveName.trim(), currentCode, selectedFolderId ?? undefined);
     }
@@ -255,6 +256,7 @@ export function ScriptLibraryDialog({
       name: selectedNode.name,
       code: selectedNode.code ?? "",
       lastModified: Date.now(),
+      path: selectedNode.path,
     });
     onOpenChange(false);
   }
@@ -274,6 +276,7 @@ export function ScriptLibraryDialog({
       name: node.name,
       code: node.code ?? "",
       lastModified: Date.now(),
+      path: node.path,
     });
     onOpenChange(false);
   }

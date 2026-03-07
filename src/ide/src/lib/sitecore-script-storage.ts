@@ -40,21 +40,23 @@ export function createSitecoreScriptStorage(helpers: SitecoreHelpers, jsScriptTe
     const children = await helpers.getItemChildren(path);
     const nodes: ScriptTreeNode[] = [];
     for (const child of children) {
+      const childPath = `${path}/${child.name}`;
       if (isScriptItem(child)) {
         nodes.push({
           id: child.itemId,
           name: child.name,
           type: "script",
           code: child.fields?.nodes?.find((f: any) => f.name === "Script")?.value ?? "",
+          path: childPath,
         });
       } else {
-        const childPath = `${path}/${child.name}`;
         const subNodes = await buildTree(childPath);
         nodes.push({
           id: child.itemId,
           name: child.name,
           type: "folder",
           children: subNodes,
+          path: childPath,
         });
       }
     }
@@ -106,6 +108,7 @@ export function createSitecoreScriptStorage(helpers: SitecoreHelpers, jsScriptTe
         name: created.name,
         code,
         lastModified: Date.now(),
+        path: created.path,
       };
     },
 

@@ -246,11 +246,11 @@ export function ScriptingConsole() {
         mode={dialogMode}
         currentCode={editorRef.current?.getValue() ?? ""}
         onLoad={(script) => {
-          openTab({ scriptId: script.id, name: script.name, code: script.code });
+          openTab({ scriptId: script.id, name: script.name, code: script.code, path: script.path });
         }}
         onSaved={(script) => {
           if (activeTabId) {
-            linkTabToScript(activeTabId, script.id, script.name);
+            linkTabToScript(activeTabId, script.id, script.name, script.path);
           }
         }}
         backend={storageBackend}

@@ -5,6 +5,7 @@ export interface SavedScript {
   name: string;
   code: string;
   lastModified: number;
+  path?: string;
 }
 
 export interface ScriptTreeNode {
@@ -13,6 +14,7 @@ export interface ScriptTreeNode {
   type: "folder" | "script";
   children?: ScriptTreeNode[];
   code?: string;
+  path?: string;
 }
 
 export interface ScriptStorageBackend {
