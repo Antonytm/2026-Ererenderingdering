@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash",
+      "WebSearch",
+      "WebFetch",
+      "Read",
+      "Write",
+      "Edit",
+      "Glob",
+      "Grep",
+      "mcp__plugin_chrome-devtools-mcp_chrome-devtools__*"
+    ]
+  },
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -c \"New-BurntToastNotification -Text 'Claude Code', 'Ready for input'\""
+          }
+        ]
+      }
+    ]
+  }
+}
