@@ -1,4 +1,5 @@
 import type { SitecoreHelpers } from "./sitecore-helpers";
+import type { ContentItem } from "./items";
 import {
   MODULE_VERSION,
   MODULE_ROOT_PATH,
@@ -7,8 +8,8 @@ import {
   TEMPLATES_ROOT_PATH,
   ICONS,
   TEMPLATE_DEFINITIONS,
-  EXAMPLE_SCRIPTS,
 } from "./items";
+import { scriptLibraryFolder } from "./items/content/script-library";
 
 export interface InstallResult {
   installed: boolean;
@@ -134,38 +135,51 @@ async function installModuleRoot(helpers: SitecoreHelpers, templateIds: Resolved
   return moduleRoot.itemId;
 }
 
+async function installContentTree(
+  helpers: SitecoreHelpers,
+  parentId: string,
+  item: ContentItem,
+  templateIds: ResolvedTemplateIds
+): Promise<void> {
+  const templateId = templateIds[item.template as keyof ResolvedTemplateIds];
+  if (!templateId) {
+    console.warn(`[JSE] Unknown template "${item.template}" for item "${item.name}", skipping`);
+    return;
+  }
+
+  const fields: Record<string, string> = { ...item.fields };
+  if (item.icon) fields.__Icon = item.icon;
+
+  console.log(`[JSE] Creating item: ${item.name} (template=${item.template})`);
+  let created;
+  try {
+    created = await helpers.createItem(parentId, templateId, item.name, fields);
+  } catch (err) {
+    console.error(`[JSE] Error creating item "${item.name}":`, err);
+    return;
+  }
+  if (!created?.itemId) {
+    console.warn(`[JSE] Failed to create item: ${item.name}`);
+    return;
+  }
+
+  if (item.children) {
+    for (const child of item.children) {
+      try {
+        await installContentTree(helpers, created.itemId, child, templateIds);
+      } catch (err) {
+        console.error(`[JSE] Error installing child "${child.name}" under "${item.name}":`, err);
+      }
+    }
+  }
+}
+
 async function installScriptLibrary(
   helpers: SitecoreHelpers,
   moduleRootId: string,
   templateIds: ResolvedTemplateIds
 ): Promise<void> {
-  console.log("[JSE] Creating Script Library");
-  const scriptLib = await helpers.createItem(
-    moduleRootId,
-    templateIds.jsScriptLibrary,
-    "Script Library",
-    { __Icon: ICONS.jsScriptLibrary }
-  );
-  if (!scriptLib?.itemId) throw new Error("Failed to create Script Library");
-
-  console.log("[JSE] Creating Examples folder");
-  const examples = await helpers.createItem(
-    scriptLib.itemId,
-    templateIds.jsScriptLibrary,
-    "Examples",
-    { __Icon: ICONS.jsScriptLibrary }
-  );
-  if (!examples?.itemId) throw new Error("Failed to create Examples folder");
-
-  for (const [name, code] of Object.entries(EXAMPLE_SCRIPTS)) {
-    console.log(`[JSE] Creating example script: ${name}`);
-    await helpers.createItem(
-      examples.itemId,
-      templateIds.jsScript,
-      name,
-      { Script: code }
-    );
-  }
+  await installContentTree(helpers, moduleRootId, scriptLibraryFolder, templateIds);
 }
 
 async function ensureUserScripts(
