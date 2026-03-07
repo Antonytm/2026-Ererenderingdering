@@ -32,30 +32,53 @@ _You can alternately paste a [link here](#docs) to a document within this repo c
 _Remove this subsection if your entry does not have any prerequisites other than Sitecore_
 
 ## Installation instructions
-⟹ Write a short clear step-wise instruction on how to install your module.  
 
-> _A simple well-described installation process is required to win the Hackathon._  
-> Feel free to use any of the following tools/formats as part of the installation:
-> - Sitecore Package files
-> - Docker image builds
-> - Sitecore CLI
-> - msbuild
-> - npm / yarn
-> 
-> _Do not use_
-> - TDS
-> - Unicorn
- 
-for example:
+### Build and run Locally
 
-1. Use the Sitecore Installation wizard to install the [package](#link-to-package)
-2. ...
-3. profit
+1. Clone the repository
+1. Open terminal
+1. Navigate to the `./src/ide/` folder
+1. Run `npm install` to install the dependencies
+1. Run `npm run build` to build the module
+1. Run `npm run start` to create run Sitecore Marketplace module
+1. Access the module at `http://localhost:3000` in your browser. You should be redirected to documentation page if the module is running correctly.
+1. Alternatively, this module is hosted on Netlify and can be accessed at [https://sitecore-hackathon-2026.netlify.app/](https://sitecore-hackathon-2026.netlify.app/)
+
+### Register a "Sitecore JavaScript Extensions" app in SitecoreAI
+
+1. Log in to the [Cloud Portal](https://portal.sitecorecloud.io/).
+1. On the navigation header, click App studio > Studio > Create app.
+1. In the Create app modal, in the App name field, enter "Sitecore JavaScript Extensions"
+1. Select Custom as the type of your app.
+1. Click Create. A new app is registered and ready to be configured.
+
+### Configure and activate "Sitecore JavaScript Extensions" app
+
+1. Enable "Standalone" and "Full screen" extension points for the app.
+1. Enable *SitecoreAI APIs* and *AI skills APIs* API access
+1. Permissions *Pop-ups*, *Copy to clipboard*, and *Read from clipboard* are not required. But you will be able to write and execute your own custom JavaScript code. If you want to use any of these permissions, enable them as well.
+1. Set *Deployment URL* to `http://localhost:3000`. Or `https://sitecore-hackathon-2026.netlify.app/` if you do not want to run it locally.
+1. Set *App logo* to `/docs/images/logo.png`
+1. Click *Activate* to activate the app.
+
+### Install an activate "Sitecore JavaScript Extensions"
+
+1. In the [Cloud Portal](https://portal.sitecorecloud.io/), click My apps.
+1. Find "Sitecore JavaScript Extensions" in the list of your apps and click *Install*.
+1. Select apps, where you want to install "Sitecore JavaScript Extensions".
+1. Click *Next*
+1. Review the permissions and click *Install* to install the app.
+
+### Start "Sitecore JavaScript Extensions"
+
+You can open "Sitecore JavaScript Extensions" from the list of your apps in the Cloud Portal.
+
+![Apps icon](/docs/images/apps-icon.png)
+![Apps list](/docs/images/apps-list.png)
 
 ### Configuration
-⟹ If there are any custom configuration that has to be set manually then remember to add all details here.
 
-_Remove this subsection if your entry does not require any configuration that is not fully covered in the installation instructions already_
+"Sitecore JavaScript Extensions" does not require any additional configuration.
 
 ## Usage instructions
 ⟹ Provide documentation about your module, how do the users use your module, where are things located, what do the icons mean, are there any secret shortcuts etc.
