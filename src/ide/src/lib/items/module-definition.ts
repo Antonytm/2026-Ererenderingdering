@@ -2,7 +2,7 @@ export const MODULE_VERSION = "1.0.0";
 export const MODULE_ROOT_PATH = "/sitecore/system/Modules/JavaScript Extensions";
 export const TEMPLATES_ROOT_PATH = "/sitecore/templates/Modules/JavaScript Extensions";
 export const SCRIPT_LIBRARY_PATH = MODULE_ROOT_PATH + "/Script Library";
-export const USER_SCRIPTS_PATH = SCRIPT_LIBRARY_PATH + "/User Scripts";
+export const USER_SCRIPTS_PATH = MODULE_ROOT_PATH + "/User Scripts";
 export const EXAMPLES_PATH = SCRIPT_LIBRARY_PATH + "/Examples";
 
 // Well-known Sitecore meta-template IDs
@@ -129,11 +129,11 @@ export const MODULE_DEFINITION: ItemDefinition = {
             fields: { Script: code },
           })),
         },
-        {
-          name: "User Scripts",
-          templateId: TEMPLATE_IDS.jsScriptLibrary,
-        },
       ],
+    },
+    {
+      name: "User Scripts",
+      templateId: TEMPLATE_IDS.jsScriptLibrary,
     },
   ],
 };
