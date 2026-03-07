@@ -8,23 +8,16 @@ import { runScript, type ConsoleEntry } from "@/src/lib/script-runner";
 import { createLocalScriptStorage, type ScriptStorageBackend } from "@/src/lib/script-storage";
 import { createSitecoreScriptStorage } from "@/src/lib/sitecore-script-storage";
 import { installModule } from "@/src/lib/item-installer";
+import { useEditorStore } from "@/src/stores/editor-store";
 import { MonacoEditor, type MonacoEditorHandle } from "./MonacoEditor";
 import { Toolbar } from "./Toolbar";
 import { ConsoleOutput } from "./ConsoleOutput";
 import { ResultsPanel } from "./ResultsPanel";
 import { ScriptLibraryDialog } from "./ScriptLibraryDialog";
 
-const DEFAULT_CODE = `// Sitecore JS Scripting Console
-// Use Sitecore.* (or sc.* shorthand), print(), and render()
-// Press Ctrl+Enter to run
-
-const ctx = await sc.getContext();
-print("Application context loaded:");
-print(JSON.stringify(ctx, null, 2));
-`;
-
 export function ScriptingConsole() {
   const { client, isInitialized } = useMarketplaceClient();
+  const { code: persistedCode, setCode } = useEditorStore();
   const editorRef = useRef<MonacoEditorHandle>(null);
   const [isRunning, setIsRunning] = useState(false);
   const [consoleEntries, setConsoleEntries] = useState<ConsoleEntry[]>([]);
@@ -160,8 +153,9 @@ export function ScriptingConsole() {
       <div className="flex-1 min-h-0">
         <MonacoEditor
           ref={editorRef}
-          defaultValue={DEFAULT_CODE}
+          defaultValue={persistedCode}
           onRunShortcut={handleRun}
+          onChange={setCode}
         />
       </div>
 

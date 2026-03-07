@@ -22,10 +22,11 @@ export interface MonacoEditorHandle {
 interface MonacoEditorProps {
   defaultValue?: string;
   onRunShortcut?: () => void;
+  onChange?: (value: string) => void;
 }
 
 export const MonacoEditor = forwardRef<MonacoEditorHandle, MonacoEditorProps>(
-  function MonacoEditor({ defaultValue = "", onRunShortcut }, ref) {
+  function MonacoEditor({ defaultValue = "", onRunShortcut, onChange }, ref) {
     const editorRef = useRef<Parameters<OnMount>[0] | null>(null);
 
     useImperativeHandle(ref, () => ({
@@ -37,6 +38,11 @@ export const MonacoEditor = forwardRef<MonacoEditorHandle, MonacoEditorProps>(
       (editor, monaco) => {
         editorRef.current = editor;
         registerCompletions(monaco);
+
+        // Notify parent of content changes
+        editor.onDidChangeModelContent(() => {
+          onChange?.(editor.getValue());
+        });
 
         // Ctrl/Cmd+Enter to run
         editor.addAction({
