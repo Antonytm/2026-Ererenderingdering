@@ -6,6 +6,7 @@ export const javascriptExtensions: ContentItem = {
   parent: "/sitecore/system/Modules",
   name: "JavaScript Extensions",
   template: TEMPLATE_IDS.jsScriptModule,
+  icon: "/~/icon/softwarev2/32x32/code_javascript.png",
   fields: { Version: MODULE_VERSION },
   children: [scriptLibraryFolder],
 };

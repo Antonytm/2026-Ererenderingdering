@@ -9,6 +9,7 @@ import { getItemScript } from "./get-item";
 export const examplesFolder: ContentItem = {
   name: "Examples",
   template: TEMPLATE_IDS.jsScriptLibrary,
+  icon: "/~/icon/apps/32x32/Codes.png",
   fields: {},
   children: [
     getContextScript,

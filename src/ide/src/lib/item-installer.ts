@@ -46,12 +46,14 @@ async function createContentRecursive(
     }
   } else {
     // Create the item
-    const fieldEntries = Object.entries(item.fields);
+    const createFields: Record<string, string> = { ...item.fields };
+    if (item.icon) createFields.__Icon = item.icon;
+    const hasFields = Object.keys(createFields).length > 0;
     const created = await helpers.createItem(
       parentId,
       item.template,
       item.name,
-      fieldEntries.length > 0 ? item.fields : undefined
+      hasFields ? createFields : undefined
     );
     itemId = created?.itemId ?? null;
   }
@@ -156,6 +158,19 @@ async function installTemplates(helpers: SitecoreHelpers): Promise<void> {
             { Type: field.type }
           );
         }
+      }
+    }
+
+    // Create or update __Standard Values with icon
+    if (tmpl.icon) {
+      const stdValuesPath = `${tmplPath}/__Standard Values`;
+      const stdValues = await helpers.getItem(stdValuesPath);
+      if (stdValues) {
+        await helpers.updateItem(stdValues.itemId, { __Icon: tmpl.icon });
+      } else {
+        await helpers.createItem(tmplItemId, tmpl.id, "__Standard Values", {
+          __Icon: tmpl.icon,
+        });
       }
     }
   }
