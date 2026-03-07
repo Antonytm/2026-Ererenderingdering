@@ -1,5 +1,6 @@
 import type { SitecoreHelpers } from "./sitecore-helpers";
 import helpData from "./help-data.json";
+import { createScriptHelpers } from "./script-helpers";
 
 export interface ConsoleEntry {
   level: "log" | "warn" | "error" | "info";
@@ -169,6 +170,8 @@ export async function runScript(
 
     const sitecoreWithNamespaces = Object.assign({}, sitecoreHelpers, namespaces);
 
+    const helpers = createScriptHelpers(print, render);
+
     // AsyncFunction allows top-level await
     const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
     const fn = new AsyncFunction(
@@ -178,9 +181,32 @@ export async function runScript(
       "render",
       "console",
       "help",
+      "printItem",
+      "renderItem",
+      "printUser",
+      "renderUser",
+      "printRole",
+      "renderRole",
+      "printTemplate",
+      "renderTemplate",
       code
     );
-    returnValue = await fn(sitecoreWithNamespaces, sitecoreWithNamespaces, print, render, proxyConsole, help);
+    returnValue = await fn(
+      sitecoreWithNamespaces,
+      sitecoreWithNamespaces,
+      print,
+      render,
+      proxyConsole,
+      help,
+      helpers.printItem,
+      helpers.renderItem,
+      helpers.printUser,
+      helpers.renderUser,
+      helpers.printRole,
+      helpers.renderRole,
+      helpers.printTemplate,
+      helpers.renderTemplate,
+    );
   } catch (e) {
     error = e instanceof Error ? e : new Error(String(e));
     consoleOutput.push({

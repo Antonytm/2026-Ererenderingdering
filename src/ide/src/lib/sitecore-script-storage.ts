@@ -81,13 +81,19 @@ export function createSitecoreScriptStorage(helpers: SitecoreHelpers, jsScriptTe
       ];
     },
 
-    async saveScript(name: string, code: string) {
-      const userScripts = await helpers.getItem(USER_SCRIPTS_PATH);
-      if (!userScripts?.itemId) {
-        throw new Error("User Scripts folder not found");
+    async saveScript(name: string, code: string, parentId?: string) {
+      let targetParentId: string;
+      if (parentId && parentId !== "user-scripts") {
+        targetParentId = parentId;
+      } else {
+        const userScripts = await helpers.getItem(USER_SCRIPTS_PATH);
+        if (!userScripts?.itemId) {
+          throw new Error("User Scripts folder not found");
+        }
+        targetParentId = userScripts.itemId;
       }
       const created = await helpers.createItem(
-        userScripts.itemId,
+        targetParentId,
         jsScriptTemplateId,
         name,
         { Script: code }

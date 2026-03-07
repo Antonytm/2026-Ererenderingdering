@@ -748,6 +748,54 @@ const utilityFunctions: {
     documentation: 'Display help for Sitecore SDK methods. help() for overview, help("getItem") for details.',
     insertText: 'help("${1}")',
   },
+  {
+    label: "printItem",
+    detail: "(item: any) => void",
+    documentation: "Print a formatted summary of a Sitecore item to the Console.",
+    insertText: "printItem(${1:item})",
+  },
+  {
+    label: "renderItem",
+    detail: "(item: any) => void",
+    documentation: "Render a styled HTML card for a Sitecore item in the Results tab.",
+    insertText: "renderItem(${1:item})",
+  },
+  {
+    label: "printUser",
+    detail: "(user: any) => void",
+    documentation: "Print a formatted summary of a Sitecore user to the Console.",
+    insertText: "printUser(${1:user})",
+  },
+  {
+    label: "renderUser",
+    detail: "(user: any) => void",
+    documentation: "Render a styled HTML card for a Sitecore user in the Results tab.",
+    insertText: "renderUser(${1:user})",
+  },
+  {
+    label: "printRole",
+    detail: "(role: any) => void",
+    documentation: "Print a formatted summary of a Sitecore role to the Console.",
+    insertText: "printRole(${1:role})",
+  },
+  {
+    label: "renderRole",
+    detail: "(role: any) => void",
+    documentation: "Render a styled HTML card for a Sitecore role in the Results tab.",
+    insertText: "renderRole(${1:role})",
+  },
+  {
+    label: "printTemplate",
+    detail: "(tmpl: any) => void",
+    documentation: "Print a formatted summary of a Sitecore template to the Console.",
+    insertText: "printTemplate(${1:tmpl})",
+  },
+  {
+    label: "renderTemplate",
+    detail: "(tmpl: any) => void",
+    documentation: "Render a styled HTML card for a Sitecore template in the Results tab.",
+    insertText: "renderTemplate(${1:tmpl})",
+  },
 ];
 
 import { sitecoreSdkDts } from "./sitecore-sdk-dts";

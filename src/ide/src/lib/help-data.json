@@ -188,7 +188,15 @@
       "methods": [
         "print",
         "render",
-        "help"
+        "help",
+        "printItem",
+        "renderItem",
+        "printUser",
+        "renderUser",
+        "printRole",
+        "renderRole",
+        "printTemplate",
+        "renderTemplate"
       ]
     }
   ],
@@ -2916,6 +2924,182 @@
         "help();\r\nhelp(\"getItem\");\r\nhelp(\"publishing\");"
       ],
       "snippet": "help(\"${1}\")",
+      "danger": "safe"
+    },
+    "printItem": {
+      "name": "printItem",
+      "qualifiedName": "printItem",
+      "category": "Utilities",
+      "categoryId": "utilities",
+      "signature": "(item: any) => void",
+      "description": "Print a formatted summary of a Sitecore item to the Console.",
+      "params": [
+        {
+          "name": "item",
+          "type": "any",
+          "description": "Item object returned from `getItem()`, `createItem()`, etc.",
+          "optional": false
+        }
+      ],
+      "returns": "void",
+      "examples": [
+        "const item = await sc.getItem(\"/sitecore/content\");\r\nprintItem(item);"
+      ],
+      "snippet": "printItem(${1:item})",
+      "danger": "safe"
+    },
+    "renderItem": {
+      "name": "renderItem",
+      "qualifiedName": "renderItem",
+      "category": "Utilities",
+      "categoryId": "utilities",
+      "signature": "(item: any) => void",
+      "description": "Render a styled HTML card for a Sitecore item in the Results tab.",
+      "params": [
+        {
+          "name": "item",
+          "type": "any",
+          "description": "Item object returned from `getItem()`, `createItem()`, etc.",
+          "optional": false
+        }
+      ],
+      "returns": "void",
+      "examples": [
+        "const item = await sc.getItem(\"/sitecore/content\");\r\nrenderItem(item);"
+      ],
+      "snippet": "renderItem(${1:item})",
+      "danger": "safe"
+    },
+    "printUser": {
+      "name": "printUser",
+      "qualifiedName": "printUser",
+      "category": "Utilities",
+      "categoryId": "utilities",
+      "signature": "(user: any) => void",
+      "description": "Print a formatted summary of a Sitecore user to the Console.",
+      "params": [
+        {
+          "name": "user",
+          "type": "any",
+          "description": "User object returned from `getCurrentUser()`, `getUser()`, etc.",
+          "optional": false
+        }
+      ],
+      "returns": "void",
+      "examples": [
+        "const user = await sc.Security.getCurrentUser();\r\nprintUser(user);"
+      ],
+      "snippet": "printUser(${1:user})",
+      "danger": "safe"
+    },
+    "renderUser": {
+      "name": "renderUser",
+      "qualifiedName": "renderUser",
+      "category": "Utilities",
+      "categoryId": "utilities",
+      "signature": "(user: any) => void",
+      "description": "Render a styled HTML card for a Sitecore user in the Results tab.",
+      "params": [
+        {
+          "name": "user",
+          "type": "any",
+          "description": "User object returned from `getCurrentUser()`, `getUser()`, etc.",
+          "optional": false
+        }
+      ],
+      "returns": "void",
+      "examples": [
+        "const user = await sc.Security.getCurrentUser();\r\nrenderUser(user);"
+      ],
+      "snippet": "renderUser(${1:user})",
+      "danger": "safe"
+    },
+    "printRole": {
+      "name": "printRole",
+      "qualifiedName": "printRole",
+      "category": "Utilities",
+      "categoryId": "utilities",
+      "signature": "(role: any) => void",
+      "description": "Print a formatted summary of a Sitecore role to the Console.",
+      "params": [
+        {
+          "name": "role",
+          "type": "any",
+          "description": "Role object returned from `getRole()`, `createRole()`, etc.",
+          "optional": false
+        }
+      ],
+      "returns": "void",
+      "examples": [
+        "const role = await sc.Security.getRole(\"sitecore\\\\Author\");\r\nprintRole(role);"
+      ],
+      "snippet": "printRole(${1:role})",
+      "danger": "safe"
+    },
+    "renderRole": {
+      "name": "renderRole",
+      "qualifiedName": "renderRole",
+      "category": "Utilities",
+      "categoryId": "utilities",
+      "signature": "(role: any) => void",
+      "description": "Render a styled HTML card for a Sitecore role in the Results tab.",
+      "params": [
+        {
+          "name": "role",
+          "type": "any",
+          "description": "Role object returned from `getRole()`, `createRole()`, etc.",
+          "optional": false
+        }
+      ],
+      "returns": "void",
+      "examples": [
+        "const role = await sc.Security.getRole(\"sitecore\\\\Author\");\r\nrenderRole(role);"
+      ],
+      "snippet": "renderRole(${1:role})",
+      "danger": "safe"
+    },
+    "printTemplate": {
+      "name": "printTemplate",
+      "qualifiedName": "printTemplate",
+      "category": "Utilities",
+      "categoryId": "utilities",
+      "signature": "(tmpl: any) => void",
+      "description": "Print a formatted summary of a Sitecore template to the Console.",
+      "params": [
+        {
+          "name": "tmpl",
+          "type": "any",
+          "description": "Template object returned from `getTemplate()`, `createTemplate()`, etc.",
+          "optional": false
+        }
+      ],
+      "returns": "void",
+      "examples": [
+        "const tmpl = await sc.Templates.getTemplate(templateId);\r\nprintTemplate(tmpl);"
+      ],
+      "snippet": "printTemplate(${1:tmpl})",
+      "danger": "safe"
+    },
+    "renderTemplate": {
+      "name": "renderTemplate",
+      "qualifiedName": "renderTemplate",
+      "category": "Utilities",
+      "categoryId": "utilities",
+      "signature": "(tmpl: any) => void",
+      "description": "Render a styled HTML card for a Sitecore template in the Results tab.",
+      "params": [
+        {
+          "name": "tmpl",
+          "type": "any",
+          "description": "Template object returned from `getTemplate()`, `createTemplate()`, etc.",
+          "optional": false
+        }
+      ],
+      "returns": "void",
+      "examples": [
+        "const tmpl = await sc.Templates.getTemplate(templateId);\r\nrenderTemplate(tmpl);"
+      ],
+      "snippet": "renderTemplate(${1:tmpl})",
       "danger": "safe"
     }
   },

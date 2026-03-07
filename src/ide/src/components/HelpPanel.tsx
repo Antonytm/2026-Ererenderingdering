@@ -15,9 +15,9 @@ interface HelpPanelProps {
 }
 
 const dangerColors: Record<string, string> = {
-  safe: "bg-green-500/15 text-green-700 dark:text-green-400",
-  mutating: "bg-yellow-500/15 text-yellow-700 dark:text-yellow-400",
-  destructive: "bg-red-500/15 text-red-700 dark:text-red-400",
+  safe: "bg-green-500/15 text-green-700",
+  mutating: "bg-yellow-500/15 text-yellow-700",
+  destructive: "bg-red-500/15 text-red-700",
 };
 
 function DangerBadge({ level }: { level: string }) {
