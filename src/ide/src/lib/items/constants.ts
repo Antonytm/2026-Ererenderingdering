@@ -14,9 +14,9 @@ export const TEMPLATE_PATHS = {
 
 // Icons
 export const ICONS = {
-  jsScriptModule: "/~/icon/softwarev2/32x32/code_javascript.png",
+  jsScriptModule: "/~/icon/software/32x32/text_code_javascript.png",
   jsScriptLibrary: "/~/icon/apps/32x32/Codes.png",
-  jsScript: "/~/icon/software/32x32/text_code_javascript.png",
+  jsScript: "/~/icon/softwarev2/32x32/code_javascript.png",
 };
 
 export interface TemplateSection {
@@ -28,6 +28,7 @@ export interface TemplateDef {
   name: string;
   icon?: string;
   sections: TemplateSection[];
+  standardValues?: Record<string, string>;
 }
 
 export interface ContentItem {
