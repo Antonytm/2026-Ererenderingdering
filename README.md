@@ -23,6 +23,7 @@ Welcome to the "Sitecore JavaScript Extensions" - a SitecoreAI module that bring
 
 - SitecoreAI
 - Administrator access to SitecoreAI Cloud Portal for app registration and configuration
+- Node.js 24 or higher for local development and testing
 
 ## Installation instructions
 
