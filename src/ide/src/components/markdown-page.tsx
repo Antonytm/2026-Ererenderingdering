@@ -26,7 +26,22 @@ export function MarkdownPage({
         <Image src="/logo.png" alt="Sitecore JavaScript Extensions" width={36} height={36} />
       </div>
       <article className="prose prose-neutral max-w-none dark:prose-invert">
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          components={{
+            img: ({ src, alt, ...props }) => (
+              // Rewrite relative img/ paths to absolute /docs-img/ for Next.js serving
+              // Markdown uses relative paths so images also work on GitHub
+              <img
+                src={typeof src === "string" ? src.replace(/^img\//, "/docs-img/") : src}
+                alt={alt || ""}
+                {...props}
+              />
+            ),
+          }}
+        >
+          {content}
+        </ReactMarkdown>
       </article>
     </div>
   );
